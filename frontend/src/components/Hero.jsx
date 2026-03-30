@@ -9,7 +9,6 @@ const Counter = ({ end, duration = 2000 }) => {
   useEffect(() => {
     let start = 0;
     const increment = end / (duration / 16);
-
     const timer = setInterval(() => {
       start += increment;
       if (start >= end) {
@@ -29,111 +28,119 @@ const Counter = ({ end, duration = 2000 }) => {
 const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
-      {/* Animated Background */}
+      {/* Background Image */}
       <motion.div
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: `url(${hero})` }}
         initial={{ scale: 1.1 }}
         animate={{ scale: 1 }}
-        transition={{ duration: 8 }}
+        transition={{ duration: 12 }}
       />
 
       {/* Dark overlay */}
-      <div className="absolute inset-0 bg-black/80"></div>
+      <div className="absolute inset-0 bg-black/70"></div>
 
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent"></div>
 
-      {/* Luxury spotlight */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(255,215,0,0.18),transparent_45%)]"></div>
+      {/* Animated geometric shapes */}
+      <motion.div
+        className="absolute top-20 left-10 w-40 h-40 border-2 border-primary rounded-full opacity-40"
+        animate={{ rotate: 360 }}
+        transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
+      />
+      <motion.div
+        className="absolute bottom-32 right-20 w-60 h-60 border border-yellow-400 rounded-xl opacity-30"
+        animate={{ rotate: -360 }}
+        transition={{ repeat: Infinity, duration: 35, ease: "linear" }}
+      />
+      <motion.div
+        className="absolute top-1/2 left-1/2 w-80 h-1 bg-gradient-to-r from-yellow-400 via-transparent to-yellow-400 opacity-20 blur-xl -translate-x-1/2"
+        animate={{ x: [0, 300, 0] }}
+        transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
+      />
 
-      {/* CONTENT */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 w-full">
-        <div className="max-w-2xl">
-          {/* Heading */}
-          <motion.h1
-            initial={{ opacity: 0, y: 60 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9 }}
-            className="text-5xl md:text-7xl font-bold leading-tight tracking-tight"
+      {/* Content */}
+      <div className="relative z-10 max-w-6xl mx-auto px-6 w-full flex flex-col justify-center h-full">
+        {/* Heading */}
+        <motion.h1
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+          className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight"
+        >
+          Precision Cuts, <br />
+          <span className="text-primary">Luxury Grooming</span>
+        </motion.h1>
+
+        {/* Subheading */}
+        <motion.p
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 1 }}
+          className="text-gray-300 text-lg md:text-xl mt-6 max-w-xl"
+        >
+          Elevate your style with expert barbering at{" "}
+          <span className="text-primary font-semibold">
+            Ras Nat Barber Shop
+          </span>
+          .
+        </motion.p>
+
+        {/* Buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 1 }}
+          className="flex flex-wrap gap-5 mt-8"
+        >
+          <Link
+            to="/booking"
+            className="bg-primary text-black px-8 py-3 rounded-full font-semibold tracking-wide hover:scale-105 hover:shadow-lg transition-transform"
           >
-            Precision Cuts <br />
-            <span className="text-primary">Luxury Grooming</span> <br />
-            Redefined
-          </motion.h1>
-
-          {/* Description */}
-          <motion.p
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="text-gray-300 text-lg mt-6 mb-10 leading-relaxed"
+            Book Appointment
+          </Link>
+          <Link
+            to="/gallery"
+            className="border border-primary px-8 py-3 rounded-full text-white hover:bg-primary hover:text-black transition"
           >
-            Experience premium barbering at
-            <span className="text-primary font-semibold">
-              {" "}
-              Ras Nat Barber Shop
-            </span>
-            . From precision fades to expert beard grooming, we deliver a
-            grooming experience designed for confidence and style.
-          </motion.p>
+            View Gallery
+          </Link>
+        </motion.div>
 
-          {/* Buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-            className="flex flex-wrap gap-5"
-          >
-            <Link
-              to="/booking"
-              className="bg-primary text-black px-9 py-3 rounded-full font-semibold tracking-wide hover:scale-105 hover:shadow-[0_0_25px_rgba(255,215,0,0.6)] transition"
-            >
-              Book Appointment
-            </Link>
+        {/* Stats */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1, duration: 1 }}
+          className="grid grid-cols-3 gap-6 mt-16 max-w-3xl"
+        >
+          <div className="backdrop-blur-md bg-white/5 border border-white/10 p-5 rounded-xl text-center">
+            <h3 className="text-3xl font-bold text-primary">
+              <Counter end={500} />+
+            </h3>
+            <p className="text-gray-400 text-sm">Happy Clients</p>
+          </div>
 
-            <Link
-              to="/gallery"
-              className="border border-primary px-9 py-3 rounded-full hover:bg-primary hover:text-black transition font-medium"
-            >
-              View Gallery
-            </Link>
-          </motion.div>
+          <div className="backdrop-blur-md bg-white/5 border border-white/10 p-5 rounded-xl text-center">
+            <h3 className="text-3xl font-bold text-primary">5★</h3>
+            <p className="text-gray-400 text-sm">Top Rating</p>
+          </div>
 
-          {/* Stats */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1 }}
-            className="grid grid-cols-3 gap-6 mt-14 max-w-lg"
-          >
-            <div className="backdrop-blur-md bg-white/5 border border-white/10 p-5 rounded-xl text-center">
-              <h3 className="text-3xl font-bold text-primary">
-                <Counter end={500} />+
-              </h3>
-              <p className="text-gray-400 text-sm">Happy Clients</p>
-            </div>
-
-            <div className="backdrop-blur-md bg-white/5 border border-white/10 p-5 rounded-xl text-center">
-              <h3 className="text-3xl font-bold text-primary">5★</h3>
-              <p className="text-gray-400 text-sm">Top Rating</p>
-            </div>
-
-            <div className="backdrop-blur-md bg-white/5 border border-white/10 p-5 rounded-xl text-center">
-              <h3 className="text-3xl font-bold text-primary">
-                <Counter end={3} />+
-              </h3>
-              <p className="text-gray-400 text-sm">Years Experience</p>
-            </div>
-          </motion.div>
-        </div>
+          <div className="backdrop-blur-md bg-white/5 border border-white/10 p-5 rounded-xl text-center">
+            <h3 className="text-3xl font-bold text-primary">
+              <Counter end={3} />+
+            </h3>
+            <p className="text-gray-400 text-sm">Years Experience</p>
+          </div>
+        </motion.div>
       </div>
 
-      {/* Scroll indicator */}
+      {/* Scroll Indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.4 }}
+        transition={{ delay: 1.4, duration: 1 }}
         className="absolute bottom-10 left-1/2 -translate-x-1/2"
       >
         <div className="w-6 h-10 border border-primary rounded-full flex justify-center">
