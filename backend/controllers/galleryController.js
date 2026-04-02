@@ -36,9 +36,16 @@ exports.getGalleryImages = async (req, res) => {
 
 // Delete gallery image
 // Delete gallery image safely
+// controllers/galleryController.js
 exports.deleteGalleryImage = async (req, res) => {
   try {
-    const image = await Gallery.findById(req.params.id);
+    const { id } = req.params;
+
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(400).json({ message: "Invalid gallery ID" });
+    }
+
+    const image = await Gallery.findById(id);
     if (!image) return res.status(404).json({ message: "Image not found" });
 
     // Delete from Cloudinary only if publicId exists
@@ -47,14 +54,16 @@ exports.deleteGalleryImage = async (req, res) => {
         await cloudinary.uploader.destroy(image.publicId);
       } catch (err) {
         console.error("Cloudinary deletion failed:", err.message);
-        // Do NOT throw error — we still remove from DB
+        // Don't throw, just log
       }
     }
 
-    await image.remove(); // Remove from MongoDB
+    // Remove from MongoDB
+    await Gallery.deleteOne({ _id: id });
+
     res.json({ message: "Image deleted successfully" });
   } catch (error) {
-    console.error("Delete gallery image error:", error.message);
+    console.error("Delete gallery image error:", error);
     res.status(500).json({ message: "Server failed to delete image" });
   }
 };
