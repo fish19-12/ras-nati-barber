@@ -4,26 +4,25 @@ const cloudinary = require("../config/cloudinary");
 // Add a review
 exports.addReview = async (req, res) => {
   try {
-    const { name, role, message, rating } = req.body;
-    if (!req.file)
-      return res.status(400).json({ message: "No image uploaded" });
-
-    const result = await cloudinary.uploader.upload(req.file.path, {
-      folder: "ras_nati_reviews",
-    });
+    let photoUrl = "";
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "ras_nati_reviews",
+      });
+      photoUrl = result.secure_url;
+    }
 
     const review = await Review.create({
-      name,
-      role,
-      message,
-      rating: rating || 5,
-      photoUrl: result.secure_url,
-      publicId: result.public_id,
+      name: req.body.name,
+      role: req.body.role,
+      comment: req.body.comment,
+      rating: req.body.rating || 5,
+      photoUrl,
     });
 
     res.status(201).json(review);
   } catch (error) {
-    console.error(error);
+    console.error("Add review error:", error.message);
     res.status(400).json({ message: error.message });
   }
 };
