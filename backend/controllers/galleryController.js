@@ -41,20 +41,20 @@ exports.deleteGalleryImage = async (req, res) => {
     const image = await Gallery.findById(req.params.id);
     if (!image) return res.status(404).json({ message: "Image not found" });
 
-    // Only delete from Cloudinary if publicId exists
+    // Delete from Cloudinary only if publicId exists
     if (image.publicId) {
       try {
         await cloudinary.uploader.destroy(image.publicId);
       } catch (err) {
         console.error("Cloudinary deletion failed:", err.message);
+        // Do NOT throw error — we still remove from DB
       }
     }
 
-    await image.remove();
-
-    res.json({ message: "Image deleted" });
+    await image.remove(); // Remove from MongoDB
+    res.json({ message: "Image deleted successfully" });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: error.message });
+    console.error("Delete gallery image error:", error.message);
+    res.status(500).json({ message: "Server failed to delete image" });
   }
 };
