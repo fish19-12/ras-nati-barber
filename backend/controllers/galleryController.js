@@ -35,16 +35,26 @@ exports.getGalleryImages = async (req, res) => {
 };
 
 // Delete gallery image
+// Delete gallery image safely
 exports.deleteGalleryImage = async (req, res) => {
   try {
     const image = await Gallery.findById(req.params.id);
     if (!image) return res.status(404).json({ message: "Image not found" });
 
-    await cloudinary.uploader.destroy(image.publicId);
+    // Only delete from Cloudinary if publicId exists
+    if (image.publicId) {
+      try {
+        await cloudinary.uploader.destroy(image.publicId);
+      } catch (err) {
+        console.error("Cloudinary deletion failed:", err.message);
+      }
+    }
+
     await image.remove();
 
     res.json({ message: "Image deleted" });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: error.message });
   }
 };

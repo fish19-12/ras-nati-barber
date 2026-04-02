@@ -9,7 +9,7 @@ import { SiTiktok } from "react-icons/si";
 
 const Footer = () => {
   return (
-    <footer className="bg-black/70 backdrop-blur-md border-t border-gray-800 py-12">
+    <footer className="bg-black/70 backdrop-blur-md border-t border-gray-800 py-12 md:pb-12 relative z-10">
       <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-8 text-center md:text-left">
         {/* Logo & Name */}
         <div className="flex flex-col items-center md:items-start">
@@ -39,7 +39,9 @@ const Footer = () => {
           <h3 className="text-base md:text-lg font-medium text-white mb-2">
             Follow Us
           </h3>
-          <div className="flex gap-4 text-2xl md:text-3xl">
+          <div className="flex gap-4 text-2xl md:text-3xl mb-6 md:mb-0">
+            {" "}
+            {/* extra bottom margin */}
             <a
               href="https://wa.me/251912345678"
               target="_blank"
@@ -75,6 +77,9 @@ const Footer = () => {
           </div>
         </div>
       </div>
+
+      {/* Spacer for mobile bottom nav */}
+      <div className="h-24 md:hidden" />
     </footer>
   );
 };

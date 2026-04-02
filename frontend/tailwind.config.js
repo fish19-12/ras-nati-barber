@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: "#C9A227", // Gold
+        primary: "#facc15", // Gold
         dark: "#0D0D0D",
         card: "#161616",
       },

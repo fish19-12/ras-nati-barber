@@ -1,70 +1,101 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-
-const galleryImages = [
-  "https://images.unsplash.com/photo-1621605815971-fbc98d665033",
-  "https://images.unsplash.com/photo-1585747860715-2ba37e788b70",
-  "https://images.unsplash.com/photo-1599351431202-1e0f0137899a",
-  "https://images.unsplash.com/photo-1612197520061-cc66b7e8f4f0",
-  "https://images.unsplash.com/photo-1598300051512-c37261e8bce6",
-  "https://images.unsplash.com/photo-1607746882042-944635dfe10e",
-];
-
-const GalleryItem = ({ image }) => {
-  return (
-    <motion.div
-      whileHover={{ scale: 1.05 }}
-      className="relative rounded-xl overflow-hidden shadow-lg cursor-pointer group"
-    >
-      <img
-        src={image}
-        alt="Gallery"
-        className="w-full h-64 md:h-72 lg:h-80 object-cover transition-transform duration-500 group-hover:scale-110"
-      />
-
-      {/* Glass Overlay on Hover */}
-      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
-        <Link
-          to="/booking"
-          className="bg-yellow-400 text-black px-6 py-3 rounded-full font-semibold uppercase tracking-wide shadow-md hover:scale-105 transition-transform duration-300"
-        >
-          Book Now
-        </Link>
-      </div>
-    </motion.div>
-  );
-};
+import axios from "axios";
 
 const Gallery = () => {
+  const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const cached = sessionStorage.getItem("galleryImages");
+    if (cached) {
+      setImages(JSON.parse(cached));
+      setLoading(false);
+      return;
+    }
+
+    const fetchImages = async () => {
+      try {
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/gallery`,
+        );
+        setImages(res.data);
+        sessionStorage.setItem("galleryImages", JSON.stringify(res.data)); // cache for session
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchImages();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="w-full min-h-screen flex flex-col items-center justify-center bg-black text-white">
+        <motion.div
+          animate={{ y: [0, -10, 0] }}
+          transition={{ repeat: Infinity, duration: 1.5 }}
+          className="text-2xl sm:text-3xl md:text-4xl font-bold text-yellow-400"
+        >
+          Loading Premium Gallery...
+        </motion.div>
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-7xl mx-auto py-20 px-4 sm:px-6 lg:px-8">
+    <div className="w-full bg-black text-white font-exo relative">
       {/* Section Title */}
-      <h1 className="text-4xl sm:text-5xl font-bold text-center text-gray-900 mb-16 tracking-tight">
-        Our Gallery
-      </h1>
+      <motion.h1
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+        className="text-4xl sm:text-5xl md:text-6xl font-bold text-center mb-12 text-yellow-400 tracking-wide"
+      >
+        Our Premium Gallery
+      </motion.h1>
 
       {/* Gallery Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {galleryImages.map((img, index) => (
-          <GalleryItem key={index} image={img} />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {images.map((item) => (
+          <motion.div
+            key={item._id}
+            whileHover={{ scale: 1.05 }}
+            className="relative rounded-2xl overflow-hidden shadow-2xl cursor-pointer group transition-transform duration-500"
+          >
+            <img
+              src={`${item.imageUrl}?w=600&h=600&c_fill&q_auto&fm=webp`}
+              alt={item.title}
+              loading="lazy"
+              className="w-full h-60 sm:h-64 md:h-64 lg:h-72 object-cover rounded-2xl transition-transform duration-500 group-hover:scale-105"
+            />
+
+            {/* Hover overlay with title + button */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileHover={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+              className="absolute inset-0 flex flex-col items-center justify-center rounded-2xl z-20 opacity-0 group-hover:opacity-100 bg-black/30"
+            >
+              <h2 className="text-md md:text-lg font-bold text-white mb-2 text-center px-2">
+                {item.title}
+              </h2>
+              <Link
+                to="/booking"
+                className="bg-amber-400 text-black px-4 py-2 md:px-6 md:py-3 rounded-full font-bold uppercase tracking-wide shadow-lg hover:scale-105 transition-transform duration-300 z-30"
+              >
+                Book Now
+              </Link>
+            </motion.div>
+          </motion.div>
         ))}
       </div>
 
-      {/* Call to Action Section */}
-      <section className="bg-gray-900 text-white text-center py-20 mt-24 rounded-2xl shadow-xl">
-        <h2 className="text-4xl md:text-5xl font-bold mb-4">
-          See Something You Like?
-        </h2>
-        <p className="mb-6 text-lg md:text-xl text-gray-300">
-          Book your appointment now and get your perfect style!
-        </p>
-        <Link
-          to="/booking"
-          className="bg-yellow-400 text-gray-900 px-10 py-3 rounded-full font-semibold uppercase tracking-wide shadow-lg hover:scale-105 transition-transform duration-300"
-        >
-          Book Now
-        </Link>
-      </section>
+      {/* Bottom padding */}
+      <div className="pb-20"></div>
     </div>
   );
 };
