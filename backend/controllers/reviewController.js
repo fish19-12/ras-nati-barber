@@ -1,11 +1,29 @@
 const Review = require("../models/Review");
+const cloudinary = require("../config/cloudinary");
 
 // Add a review
 exports.addReview = async (req, res) => {
   try {
-    const review = await Review.create(req.body);
+    const { name, role, message, rating } = req.body;
+    if (!req.file)
+      return res.status(400).json({ message: "No image uploaded" });
+
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: "ras_nati_reviews",
+    });
+
+    const review = await Review.create({
+      name,
+      role,
+      message,
+      rating: rating || 5,
+      photoUrl: result.secure_url,
+      publicId: result.public_id,
+    });
+
     res.status(201).json(review);
   } catch (error) {
+    console.error(error);
     res.status(400).json({ message: error.message });
   }
 };
@@ -14,21 +32,34 @@ exports.addReview = async (req, res) => {
 exports.getReviews = async (req, res) => {
   try {
     const reviews = await Review.find().sort({ createdAt: -1 });
-    res.json(reviews);
+    res.status(200).json(reviews);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-// Delete review
+// Delete a review
 exports.deleteReview = async (req, res) => {
   try {
-    const review = await Review.findById(req.params.id);
+    const { id } = req.params;
+    if (!id.match(/^[0-9a-fA-F]{24}$/))
+      return res.status(400).json({ message: "Invalid ID" });
+
+    const review = await Review.findById(id);
     if (!review) return res.status(404).json({ message: "Review not found" });
 
-    await review.remove();
-    res.json({ message: "Review deleted" });
+    // Delete from Cloudinary
+    try {
+      await cloudinary.uploader.destroy(review.publicId);
+    } catch (err) {
+      console.error("Cloudinary deletion failed:", err.message);
+    }
+
+    await Review.deleteOne({ _id: id });
+
+    res.json({ message: "Review deleted successfully" });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Delete review error:", error);
+    res.status(500).json({ message: "Server failed to delete review" });
   }
 };
