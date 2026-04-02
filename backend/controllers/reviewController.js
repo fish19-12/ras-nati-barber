@@ -15,7 +15,7 @@ exports.addReview = async (req, res) => {
     const review = await Review.create({
       name: req.body.name,
       role: req.body.role,
-      comment: req.body.comment,
+      comment: req.body.comment || req.body.message, // fallback if frontend sends "message"
       rating: req.body.rating || 5,
       photoUrl,
     });
