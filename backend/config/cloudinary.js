@@ -1,4 +1,5 @@
 const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const dotenv = require("dotenv");
 
 dotenv.config();
@@ -9,4 +10,16 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-module.exports = cloudinary;
+// Multer storage for booking photo with compression
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "bookings", // folder in your Cloudinary
+    allowed_formats: ["jpg", "jpeg", "png"],
+    transformation: [
+      { width: 800, crop: "limit", quality: "auto" }, // compress photo
+    ],
+  },
+});
+
+module.exports = { cloudinary, storage };

@@ -6,7 +6,6 @@ import axios from "axios";
 const Reviews = () => {
   const [reviews, setReviews] = useState([]);
 
-  // Fetch reviews from backend (replace static data)
   useEffect(() => {
     const fetchReviews = async () => {
       try {
@@ -27,52 +26,62 @@ const Reviews = () => {
         What Our Customers Say
       </h1>
 
-      <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto">
-        {reviews.map((review) => (
-          <motion.div
-            key={review._id}
-            whileHover={{ scale: 1.03 }}
-            transition={{ duration: 0.3 }}
-            className="flex flex-col md:flex-row bg-white/10 backdrop-blur-md rounded-3xl overflow-hidden border border-yellow-400/20 shadow-lg hover:shadow-[0_0_60px_rgba(255,215,0,0.5)] transition-transform"
-          >
-            {/* Photo Left */}
-            <div className="md:w-1/3 w-full h-64 md:h-auto relative flex-shrink-0">
-              <motion.img
-                src={review.photoUrl || review.photo}
-                alt={review.name}
-                className="w-full h-full object-cover rounded-t-3xl md:rounded-l-3xl md:rounded-tr-none transition-transform duration-500 hover:scale-105"
-              />
-            </div>
-
-            {/* Text Right */}
-            <div className="md:w-2/3 w-full p-6 md:p-8 flex flex-col justify-between gap-4">
-              <div>
-                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-yellow-400">
-                  {review.name}
-                </h3>
-                <p className="text-gray-300 text-sm sm:text-base">
-                  {review.role}
-                </p>
-                <p className="text-gray-300 text-base mt-2 leading-relaxed">
-                  "{review.message}"
-                </p>
+      {/* Mobile: horizontal scroll, Desktop: grid */}
+      <div className="lg:grid lg:grid-cols-3 lg:gap-8 max-w-7xl mx-auto">
+        <div className="flex gap-6 overflow-x-auto lg:overflow-visible pb-4 lg:pb-0">
+          {reviews.map((review) => (
+            <motion.div
+              key={review._id}
+              whileHover={{ scale: 1.03 }}
+              transition={{ duration: 0.3 }}
+              className="flex-shrink-0 w-full max-w-xs lg:max-w-none lg:flex lg:flex-col bg-white/10 backdrop-blur-md rounded-3xl overflow-hidden border border-yellow-400/20 shadow-lg hover:shadow-[0_0_60px_rgba(255,215,0,0.5)] transition-transform"
+            >
+              {/* Photo */}
+              <div className="w-full h-64 lg:h-48 relative">
+                <motion.img
+                  src={review.photoUrl}
+                  alt={review.name}
+                  className="w-full h-full object-cover rounded-t-3xl lg:rounded-t-none lg:rounded-tl-3xl transition-transform duration-500 hover:scale-105"
+                />
               </div>
 
-              {/* Rating */}
-              <div className="flex items-center mt-4">
-                {Array.from({ length: 5 }, (_, i) => {
-                  if (i + 1 <= review.rating)
-                    return <FaStar key={i} className="text-yellow-400 mr-1" />;
-                  if (i + 0.5 === review.rating)
+              {/* Text */}
+              <div className="p-6 flex flex-col justify-between gap-4">
+                <div>
+                  <h3 className="text-xl sm:text-2xl font-bold text-yellow-400">
+                    {review.name}
+                  </h3>
+                  <p className="text-gray-300 text-sm sm:text-base">
+                    {review.role}
+                  </p>
+                  <p className="text-gray-300 text-base mt-2 leading-relaxed">
+                    "{review.comment}"
+                  </p>
+                </div>
+
+                {/* Rating */}
+                <div className="flex items-center mt-4">
+                  {Array.from({ length: 5 }, (_, i) => {
+                    if (i + 1 <= review.rating)
+                      return (
+                        <FaStar key={i} className="text-yellow-400 mr-1" />
+                      );
+                    if (i + 0.5 === review.rating)
+                      return (
+                        <FaStarHalfAlt
+                          key={i}
+                          className="text-yellow-400 mr-1"
+                        />
+                      );
                     return (
-                      <FaStarHalfAlt key={i} className="text-yellow-400 mr-1" />
+                      <FaRegStar key={i} className="text-yellow-400 mr-1" />
                     );
-                  return <FaRegStar key={i} className="text-yellow-400 mr-1" />;
-                })}
+                  })}
+                </div>
               </div>
-            </div>
-          </motion.div>
-        ))}
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   );

@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { FaCopy, FaCheck } from "react-icons/fa";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const servicesList = [
   { name: "Haircut", desc: "Clean & modern cut" },
@@ -18,10 +21,16 @@ const timeOptions = [
 ];
 
 const Booking = () => {
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
   const [selectedServices, setSelectedServices] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
+  const [paymentPhoto, setPaymentPhoto] = useState(null);
+  const [photoPreview, setPhotoPreview] = useState(null);
+  const [message, setMessage] = useState("");
   const [copied, setCopied] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const toggleService = (service) => {
     setSelectedServices((prev) =>
@@ -37,8 +46,65 @@ const Booking = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setPaymentPhoto(file);
+      setPhotoPreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (
+      !name ||
+      !phone ||
+      selectedServices.length === 0 ||
+      !selectedDate ||
+      !selectedTime
+    ) {
+      return toast.error("Please fill all required fields!");
+    }
+
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("phone", phone);
+    formData.append("services", JSON.stringify(selectedServices));
+    formData.append("date", selectedDate);
+    formData.append("time", selectedTime);
+    if (paymentPhoto) formData.append("paymentPhoto", paymentPhoto);
+    formData.append("message", message);
+
+    try {
+      setLoading(true);
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/bookings`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        },
+      );
+      toast.success("Booking confirmed!");
+
+      // Reset form
+      setName("");
+      setPhone("");
+      setSelectedServices([]);
+      setSelectedDate("");
+      setSelectedTime("");
+      setPaymentPhoto(null);
+      setPhotoPreview(null);
+      setMessage("");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to create booking!");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="bg-black text-white min-h-screen px-4 py-16 md:py-24">
+      <ToastContainer position="top-right" autoClose={3000} />
       {/* HEADER */}
       <div className="text-center mb-12">
         <h1 className="text-4xl md:text-6xl font-extrabold bg-gradient-to-r from-yellow-400 to-primary bg-clip-text text-transparent">
@@ -87,8 +153,20 @@ const Booking = () => {
         <div className="bg-white/5 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-white/10">
           {/* NAME + PHONE */}
           <div className="grid md:grid-cols-2 gap-4 mb-6">
-            <input type="text" placeholder="Full Name" className="input" />
-            <input type="text" placeholder="Phone Number" className="input" />
+            <input
+              type="text"
+              placeholder="Full Name"
+              className="input"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="Phone Number"
+              className="input"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
           </div>
 
           {/* DATE */}
@@ -125,7 +203,6 @@ const Booking = () => {
 
           {/* SERVICES */}
           <h3 className="text-sm text-gray-300 mb-3">Choose Services</h3>
-
           <div className="grid grid-cols-2 gap-3 mb-6">
             {servicesList.map((service, i) => (
               <div
@@ -143,15 +220,40 @@ const Booking = () => {
             ))}
           </div>
 
-          {/* FILE */}
+          {/* PAYMENT PHOTO */}
           <div className="mb-6">
             <label className="text-sm text-gray-400">Payment Screenshot</label>
-            <input type="file" className="w-full mt-2 text-sm text-gray-400" />
+            <input
+              type="file"
+              className="w-full mt-2 text-sm text-gray-400"
+              onChange={handleFileChange}
+            />
+            {photoPreview && (
+              <img
+                src={photoPreview}
+                alt="Preview"
+                className="mt-2 w-full h-40 object-cover rounded-xl"
+              />
+            )}
+          </div>
+
+          {/* MESSAGE */}
+          <div className="mb-6">
+            <textarea
+              placeholder="Message (optional)"
+              className="input resize-none h-24"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+            />
           </div>
 
           {/* BUTTON */}
-          <button className="w-full py-4 rounded-full bg-gradient-to-r from-yellow-400 to-primary text-black font-bold hover:scale-105 transition">
-            Confirm Booking
+          <button
+            onClick={handleSubmit}
+            disabled={loading}
+            className="w-full py-4 rounded-full bg-gradient-to-r from-yellow-400 to-primary text-black font-bold hover:scale-105 transition disabled:opacity-50"
+          >
+            {loading ? "Submitting..." : "Confirm Booking"}
           </button>
         </div>
       </div>
