@@ -68,20 +68,20 @@ const Hero = () => {
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="flex flex-col sm:flex-row gap-4 mt-8 w-full sm:w-auto"
+          className="flex flex-col sm:flex-row gap-4 mt-8 justify-center"
         >
           <Link
             to="/booking"
-            className="w-full sm:w-auto px-8 py-3 rounded-full bg-amber-400 text-black font-semibold hover:scale-105 hover:bg-amber-300 transition"
+            className="px-5 py-2.5 sm:px-8 sm:py-3 rounded-full bg-amber-400 text-black font-semibold hover:scale-105 hover:bg-amber-300 transition text-sm sm:text-base"
           >
             Book Appointment
           </Link>
 
           <Link
             to="/gallery"
-            className="w-full sm:w-auto px-8 py-3 rounded-full border border-white/40 hover:bg-white hover:text-black transition"
+            className="px-5 py-2.5 sm:px-8 sm:py-3 rounded-full border border-white/40 hover:bg-white hover:text-black transition text-sm sm:text-base"
           >
-            View Work
+            View services
           </Link>
         </motion.div>
 
