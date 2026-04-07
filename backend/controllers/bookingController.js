@@ -60,3 +60,41 @@ exports.getBookings = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+// Delete a booking
+exports.deleteBooking = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Validate MongoDB ObjectId
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(400).json({ message: "Invalid booking ID" });
+    }
+
+    const booking = await Booking.findById(id);
+    if (!booking) return res.status(404).json({ message: "Booking not found" });
+
+    // Optional: Delete payment photo from Cloudinary if exists
+    if (
+      booking.paymentPhotoUrl &&
+      booking.paymentPhotoUrl.includes("res.cloudinary.com")
+    ) {
+      const publicId = booking.paymentPhotoUrl
+        .split("/")
+        .slice(-1)[0]
+        .split(".")[0]; // get public_id from URL
+      const cloudinary = require("../config/cloudinary").cloudinary;
+      try {
+        await cloudinary.uploader.destroy(publicId);
+      } catch (err) {
+        console.error("Cloudinary deletion failed:", err.message);
+      }
+    }
+
+    await Booking.deleteOne({ _id: id });
+
+    res.json({ message: "Booking deleted successfully" });
+  } catch (error) {
+    console.error("Delete booking error:", error.message);
+    res.status(500).json({ message: "Server failed to delete booking" });
+  }
+};
