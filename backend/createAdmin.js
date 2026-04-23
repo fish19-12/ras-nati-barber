@@ -19,7 +19,7 @@ async function createAdmin() {
     }
 
     const admin = new User({
-      username: "admin@nati.com",
+      username: "admin@kemekem.com",
       password: "112233", // will be hashed automatically
     });
 
