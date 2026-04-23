@@ -23,6 +23,9 @@ app.use("/api/bookings", require("./routes/bookingRoutes"));
 app.use("/api/gallery", require("./routes/galleryRoutes"));
 app.use("/api/reviews", require("./routes/reviewRoutes"));
 
+// ✅ NEW: Register Route
+app.use("/api/register", require("./routes/registerRoutes"));
+
 // ✅ Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
