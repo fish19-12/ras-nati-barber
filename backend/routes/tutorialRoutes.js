@@ -17,14 +17,14 @@ const {
   deleteTutorial,
 } = require("../controllers/tutorialController");
 
-/* =========================
+/* =========================================
    THUMBNAIL STORAGE
-========================= */
+========================================= */
 
 const thumbnailStorage = new CloudinaryStorage({
   cloudinary,
 
-  params: {
+  params: async (req, file) => ({
     folder: "tutorial-thumbnails",
 
     allowed_formats: ["jpg", "jpeg", "png", "webp"],
@@ -32,18 +32,17 @@ const thumbnailStorage = new CloudinaryStorage({
     transformation: [
       {
         width: 1200,
-
         crop: "limit",
-
         quality: "auto",
+        fetch_format: "auto",
       },
     ],
-  },
+  }),
 });
 
-/* =========================
+/* =========================================
    VIDEO STORAGE
-========================= */
+========================================= */
 
 const videoStorage = new CloudinaryStorage({
   cloudinary,
@@ -55,7 +54,9 @@ const videoStorage = new CloudinaryStorage({
 
     allowed_formats: ["mp4", "mov", "avi", "mkv", "webm"],
 
-    public_id: Date.now() + "-" + file.originalname.split(".")[0],
+    public_id: `${Date.now()}-${file.originalname
+      .split(".")[0]
+      .replace(/\s+/g, "-")}`,
 
     transformation: [
       {
@@ -73,74 +74,182 @@ const videoStorage = new CloudinaryStorage({
   }),
 });
 
-/* =========================
-   MULTER
-========================= */
+/* =========================================
+   MULTER STORAGE
+========================================= */
 
-const thumbnailUpload = multer({
-  storage: thumbnailStorage,
+const storage = {
+  thumbnail: thumbnailStorage,
+  video: videoStorage,
+};
 
-  limits: {
-    fileSize: 10 * 1024 * 1024, // 10MB
-  },
-});
+/* =========================================
+   MULTER UPLOAD
+========================================= */
 
-const videoUpload = multer({
-  storage: videoStorage,
+const upload = multer({
+  storage: multer.memoryStorage(),
 
   limits: {
     fileSize: 100 * 1024 * 1024, // 100MB
   },
 });
 
-/* =========================
-   CUSTOM UPLOAD MIDDLEWARE
-========================= */
+/* =========================================
+   MANUAL CLOUDINARY UPLOAD
+========================================= */
 
-const uploadTutorialFiles = (req, res, next) => {
-  thumbnailUpload.single("thumbnail")(req, res, function (thumbnailError) {
-    if (thumbnailError) {
-      return res.status(500).json({
-        message: thumbnailError.message,
-      });
-    }
+const streamifier = require("streamifier");
 
-    const thumbnailFile = req.file;
+const uploadToCloudinary = (buffer, options) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      options,
+      (error, result) => {
+        if (error) reject(error);
+        else resolve(result);
+      },
+    );
 
-    videoUpload.single("video")(req, res, function (videoError) {
-      if (videoError) {
-        return res.status(500).json({
-          message: videoError.message,
-        });
-      }
-
-      const videoFile = req.file;
-
-      req.files = {
-        thumbnail: [thumbnailFile],
-
-        video: [videoFile],
-      };
-
-      next();
-    });
+    streamifier.createReadStream(buffer).pipe(stream);
   });
 };
 
-/* =========================
-   ROUTES
-========================= */
+/* =========================================
+   CREATE TUTORIAL
+========================================= */
 
-/* CREATE */
-router.post("/", uploadTutorialFiles, createTutorial);
+router.post(
+  "/",
+  upload.fields([
+    { name: "thumbnail", maxCount: 1 },
+    { name: "video", maxCount: 1 },
+  ]),
+  async (req, res) => {
+    try {
+      if (!req.files.thumbnail || !req.files.video) {
+        return res.status(400).json({
+          message: "Thumbnail and video are required",
+        });
+      }
 
-/* GET ALL */
+      /* FILES */
+
+      const thumbnailFile = req.files.thumbnail[0];
+
+      const videoFile = req.files.video[0];
+
+      /* UPLOAD THUMBNAIL */
+
+      const thumbnailUpload = await uploadToCloudinary(thumbnailFile.buffer, {
+        folder: "tutorial-thumbnails",
+
+        resource_type: "image",
+
+        transformation: [
+          {
+            width: 1200,
+            crop: "limit",
+            quality: "auto",
+            fetch_format: "auto",
+          },
+        ],
+      });
+
+      /* UPLOAD VIDEO */
+
+      const videoUpload = await uploadToCloudinary(videoFile.buffer, {
+        folder: "tutorial-videos",
+
+        resource_type: "video",
+
+        transformation: [
+          {
+            quality: "auto:low",
+
+            fetch_format: "auto",
+
+            width: 1280,
+
+            crop: "limit",
+
+            video_codec: "h264",
+          },
+        ],
+      });
+
+      /* SAVE DATABASE */
+
+      req.body.thumbnailUrl = thumbnailUpload.secure_url;
+
+      req.body.thumbnailPublicId = thumbnailUpload.public_id;
+
+      req.body.videoUrl = videoUpload.secure_url;
+
+      req.body.videoPublicId = videoUpload.public_id;
+
+      req.body.featured = req.body.featured || false;
+
+      nextCreate(req, res);
+    } catch (error) {
+      console.error("UPLOAD ERROR:", error);
+
+      res.status(500).json({
+        message: error.message,
+      });
+    }
+  },
+);
+
+/* =========================================
+   CONTROLLER HANDLERS
+========================================= */
+
+const nextCreate = async (req, res) => {
+  try {
+    const Tutorial = require("../models/Tutorial");
+
+    const tutorial = await Tutorial.create({
+      title: req.body.title,
+      description: req.body.description,
+      category: req.body.category,
+      level: req.body.level,
+      duration: req.body.duration,
+      featured: req.body.featured,
+
+      thumbnailUrl: req.body.thumbnailUrl,
+      thumbnailPublicId: req.body.thumbnailPublicId,
+
+      videoUrl: req.body.videoUrl,
+      videoPublicId: req.body.videoPublicId,
+    });
+
+    res.status(201).json(tutorial);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+/* =========================================
+   GET ALL
+========================================= */
+
 router.get("/", getTutorials);
 
-/* GET SINGLE */
+/* =========================================
+   GET SINGLE
+========================================= */
+
 router.get("/:id", getSingleTutorial);
 
-/* DELETE */
+/* =========================================
+   DELETE
+========================================= */
+
 router.delete("/:id", deleteTutorial);
 
 module.exports = router;
