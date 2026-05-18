@@ -54,7 +54,7 @@ const Contact = () => {
           {/* INSTAGRAM */}
           <div className="flex items-center gap-4 text-lg">
             <FaInstagram className="text-pink-500 text-2xl" />
-            <span className="text-gray-200">@rasnatibarbershop</span>
+            <span className="text-gray-200">nhattansisay@gmail.com</span>
           </div>
 
           {/* ADDRESS */}
@@ -62,7 +62,7 @@ const Contact = () => {
             <FaMapMarkerAlt className="text-yellow-400 text-2xl mt-1" />
             <span className="text-gray-200">
               Addis Ababa – Welo Sefer <br />
-              Grand Mall, 2nd Floor
+              Garad Mall, 2nd Floor
             </span>
           </div>
 

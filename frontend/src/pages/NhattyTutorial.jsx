@@ -1,7 +1,16 @@
 // src/pages/NhattyTutorial.jsx
 
 import { motion } from "framer-motion";
-import { FaPlay, FaClock, FaStar, FaYoutube, FaCut } from "react-icons/fa";
+import {
+  FaPlay,
+  FaClock,
+  FaStar,
+  FaYoutube,
+  FaCut,
+  FaArrowRight,
+} from "react-icons/fa";
+
+const YOUTUBE_LINK = "https://www.youtube.com/@Nhattythebarber1";
 
 const tutorials = [
   {
@@ -11,7 +20,7 @@ const tutorials = [
     level: "Beginner",
     image:
       "https://images.unsplash.com/photo-1622286342621-4bd786c2447c?q=80&w=1200&auto=format&fit=crop",
-    video: "https://www.youtube.com/",
+    video: YOUTUBE_LINK,
   },
   {
     id: 2,
@@ -20,7 +29,7 @@ const tutorials = [
     level: "Intermediate",
     image:
       "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?q=80&w=1200&auto=format&fit=crop",
-    video: "https://www.youtube.com/",
+    video: YOUTUBE_LINK,
   },
   {
     id: 3,
@@ -29,7 +38,7 @@ const tutorials = [
     level: "Advanced",
     image:
       "https://images.unsplash.com/photo-1517832606299-7ae9b720a186?q=80&w=1200&auto=format&fit=crop",
-    video: "https://www.youtube.com/",
+    video: YOUTUBE_LINK,
   },
   {
     id: 4,
@@ -38,7 +47,7 @@ const tutorials = [
     level: "Beginner",
     image:
       "https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?q=80&w=1200&auto=format&fit=crop",
-    video: "https://www.youtube.com/",
+    video: YOUTUBE_LINK,
   },
 ];
 
@@ -63,14 +72,14 @@ const NhattyTutorial = () => {
               "url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=2070&auto=format&fit=crop')",
           }}
         >
-          <div className="absolute inset-0 bg-black/75 backdrop-blur-[2px]" />
+          <div className="absolute inset-0 bg-black/80 backdrop-blur-[2px]" />
         </div>
 
         <motion.div
           initial={{ opacity: 0, y: 60 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="relative z-10 text-center px-6 max-w-4xl"
+          className="relative z-10 text-center px-6 max-w-5xl"
         >
           <div className="flex justify-center mb-6">
             <div className="bg-yellow-400/20 border border-yellow-400/30 p-5 rounded-full">
@@ -80,22 +89,35 @@ const NhattyTutorial = () => {
 
           <h1 className="text-5xl md:text-7xl font-black leading-tight">
             NHATTY
-            <span className="text-yellow-400"> TUTORIAL</span>
+            <span className="text-yellow-400"> TUTORIALS</span>
           </h1>
 
           <p className="mt-6 text-gray-300 text-lg md:text-2xl leading-relaxed">
-            Learn professional barber techniques, fades, beard styling,
-            dreadlocks, and modern haircut skills from Nhatty The Barber.
+            Master premium barbering skills with professional tutorials from
+            Nhatty The Barber — fades, beard styling, dreadlocks, clipper
+            techniques, line-ups, and modern grooming education.
           </p>
 
           <div className="mt-10 flex flex-wrap justify-center gap-5">
-            <button className="bg-yellow-400 hover:bg-yellow-300 text-black px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 hover:scale-105 shadow-2xl">
-              Watch Tutorials
-            </button>
+            <a
+              href={YOUTUBE_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-yellow-400 hover:bg-yellow-300 text-black px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 hover:scale-105 shadow-2xl flex items-center gap-3"
+            >
+              <FaYoutube />
+              Watch On YouTube
+            </a>
 
-            <button className="border border-gray-600 hover:border-yellow-400 px-8 py-4 rounded-full font-semibold transition-all duration-300 hover:bg-yellow-400/10">
-              Explore Courses
-            </button>
+            <a
+              href={YOUTUBE_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="border border-gray-600 hover:border-yellow-400 px-8 py-4 rounded-full font-semibold transition-all duration-300 hover:bg-yellow-400/10 flex items-center gap-3"
+            >
+              Subscribe Channel
+              <FaArrowRight />
+            </a>
           </div>
         </motion.div>
       </section>
@@ -143,9 +165,14 @@ const NhattyTutorial = () => {
           />
 
           <div className="absolute inset-0 flex items-center justify-center">
-            <button className="bg-yellow-400 hover:scale-110 transition-transform duration-300 text-black p-8 rounded-full shadow-2xl">
+            <a
+              href={YOUTUBE_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-yellow-400 hover:scale-110 transition-transform duration-300 text-black p-8 rounded-full shadow-2xl"
+            >
               <FaPlay className="text-4xl ml-2" />
-            </button>
+            </a>
           </div>
 
           <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black via-black/70 to-transparent">
@@ -161,12 +188,12 @@ const NhattyTutorial = () => {
             </div>
 
             <h2 className="text-3xl md:text-5xl font-bold">
-              How To Make A Perfect Skin Fade
+              How To Create The Perfect Skin Fade
             </h2>
 
             <p className="text-gray-300 mt-4 max-w-3xl">
-              Master professional fade blending techniques, clean line-ups,
-              clipper control, and modern barber finishing.
+              Learn professional fade blending, clean detailing, clipper
+              techniques, and premium barber finishing from Nhatty The Barber.
             </p>
           </div>
         </motion.div>
@@ -179,9 +206,14 @@ const NhattyTutorial = () => {
             Latest <span className="text-yellow-400">Tutorials</span>
           </h2>
 
-          <button className="text-yellow-400 hover:text-yellow-300 font-semibold">
-            View All
-          </button>
+          <a
+            href={YOUTUBE_LINK}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-yellow-400 hover:text-yellow-300 font-semibold"
+          >
+            View All Videos
+          </a>
         </div>
 
         <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-8">
@@ -202,9 +234,14 @@ const NhattyTutorial = () => {
                 />
 
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
-                  <button className="bg-yellow-400 text-black p-5 rounded-full hover:scale-110 transition-transform">
+                  <a
+                    href={tutorial.video}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-yellow-400 text-black p-5 rounded-full hover:scale-110 transition-transform"
+                  >
                     <FaPlay className="text-xl ml-1" />
-                  </button>
+                  </a>
                 </div>
 
                 <div className="absolute top-4 left-4 bg-black/80 backdrop-blur-md px-4 py-2 rounded-full text-sm flex items-center gap-2">
@@ -232,37 +269,57 @@ const NhattyTutorial = () => {
                   {tutorial.title}
                 </h3>
 
-                <button className="mt-6 w-full bg-zinc-900 hover:bg-yellow-400 hover:text-black border border-zinc-800 hover:border-yellow-400 py-3 rounded-2xl font-semibold transition-all duration-300 flex items-center justify-center gap-3">
+                <a
+                  href={tutorial.video}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-6 w-full bg-zinc-900 hover:bg-yellow-400 hover:text-black border border-zinc-800 hover:border-yellow-400 py-3 rounded-2xl font-semibold transition-all duration-300 flex items-center justify-center gap-3"
+                >
                   <FaYoutube />
                   Watch Tutorial
-                </button>
+                </a>
               </div>
             </motion.div>
           ))}
         </div>
       </section>
 
-      {/* TIPS SECTION */}
+      {/* CTA SECTION */}
       <section className="max-w-7xl mx-auto px-6 pb-32">
-        <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-[40px] p-10 md:p-16 text-black">
-          <div className="max-w-4xl">
+        <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-[40px] p-10 md:p-16 text-black relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-72 h-72 bg-black/10 rounded-full blur-3xl"></div>
+
+          <div className="relative z-10 max-w-4xl">
             <h2 className="text-4xl md:text-6xl font-black leading-tight">
-              Become A Professional Barber
+              Level Up Your Barber Career
             </h2>
 
-            <p className="mt-6 text-lg md:text-xl text-black/80">
-              Learn modern techniques, client communication, fade blending,
-              beard shaping, and premium barber styling from Nhatty The Barber.
+            <p className="mt-6 text-lg md:text-xl text-black/80 leading-relaxed">
+              Join the Nhatty The Barber community and learn premium barbering
+              skills, modern fade techniques, beard styling, client experience,
+              and professional grooming secrets from real industry experience.
             </p>
 
             <div className="mt-10 flex flex-wrap gap-5">
-              <button className="bg-black text-white px-8 py-4 rounded-full font-bold hover:scale-105 transition-transform">
-                Start Learning
-              </button>
+              <a
+                href={YOUTUBE_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-black text-white px-8 py-4 rounded-full font-bold hover:scale-105 transition-transform flex items-center gap-3"
+              >
+                <FaYoutube />
+                Start Watching
+              </a>
 
-              <button className="border border-black px-8 py-4 rounded-full font-semibold hover:bg-black hover:text-white transition-all">
-                Join Community
-              </button>
+              <a
+                href={YOUTUBE_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="border border-black px-8 py-4 rounded-full font-semibold hover:bg-black hover:text-white transition-all flex items-center gap-3"
+              >
+                Join YouTube Community
+                <FaArrowRight />
+              </a>
             </div>
           </div>
         </div>

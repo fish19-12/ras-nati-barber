@@ -1,10 +1,10 @@
 import {
   FaWhatsapp,
   FaInstagram,
-  FaFacebookF,
   FaMapMarkerAlt,
   FaPhone,
   FaClock,
+  FaYoutube,
 } from "react-icons/fa";
 import { SiTiktok } from "react-icons/si";
 
@@ -15,7 +15,7 @@ const Footer = () => {
         {/* BRAND */}
         <div className="flex flex-col items-center md:items-start">
           <h2 className="text-2xl md:text-3xl font-bold text-white">
-            Ras Nati <span className="text-yellow-400">Barber Shop</span>
+            Nhatty <span className="text-yellow-400">The Barber</span>
           </h2>
 
           <p className="text-gray-400 text-sm mt-3 leading-relaxed max-w-sm">
@@ -25,7 +25,7 @@ const Footer = () => {
           </p>
 
           <p className="text-gray-500 text-sm mt-4">
-            © 2026 Nhatty The Barber . All rights reserved.
+            © 2026 Nhatty The Barber. All rights reserved.
           </p>
         </div>
 
@@ -35,7 +35,7 @@ const Footer = () => {
 
           <div className="flex items-center gap-2 text-gray-300">
             <FaPhone className="text-yellow-400" />
-            +251 975700510
+            +251 91 536 9490
           </div>
 
           <div className="flex items-start gap-2 text-gray-300 text-sm">
@@ -63,38 +63,42 @@ const Footer = () => {
           <h3 className="text-lg font-semibold text-white mb-4">Follow Us</h3>
 
           <div className="flex gap-4 text-2xl">
+            {/* WhatsApp */}
             <a
-              href="https://wa.me/251912345678"
+              href="https://wa.me/251915369490"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-green-500 hover:scale-110 hover:text-green-400 transition"
+              className="text-green-500 hover:scale-110 hover:text-green-400 transition duration-300"
             >
               <FaWhatsapp />
             </a>
 
+            {/* Instagram */}
             <a
-              href="#"
+              href="https://www.instagram.com/nhatty_the_barber?igsh=MTg5Y3RlY2RtdDJlaQ=="
               target="_blank"
               rel="noopener noreferrer"
-              className="text-pink-500 hover:scale-110 hover:text-pink-400 transition"
+              className="text-pink-500 hover:scale-110 hover:text-pink-400 transition duration-300"
             >
               <FaInstagram />
             </a>
 
+            {/* YouTube */}
             <a
-              href="#"
+              href="https://www.youtube.com/@Nhattythebarber1"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:scale-110 hover:text-blue-500 transition"
+              className="text-red-600 hover:scale-110 hover:text-red-500 transition duration-300"
             >
-              <FaFacebookF />
+              <FaYoutube />
             </a>
 
+            {/* TikTok */}
             <a
-              href="#"
+              href="https://www.tiktok.com/@nhattythebarber"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-white rounded-full p-1 text-black hover:scale-110 transition"
+              className="bg-white rounded-full p-1 text-black hover:scale-110 transition duration-300"
             >
               <SiTiktok />
             </a>

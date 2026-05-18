@@ -7,6 +7,7 @@ import {
   FaMagic,
   FaCar,
   FaCity,
+  FaClock,
 } from "react-icons/fa";
 
 import axios from "axios";
@@ -50,11 +51,38 @@ const servicesList = [
   },
 ];
 
-const timeOptions = [
-  "Morning (2:00 - 6:00)",
-  "Midday (6:00 - 9:00)",
-  "Afternoon (9:00 - 12:00)",
-  "Evening (12:00 - 2:00)",
+// INDIVIDUAL TIME LIST
+const timePeriods = [
+  {
+    label: "Morning",
+    times: [
+      "12:00 AM",
+      "1:00 AM",
+      "2:00 AM",
+      "3:00 AM",
+      "4:00 AM",
+      "5:00 AM",
+      "6:00 AM",
+    ],
+  },
+
+  {
+    label: "Afternoon",
+    times: [
+      "12:00 PM",
+      "1:00 PM",
+      "2:00 PM",
+      "3:00 PM",
+      "4:00 PM",
+      "5:00 PM",
+      "6:00 PM",
+    ],
+  },
+
+  {
+    label: "Evening",
+    times: ["7:00 PM", "8:00 PM", "9:00 PM", "10:00 PM", "11:00 PM"],
+  },
 ];
 
 const Booking = () => {
@@ -65,6 +93,9 @@ const Booking = () => {
   const [selectedService, setSelectedService] = useState("");
 
   const [selectedDate, setSelectedDate] = useState("");
+
+  // TIME STATES
+  const [selectedPeriod, setSelectedPeriod] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
 
   const [outdoorAddress, setOutdoorAddress] = useState("");
@@ -80,6 +111,16 @@ const Booking = () => {
   const [copied, setCopied] = useState("");
 
   const [loading, setLoading] = useState(false);
+
+  // SUCCESS POPUP
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+  const [bookingInfo, setBookingInfo] = useState({
+    customer: "",
+    date: "",
+    time: "",
+    service: "",
+  });
 
   // SELECT ONLY ONE SERVICE
   const handleServiceSelect = (service) => {
@@ -99,14 +140,87 @@ const Booking = () => {
     }, 2000);
   };
 
+  // IMAGE COMPRESS FUNCTION
+  const compressImage = (file) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+
+      reader.readAsDataURL(file);
+
+      reader.onload = (event) => {
+        const img = new Image();
+
+        img.src = event.target.result;
+
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+
+          const MAX_WIDTH = 1200;
+          const MAX_HEIGHT = 1200;
+
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width *= MAX_HEIGHT / height;
+              height = MAX_HEIGHT;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+
+          const ctx = canvas.getContext("2d");
+
+          ctx.drawImage(img, 0, 0, width, height);
+
+          canvas.toBlob(
+            (blob) => {
+              const compressedFile = new File([blob], file.name, {
+                type: "image/jpeg",
+                lastModified: Date.now(),
+              });
+
+              resolve(compressedFile);
+            },
+            "image/jpeg",
+            0.7,
+          );
+        };
+      };
+    });
+  };
+
   // FILE
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const file = e.target.files[0];
 
     if (file) {
-      setPaymentPhoto(file);
-      setPhotoPreview(URL.createObjectURL(file));
+      toast.info("Compressing image...");
+
+      const compressedImage = await compressImage(file);
+
+      setPaymentPhoto(compressedImage);
+
+      setPhotoPreview(URL.createObjectURL(compressedImage));
+
+      toast.success("Image optimized successfully!");
     }
+  };
+
+  // GET TIMES
+  const getFilteredTimes = () => {
+    const foundPeriod = timePeriods.find(
+      (period) => period.label === selectedPeriod,
+    );
+
+    return foundPeriod ? foundPeriod.times : [];
   };
 
   // SUBMIT
@@ -137,6 +251,9 @@ const Booking = () => {
     formData.append("service", selectedService);
 
     formData.append("date", selectedDate);
+
+    // SAVE BOTH
+    formData.append("timePeriod", selectedPeriod);
     formData.append("time", selectedTime);
 
     formData.append("outdoorAddress", outdoorAddress);
@@ -164,6 +281,16 @@ const Booking = () => {
         },
       );
 
+      // MODERN SUCCESS POPUP
+      setBookingInfo({
+        customer: name,
+        date: selectedDate,
+        time: selectedTime,
+        service: selectedService,
+      });
+
+      setShowSuccessModal(true);
+
       toast.success("Booking Confirmed!");
 
       // RESET
@@ -171,6 +298,7 @@ const Booking = () => {
       setPhone("");
       setSelectedService("");
       setSelectedDate("");
+      setSelectedPeriod("");
       setSelectedTime("");
       setOutdoorAddress("");
       setCityLocation("");
@@ -189,7 +317,90 @@ const Booking = () => {
 
   return (
     <div className="min-h-screen bg-black text-white relative overflow-hidden">
-      <ToastContainer position="top-right" autoClose={3000} />
+      <ToastContainer position="top-right" autoClose={3000} theme="dark" />
+
+      {/* SUCCESS MODAL */}
+      {showSuccessModal && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
+          <div className="w-full max-w-lg rounded-[30px] border border-yellow-500/20 bg-[#0d0d0d] p-6 sm:p-8 relative overflow-hidden animate-popup">
+            {/* GLOW */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[250px] h-[250px] bg-yellow-500/10 blur-[120px] rounded-full"></div>
+
+            {/* ICON */}
+            <div className="relative z-10 flex justify-center mb-5">
+              <div className="w-20 h-20 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 flex items-center justify-center text-black text-3xl shadow-2xl shadow-yellow-500/30">
+                ✓
+              </div>
+            </div>
+
+            {/* TITLE */}
+            <div className="relative z-10 text-center">
+              <h2 className="text-3xl font-black bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
+                Booking Confirmed
+              </h2>
+
+              <p className="text-gray-400 mt-3 text-sm sm:text-base leading-relaxed">
+                Thank you{" "}
+                <span className="text-yellow-400 font-semibold">
+                  {bookingInfo.customer}
+                </span>{" "}
+                for booking with{" "}
+                <span className="text-white font-semibold">
+                  Nhatty The Barber
+                </span>
+                .
+              </p>
+            </div>
+
+            {/* BOOKING DETAILS */}
+            <div className="relative z-10 mt-6 space-y-4">
+              <div className="bg-white/5 border border-white/10 rounded-2xl p-4">
+                <p className="text-xs text-gray-400 mb-1">Service</p>
+
+                <h4 className="font-bold text-lg">{bookingInfo.service}</h4>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-4">
+                  <p className="text-xs text-gray-400 mb-1">Date</p>
+
+                  <h4 className="font-bold">{bookingInfo.date}</h4>
+                </div>
+
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-4">
+                  <p className="text-xs text-gray-400 mb-1">Time</p>
+
+                  <h4 className="font-bold">{bookingInfo.time}</h4>
+                </div>
+              </div>
+
+              {/* NOTICE */}
+              <div className="rounded-2xl border border-yellow-500/20 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 p-5">
+                <h4 className="text-yellow-400 font-bold mb-2">
+                  Important Notice
+                </h4>
+
+                <p className="text-sm text-gray-300 leading-relaxed">
+                  Please arrive at your scheduled appointment time. If you are
+                  delayed by more than{" "}
+                  <span className="text-yellow-400 font-semibold">
+                    20 minutes
+                  </span>
+                  , availability may no longer be guaranteed.
+                </p>
+              </div>
+            </div>
+
+            {/* BUTTON */}
+            <button
+              onClick={() => setShowSuccessModal(false)}
+              className="relative z-10 mt-6 w-full py-4 rounded-2xl bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold hover:scale-[1.01] transition-all duration-300"
+            >
+              Done
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* BG */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[450px] h-[450px] bg-yellow-500/10 blur-[130px] rounded-full"></div>
@@ -321,8 +532,6 @@ const Booking = () => {
               </div>
             </div>
 
-            {/* DATE */}
-
             {/* SERVICES */}
             <div className="mb-7">
               <h3 className="section-title">Choose One Service</h3>
@@ -387,10 +596,12 @@ const Booking = () => {
                 </div>
               </div>
             )}
+
+            {/* APPOINTMENT */}
             <div className="mb-7">
               <h3 className="section-title">Appointment Schedule</h3>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                 <div>
                   <label className="label">Select Date</label>
 
@@ -403,23 +614,68 @@ const Booking = () => {
                 </div>
 
                 <div>
-                  <label className="label">Preferred Time</label>
+                  <label className="label">Select Period</label>
 
                   <select
                     className="input"
-                    value={selectedTime}
-                    onChange={(e) => setSelectedTime(e.target.value)}
+                    value={selectedPeriod}
+                    onChange={(e) => {
+                      setSelectedPeriod(e.target.value);
+                      setSelectedTime("");
+                    }}
                   >
-                    <option value="">Select Time</option>
+                    <option value="">Choose Time Period</option>
 
-                    {timeOptions.map((time, i) => (
-                      <option key={i} value={time}>
-                        {time}
+                    {timePeriods.map((period, i) => (
+                      <option key={i} value={period.label}>
+                        {period.label}
                       </option>
                     ))}
                   </select>
                 </div>
               </div>
+
+              {/* TIME GRID */}
+              {selectedPeriod && (
+                <div className="bg-black/30 border border-white/10 rounded-2xl p-4">
+                  <div className="flex items-center gap-2 mb-4">
+                    <FaClock className="text-yellow-400" />
+
+                    <h4 className="font-semibold">
+                      Select Exact Time ({selectedPeriod})
+                    </h4>
+                  </div>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                    {getFilteredTimes().map((time, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={() => setSelectedTime(time)}
+                        className={`py-3 rounded-xl text-sm font-medium border transition-all duration-300 ${
+                          selectedTime === time
+                            ? "bg-gradient-to-r from-yellow-400 to-orange-500 text-black border-yellow-400"
+                            : "bg-white/5 border-white/10 hover:border-yellow-400/40 hover:bg-white/10"
+                        }`}
+                      >
+                        {time}
+                      </button>
+                    ))}
+                  </div>
+
+                  {selectedTime && (
+                    <div className="mt-4 p-4 rounded-2xl bg-yellow-500/10 border border-yellow-500/20">
+                      <p className="text-sm text-yellow-400 font-semibold">
+                        Selected Booking Time:
+                      </p>
+
+                      <p className="text-lg font-bold mt-1">
+                        {selectedPeriod} - {selectedTime}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* SCREENSHOT */}
@@ -428,9 +684,14 @@ const Booking = () => {
 
               <input
                 type="file"
+                accept="image/*"
                 onChange={handleFileChange}
                 className="w-full text-sm text-gray-400"
               />
+
+              <p className="text-xs text-gray-500 mt-2">
+                Images are automatically optimized for faster booking.
+              </p>
 
               {photoPreview && (
                 <img
@@ -501,6 +762,22 @@ const Booking = () => {
             font-weight: 700;
             margin-bottom: 16px;
             color: white;
+          }
+
+          @keyframes popup {
+            0% {
+              opacity: 0;
+              transform: scale(0.9) translateY(20px);
+            }
+
+            100% {
+              opacity: 1;
+              transform: scale(1) translateY(0);
+            }
+          }
+
+          .animate-popup {
+            animation: popup 0.35s ease;
           }
 
           @media (max-width: 640px) {

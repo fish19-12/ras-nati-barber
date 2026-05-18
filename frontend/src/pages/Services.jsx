@@ -1,26 +1,24 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { FaCrown, FaGem, FaCar, FaCity, FaMagic, FaStar } from "react-icons/fa";
+import {
+  FaCrown,
+  FaGem,
+  FaCar,
+  FaCity,
+  FaFire,
+  FaSpa,
+  FaGlassWhiskey,
+  FaMagic,
+  FaStar,
+} from "react-icons/fa";
 
 import haircut from "../assets/haircut.jpg";
-import shaving from "../assets/shaving.jpg";
 import hairstyling from "../assets/hairstyiling.jpg";
-import treatment from "../assets/treatment.jpg";
-import shop1 from "../assets/shop1.jpg";
 
-// DETAIL SERVICE IMAGES (your gallery photos)
-import s1 from "../assets/s1.jpg";
-import s2 from "../assets/s2.jpg";
-import s3 from "../assets/s3.jpg";
-import s4 from "../assets/s4.jpg";
-import s5 from "../assets/s5.jpg";
-import s6 from "../assets/s6.jpg";
-import s7 from "../assets/s7.jpg";
-import s8 from "../assets/s8.jpg";
-import s9 from "../assets/s9.jpg";
-import s10 from "../assets/s10.jpg";
-import s11 from "../assets/s11.jpg";
-import s12 from "../assets/s12.jpg";
+/* NEW SERVICE IMAGES */
+import rebornImg from "../assets/reborn.jpg";
+import outdoorImg from "../assets/out.jpg";
+import cityImg from "../assets/city.jpg";
 
 const services = [
   {
@@ -30,7 +28,17 @@ const services = [
     icon: <FaCrown />,
     color: "from-yellow-400 to-amber-600",
     badge: "VIP",
-    gallery: [s1, s2, s3, s4],
+    items: [
+      "Tea",
+      "Coffee",
+      "Water",
+      "Shampoo",
+      "Face Steam",
+      "Curling",
+      "Hair Color",
+      "Face Mask",
+      "Hair Fiber",
+    ],
   },
 
   {
@@ -40,129 +48,205 @@ const services = [
     icon: <FaGem />,
     color: "from-purple-500 to-pink-500",
     badge: "VVIP",
-    gallery: [s5, s6, s7, s8],
+    items: [
+      "Tea",
+      "Coffee",
+      "Macchiato",
+      "Water",
+      "Juice",
+      "Shampoo",
+      "Face Steam",
+      "Hair Treatment",
+      "Curling",
+      "Special Hair Color",
+      "Face Mask",
+      "Hair Fiber",
+      "Real Hair Fiber",
+      "Pedicure",
+    ],
   },
 
   {
     title: "Nhatty Reborn Cut",
     subtitle: "Old To Young Transformation",
-    img: treatment,
+    img: rebornImg,
     icon: <FaMagic />,
     color: "from-red-500 to-orange-500",
     badge: "Exclusive",
     special: true,
-    gallery: [s9, s10, s11, s12],
+    description:
+      "Only available at Ras Nati Barber Shop. Complete transformation service designed to give you a fresh, modern, youthful appearance.",
+    items: [
+      "Tea",
+      "Coffee",
+      "Macchiato",
+      "Water",
+      "Juice",
+      "Shampoo",
+      "Face Steam",
+      "Hair Treatment",
+      "Curling",
+      "Special Hair Color",
+      "Face Mask",
+      "Hair Fiber",
+      "Real Hair Fiber",
+      "Pedicure",
+    ],
   },
 
   {
     title: "Outdoor Service",
     subtitle: "Professional Service At Your Location",
-    img: shaving,
+    img: outdoorImg,
     icon: <FaCar />,
     color: "from-green-500 to-emerald-600",
     badge: "Mobile",
-    gallery: [shop1, s2, s3, s6],
+    items: [
+      "Hair Color",
+      "Curling",
+      "Face Mask",
+      "Normal Hair Fiber",
+      "Real Hair Fiber",
+      "Reborn Cut",
+    ],
   },
 
   {
     title: "City To City Service",
     subtitle: "Travel Grooming Service",
-    img: shop1,
+    img: cityImg,
     icon: <FaCity />,
     color: "from-blue-500 to-cyan-500",
     badge: "Travel",
-    gallery: [s4, s7, s8, s10],
+    items: [
+      "Hair Color",
+      "Curling",
+      "Face Mask",
+      "Normal Hair Fiber",
+      "Real Hair Fiber",
+      "Reborn Cut",
+    ],
   },
 ];
 
 const Services = () => {
   return (
-    <div className="bg-black text-white min-h-screen relative overflow-hidden">
-      {/* Glow background */}
+    <div className="bg-black text-white min-h-screen overflow-hidden relative">
+      {/* Background Glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-yellow-500/10 blur-[180px] rounded-full"></div>
 
-      {/* HERO */}
-      <section className="text-center pt-24 pb-12 px-4">
-        <motion.h1
-          initial={{ opacity: 0, y: -30 }}
+      {/* Hero Section */}
+      <section className="relative text-center pt-24 sm:pt-28 pb-12 sm:pb-16 px-4">
+        <motion.div
+          initial={{ opacity: 0, y: -40 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-4xl md:text-6xl font-black"
+          transition={{ duration: 0.7 }}
         >
-          Our{" "}
-          <span className="bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
-            Services
+          <span className="inline-block px-4 py-1 rounded-full bg-yellow-400/10 border border-yellow-400/20 text-yellow-400 text-xs sm:text-sm mb-5">
+            Premium Grooming Experience
           </span>
-        </motion.h1>
 
-        <p className="text-gray-400 max-w-2xl mx-auto mt-4">
-          Premium grooming experience with modern luxury service packages
-          designed for style, comfort, and transformation.
-        </p>
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black uppercase leading-tight">
+            Our{" "}
+            <span className="bg-gradient-to-r from-yellow-400 via-orange-500 to-yellow-300 bg-clip-text text-transparent">
+              Services
+            </span>
+          </h1>
+
+          <p className="text-gray-400 max-w-2xl mx-auto mt-4 sm:mt-5 text-xs sm:text-base leading-relaxed">
+            Experience modern luxury grooming with exclusive VIP, VVIP, Nhatty
+            Reborn transformation, outdoor, and city-to-city barber services
+            only at Ras Nati Barber Shop.
+          </p>
+        </motion.div>
       </section>
 
-      {/* GRID */}
-      <section className="max-w-7xl mx-auto px-4 pb-24">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Services Grid */}
+      <section className="max-w-7xl mx-auto px-3 sm:px-4 pb-20 sm:pb-24">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-7">
           {services.map((service, index) => (
             <motion.div
               key={index}
-              whileHover={{ y: -10 }}
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 60 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
-              className="relative bg-white/5 border border-white/10 rounded-3xl overflow-hidden backdrop-blur-xl"
+              whileHover={{ y: -8 }}
+              className={`relative rounded-2xl overflow-hidden border ${
+                service.special ? "border-orange-500/40" : "border-white/10"
+              } bg-white/5 backdrop-blur-xl group h-full`}
             >
-              {/* MAIN IMAGE */}
-              <div className="relative h-56 overflow-hidden">
+              {/* Image */}
+              <div className="relative h-40 sm:h-52 lg:h-64 bg-black overflow-hidden flex items-center justify-center">
                 <img
                   src={service.img}
-                  className="w-full h-full object-cover group-hover:scale-110 transition duration-700"
+                  alt={service.title}
+                  className="w-full h-full object-contain transition duration-500 group-hover:scale-105"
                 />
 
+                {/* Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
 
-                {/* badge */}
+                {/* Badge */}
                 <div
-                  className={`absolute top-3 right-3 px-3 py-1 text-xs font-bold rounded-full bg-gradient-to-r ${service.color}`}
+                  className={`absolute top-2 right-2 sm:top-4 sm:right-4 bg-gradient-to-r ${service.color} text-white text-[9px] sm:text-xs font-bold px-2 py-1 sm:px-4 rounded-full shadow-lg`}
                 >
                   {service.badge}
                 </div>
               </div>
 
-              {/* CONTENT */}
-              <div className="p-5">
-                {/* icon */}
+              {/* Content */}
+              <div className="p-3 sm:p-5">
+                {/* Icon */}
                 <div
-                  className={`w-12 h-12 flex items-center justify-center rounded-2xl text-xl mb-3 bg-gradient-to-r ${service.color}`}
+                  className={`w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center text-lg sm:text-2xl mb-3 sm:mb-4 bg-gradient-to-r ${service.color}`}
                 >
                   {service.icon}
                 </div>
 
-                <h2 className="text-xl font-bold">{service.title}</h2>
-                <p className="text-yellow-400 text-sm mb-4">
+                {/* Title */}
+                <h2 className="text-sm sm:text-xl lg:text-2xl font-bold mb-1 sm:mb-2 leading-tight">
+                  {service.title}
+                </h2>
+
+                {/* Subtitle */}
+                <p className="text-yellow-400 text-[11px] sm:text-sm mb-2 sm:mb-4 leading-relaxed">
                   {service.subtitle}
                 </p>
 
-                {/* IMAGE GALLERY (NEW FEATURE) */}
-                <div className="grid grid-cols-4 gap-2 mb-5">
-                  {service.gallery.map((img, i) => (
-                    <div
-                      key={i}
-                      className="h-14 rounded-lg overflow-hidden border border-white/10"
-                    >
-                      <img
-                        src={img}
-                        className="w-full h-full object-cover hover:scale-110 transition"
-                      />
+                {/* Description */}
+                {service.description && (
+                  <div className="bg-orange-500/10 border border-orange-500/20 rounded-xl sm:rounded-2xl p-2 sm:p-4 mb-3 sm:mb-5">
+                    <div className="flex items-center gap-2 mb-1 sm:mb-2 text-orange-400">
+                      <FaStar className="text-xs sm:text-sm" />
+
+                      <span className="font-semibold text-[10px] sm:text-sm">
+                        Exclusive Service
+                      </span>
                     </div>
+
+                    <p className="text-[10px] sm:text-sm text-gray-300 leading-relaxed">
+                      {service.description}
+                    </p>
+                  </div>
+                )}
+
+                {/* Service Items */}
+                <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-4 sm:mb-6">
+                  {service.items.map((item, i) => (
+                    <span
+                      key={i}
+                      className="text-[9px] sm:text-xs px-2 py-1 sm:px-3 sm:py-2 rounded-full bg-white/10 border border-white/10 text-gray-300"
+                    >
+                      {item}
+                    </span>
                   ))}
                 </div>
 
-                {/* BUTTON */}
+                {/* Button */}
                 <Link
                   to="/booking"
-                  className={`block text-center py-3 rounded-xl font-semibold bg-gradient-to-r ${service.color} hover:scale-105 transition`}
+                  className={`inline-flex items-center justify-center w-full px-3 py-2 sm:px-6 sm:py-3 rounded-xl sm:rounded-full bg-gradient-to-r ${service.color} text-white font-semibold text-[11px] sm:text-sm hover:scale-105 transition duration-300`}
                 >
                   Book Now
                 </Link>
@@ -172,22 +256,84 @@ const Services = () => {
         </div>
       </section>
 
+      {/* Why Choose Us */}
+      <section className="max-w-6xl mx-auto px-4 pb-20 sm:pb-24">
+        <div className="rounded-2xl sm:rounded-3xl border border-yellow-400/10 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 p-5 sm:p-8 md:p-12 text-center">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-5">
+            Why Choose Ras Nati Barber Shop?
+          </h2>
+
+          <p className="text-gray-300 max-w-3xl mx-auto leading-relaxed text-sm sm:text-base">
+            Ras Nati Barber Shop delivers modern luxury grooming with premium
+            customer care, transformation cuts, mobile barber services, and
+            elite VIP experiences designed for clients who want style,
+            confidence, and professionalism.
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mt-8 sm:mt-10">
+            <div className="bg-black/30 rounded-2xl p-5 sm:p-6 border border-white/10">
+              <FaFire className="text-2xl sm:text-3xl text-yellow-400 mx-auto mb-3" />
+
+              <h3 className="font-bold mb-2 text-sm sm:text-base">
+                Modern Styles
+              </h3>
+
+              <p className="text-xs sm:text-sm text-gray-400">
+                Trending haircuts and professional styling.
+              </p>
+            </div>
+
+            <div className="bg-black/30 rounded-2xl p-5 sm:p-6 border border-white/10">
+              <FaSpa className="text-2xl sm:text-3xl text-yellow-400 mx-auto mb-3" />
+
+              <h3 className="font-bold mb-2 text-sm sm:text-base">
+                Luxury Experience
+              </h3>
+
+              <p className="text-xs sm:text-sm text-gray-400">
+                Premium grooming and relaxing treatments.
+              </p>
+            </div>
+
+            <div className="bg-black/30 rounded-2xl p-5 sm:p-6 border border-white/10">
+              <FaGlassWhiskey className="text-2xl sm:text-3xl text-yellow-400 mx-auto mb-3" />
+
+              <h3 className="font-bold mb-2 text-sm sm:text-base">
+                Premium Hospitality
+              </h3>
+
+              <p className="text-xs sm:text-sm text-gray-400">
+                Coffee, macchiato, juice, and VIP care.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
-      <section className="text-center pb-20 px-4">
-        <h2 className="text-3xl font-bold mb-3">
-          Ready for Your Transformation?
-        </h2>
-
-        <p className="text-gray-400 mb-6">
-          Book your appointment and experience luxury grooming.
-        </p>
-
-        <Link
-          to="/booking"
-          className="inline-block px-8 py-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold rounded-full hover:scale-105 transition"
+      <section className="text-center pb-16 sm:pb-20 px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="max-w-3xl mx-auto"
         >
-          Book Appointment
-        </Link>
+          <h2 className="text-2xl sm:text-4xl font-bold mb-4">
+            Ready For Your Transformation?
+          </h2>
+
+          <p className="text-gray-400 mb-6 sm:mb-8 text-sm sm:text-base">
+            Book your appointment today and experience premium grooming at Ras
+            Nati Barber Shop.
+          </p>
+
+          <Link
+            to="/booking"
+            className="inline-block px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold text-sm sm:text-base hover:scale-105 transition duration-300 shadow-2xl shadow-yellow-500/20"
+          >
+            Book Appointment
+          </Link>
+        </motion.div>
       </section>
     </div>
   );

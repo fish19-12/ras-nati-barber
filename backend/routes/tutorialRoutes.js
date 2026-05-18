@@ -58,10 +58,8 @@ const uploadToCloudinary = (buffer, options) => {
 router.post(
   "/",
 
-  upload.fields([
-    { name: "thumbnail", maxCount: 1 },
-    { name: "video", maxCount: 1 },
-  ]),
+  // ONLY THUMBNAIL NOW
+  upload.fields([{ name: "thumbnail", maxCount: 1 }]),
 
   async (req, res) => {
     try {
@@ -71,13 +69,16 @@ router.post(
 
       if (!req.files?.thumbnail?.[0]) {
         return res.status(400).json({
+          success: false,
           message: "Thumbnail is required",
         });
       }
 
-      if (!req.files?.video?.[0]) {
+      // VIDEO COMES FROM CLOUDINARY DIRECT UPLOAD
+      if (!req.body.videoUrl || !req.body.videoPublicId) {
         return res.status(400).json({
-          message: "Video is required",
+          success: false,
+          message: "Video upload failed",
         });
       }
 
@@ -86,8 +87,6 @@ router.post(
       ========================= */
 
       const thumbnailFile = req.files.thumbnail[0];
-
-      const videoFile = req.files.video[0];
 
       /* =========================
          UPLOAD THUMBNAIL
@@ -107,30 +106,6 @@ router.post(
             quality: "auto",
 
             fetch_format: "auto",
-          },
-        ],
-      });
-
-      /* =========================
-         UPLOAD VIDEO
-      ========================= */
-
-      const videoUpload = await uploadToCloudinary(videoFile.buffer, {
-        folder: "tutorial-videos",
-
-        resource_type: "video",
-
-        transformation: [
-          {
-            quality: "auto:low",
-
-            fetch_format: "auto",
-
-            width: 1280,
-
-            crop: "limit",
-
-            video_codec: "h264",
           },
         ],
       });
@@ -156,9 +131,10 @@ router.post(
 
         thumbnailPublicId: thumbnailUpload.public_id,
 
-        videoUrl: videoUpload.secure_url,
+        // VIDEO FROM FRONTEND CLOUDINARY
+        videoUrl: req.body.videoUrl,
 
-        videoPublicId: videoUpload.public_id,
+        videoPublicId: req.body.videoPublicId,
       });
 
       /* =========================

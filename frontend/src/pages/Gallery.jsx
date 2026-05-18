@@ -77,7 +77,7 @@ const Gallery = () => {
         <p className="text-gray-400 text-lg leading-relaxed">
           Welcome to the premium gallery of{" "}
           <span className="text-yellow-400 font-semibold">
-            Ras Nati Barber Shop
+            Nhatty The Barber
           </span>
           . Our barbers create modern styles, fades, and luxury grooming
           experiences trusted by influencers, celebrities, and thousands of

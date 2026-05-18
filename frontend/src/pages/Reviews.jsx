@@ -71,7 +71,7 @@ const Reviews = () => {
         </div>
 
         <div>
-          <h2 className="text-3xl font-bold text-yellow-400">4.9</h2>
+          <h2 className="text-3xl font-bold text-yellow-400">5</h2>
           <p className="text-gray-400">Average Rating</p>
         </div>
 
