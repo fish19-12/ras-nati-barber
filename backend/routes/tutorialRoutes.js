@@ -6,85 +6,20 @@ const router = express.Router();
 
 const multer = require("multer");
 
+const streamifier = require("streamifier");
+
 const { cloudinary } = require("../config/cloudinary");
 
-const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const Tutorial = require("../models/Tutorial");
 
 const {
-  createTutorial,
   getTutorials,
   getSingleTutorial,
   deleteTutorial,
 } = require("../controllers/tutorialController");
 
 /* =========================================
-   THUMBNAIL STORAGE
-========================================= */
-
-const thumbnailStorage = new CloudinaryStorage({
-  cloudinary,
-
-  params: async (req, file) => ({
-    folder: "tutorial-thumbnails",
-
-    allowed_formats: ["jpg", "jpeg", "png", "webp"],
-
-    transformation: [
-      {
-        width: 1200,
-        crop: "limit",
-        quality: "auto",
-        fetch_format: "auto",
-      },
-    ],
-  }),
-});
-
-/* =========================================
-   VIDEO STORAGE
-========================================= */
-
-const videoStorage = new CloudinaryStorage({
-  cloudinary,
-
-  params: async (req, file) => ({
-    folder: "tutorial-videos",
-
-    resource_type: "video",
-
-    allowed_formats: ["mp4", "mov", "avi", "mkv", "webm"],
-
-    public_id: `${Date.now()}-${file.originalname
-      .split(".")[0]
-      .replace(/\s+/g, "-")}`,
-
-    transformation: [
-      {
-        quality: "auto:low",
-
-        fetch_format: "auto",
-
-        width: 1280,
-
-        crop: "limit",
-
-        video_codec: "h264",
-      },
-    ],
-  }),
-});
-
-/* =========================================
-   MULTER STORAGE
-========================================= */
-
-const storage = {
-  thumbnail: thumbnailStorage,
-  video: videoStorage,
-};
-
-/* =========================================
-   MULTER UPLOAD
+   MULTER MEMORY STORAGE
 ========================================= */
 
 const upload = multer({
@@ -96,22 +31,23 @@ const upload = multer({
 });
 
 /* =========================================
-   MANUAL CLOUDINARY UPLOAD
+   CLOUDINARY STREAM UPLOAD
 ========================================= */
-
-const streamifier = require("streamifier");
 
 const uploadToCloudinary = (buffer, options) => {
   return new Promise((resolve, reject) => {
-    const stream = cloudinary.uploader.upload_stream(
+    const uploadStream = cloudinary.uploader.upload_stream(
       options,
       (error, result) => {
-        if (error) reject(error);
-        else resolve(result);
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result);
+        }
       },
     );
 
-    streamifier.createReadStream(buffer).pipe(stream);
+    streamifier.createReadStream(buffer).pipe(uploadStream);
   });
 };
 
@@ -121,25 +57,41 @@ const uploadToCloudinary = (buffer, options) => {
 
 router.post(
   "/",
+
   upload.fields([
     { name: "thumbnail", maxCount: 1 },
     { name: "video", maxCount: 1 },
   ]),
+
   async (req, res) => {
     try {
-      if (!req.files.thumbnail || !req.files.video) {
+      /* =========================
+         VALIDATION
+      ========================= */
+
+      if (!req.files?.thumbnail?.[0]) {
         return res.status(400).json({
-          message: "Thumbnail and video are required",
+          message: "Thumbnail is required",
         });
       }
 
-      /* FILES */
+      if (!req.files?.video?.[0]) {
+        return res.status(400).json({
+          message: "Video is required",
+        });
+      }
+
+      /* =========================
+         FILES
+      ========================= */
 
       const thumbnailFile = req.files.thumbnail[0];
 
       const videoFile = req.files.video[0];
 
-      /* UPLOAD THUMBNAIL */
+      /* =========================
+         UPLOAD THUMBNAIL
+      ========================= */
 
       const thumbnailUpload = await uploadToCloudinary(thumbnailFile.buffer, {
         folder: "tutorial-thumbnails",
@@ -149,14 +101,19 @@ router.post(
         transformation: [
           {
             width: 1200,
+
             crop: "limit",
+
             quality: "auto",
+
             fetch_format: "auto",
           },
         ],
       });
 
-      /* UPLOAD VIDEO */
+      /* =========================
+         UPLOAD VIDEO
+      ========================= */
 
       const videoUpload = await uploadToCloudinary(videoFile.buffer, {
         folder: "tutorial-videos",
@@ -178,61 +135,54 @@ router.post(
         ],
       });
 
-      /* SAVE DATABASE */
+      /* =========================
+         SAVE DATABASE
+      ========================= */
 
-      req.body.thumbnailUrl = thumbnailUpload.secure_url;
+      const tutorial = await Tutorial.create({
+        title: req.body.title,
 
-      req.body.thumbnailPublicId = thumbnailUpload.public_id;
+        description: req.body.description,
 
-      req.body.videoUrl = videoUpload.secure_url;
+        category: req.body.category,
 
-      req.body.videoPublicId = videoUpload.public_id;
+        level: req.body.level,
 
-      req.body.featured = req.body.featured || false;
+        duration: req.body.duration,
 
-      nextCreate(req, res);
+        featured: req.body.featured || false,
+
+        thumbnailUrl: thumbnailUpload.secure_url,
+
+        thumbnailPublicId: thumbnailUpload.public_id,
+
+        videoUrl: videoUpload.secure_url,
+
+        videoPublicId: videoUpload.public_id,
+      });
+
+      /* =========================
+         SUCCESS RESPONSE
+      ========================= */
+
+      res.status(201).json({
+        success: true,
+
+        message: "Tutorial uploaded successfully",
+
+        tutorial,
+      });
     } catch (error) {
-      console.error("UPLOAD ERROR:", error);
+      console.error("TUTORIAL UPLOAD ERROR:", error);
 
       res.status(500).json({
-        message: error.message,
+        success: false,
+
+        message: error.message || "Upload failed",
       });
     }
   },
 );
-
-/* =========================================
-   CONTROLLER HANDLERS
-========================================= */
-
-const nextCreate = async (req, res) => {
-  try {
-    const Tutorial = require("../models/Tutorial");
-
-    const tutorial = await Tutorial.create({
-      title: req.body.title,
-      description: req.body.description,
-      category: req.body.category,
-      level: req.body.level,
-      duration: req.body.duration,
-      featured: req.body.featured,
-
-      thumbnailUrl: req.body.thumbnailUrl,
-      thumbnailPublicId: req.body.thumbnailPublicId,
-
-      videoUrl: req.body.videoUrl,
-      videoPublicId: req.body.videoPublicId,
-    });
-
-    res.status(201).json(tutorial);
-  } catch (error) {
-    console.error(error);
-
-    res.status(500).json({
-      message: error.message,
-    });
-  }
-};
 
 /* =========================================
    GET ALL
