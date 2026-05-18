@@ -14,11 +14,9 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary,
   params: {
-    folder: "bookings", // folder in your Cloudinary
+    folder: "bookings",
     allowed_formats: ["jpg", "jpeg", "png"],
-    transformation: [
-      { width: 800, crop: "limit", quality: "auto" }, // compress photo
-    ],
+    transformation: [{ width: 800, crop: "limit", quality: "auto" }],
   },
 });
 

@@ -6,7 +6,7 @@ import { useTypewriter, Cursor } from "react-simple-typewriter";
 const Hero = () => {
   const [text] = useTypewriter({
     words: [
-      "Ras Nati Barber Shop",
+      "Nhatty The Barber ",
       "Premium Grooming Experience",
       "Modern Cuts & Clean Styles",
     ],
@@ -78,7 +78,7 @@ const Hero = () => {
           </Link>
 
           <Link
-            to="/gallery"
+            to="/services"
             className="px-5 py-2.5 sm:px-8 sm:py-3 rounded-full border border-white/40 hover:bg-white hover:text-black transition text-sm sm:text-base"
           >
             View services

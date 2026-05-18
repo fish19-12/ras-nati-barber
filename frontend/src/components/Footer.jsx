@@ -19,13 +19,13 @@ const Footer = () => {
           </h2>
 
           <p className="text-gray-400 text-sm mt-3 leading-relaxed max-w-sm">
-            Premium barber services in Addis Ababa. Ras Nati Barber Shop is
-            trusted by influencers, celebrities, and hundreds of loyal clients
-            for modern fades, stylish cuts, and luxury grooming.
+            Premium barber services in Addis Ababa. Nhatty The Barber is trusted
+            by influencers, celebrities, and hundreds of loyal clients for
+            modern fades, stylish cuts, and luxury grooming.
           </p>
 
           <p className="text-gray-500 text-sm mt-4">
-            © 2026 Ras Nati Barber Shop. All rights reserved.
+            © 2026 Nhatty The Barber . All rights reserved.
           </p>
         </div>
 
@@ -40,7 +40,7 @@ const Footer = () => {
 
           <div className="flex items-start gap-2 text-gray-300 text-sm">
             <FaMapMarkerAlt className="text-yellow-400 mt-1" />
-            Addis Ababa, Welo Sefer Grand Mall – 2nd Floor
+            Addis Ababa, Welo Sefer Garad Mall – 2nd Floor
           </div>
 
           <div className="flex items-center gap-2 text-gray-300 text-sm">
@@ -101,7 +101,7 @@ const Footer = () => {
           </div>
 
           <p className="text-gray-500 text-sm mt-4">
-            Stay connected with Ras Nati for the latest styles and updates.
+            Stay connected with Nhatty for the latest styles and updates.
           </p>
         </div>
       </div>
