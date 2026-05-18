@@ -1,6 +1,7 @@
 // controllers/tutorialController.js
 
 const Tutorial = require("../models/Tutorial");
+
 const { cloudinary } = require("../config/cloudinary");
 
 /* =========================
@@ -9,35 +10,94 @@ const { cloudinary } = require("../config/cloudinary");
 
 exports.createTutorial = async (req, res) => {
   try {
-    if (!req.files?.thumbnail || !req.files?.video) {
+    /* =========================
+       THUMBNAIL REQUIRED
+    ========================= */
+
+    if (!req.files?.thumbnail) {
       return res.status(400).json({
-        message: "Thumbnail and video are required",
+        message: "Thumbnail is required",
       });
     }
 
     const thumbnail = req.files.thumbnail[0];
-    const video = req.files.video[0];
+
+    /* =========================
+       VIDEO SOURCES
+    ========================= */
+
+    let videoUrl = "";
+    let videoPublicId = "";
+
+    /* OPTION 1:
+       VIDEO FILE FROM BACKEND
+    */
+
+    if (req.files?.video?.[0]) {
+      videoUrl = req.files.video[0].path;
+
+      videoPublicId = req.files.video[0].filename;
+    }
+
+    /* OPTION 2:
+       VIDEO FROM CLOUDINARY DIRECT UPLOAD
+    */
+
+    if (req.body.videoUrl && req.body.videoPublicId) {
+      videoUrl = req.body.videoUrl;
+
+      videoPublicId = req.body.videoPublicId;
+    }
+
+    /* =========================
+       VIDEO REQUIRED
+    ========================= */
+
+    if (!videoUrl || !videoPublicId) {
+      return res.status(400).json({
+        message: "Video is required",
+      });
+    }
+
+    /* =========================
+       CREATE TUTORIAL
+    ========================= */
 
     const tutorial = await Tutorial.create({
       title: req.body.title,
+
       description: req.body.description,
+
       category: req.body.category,
+
       level: req.body.level,
+
       duration: req.body.duration,
-      featured: req.body.featured,
+
+      featured: req.body.featured || false,
 
       thumbnailUrl: thumbnail.path,
+
       thumbnailPublicId: thumbnail.filename,
 
-      videoUrl: video.path,
-      videoPublicId: video.filename,
+      videoUrl,
+
+      videoPublicId,
     });
 
-    res.status(201).json(tutorial);
+    res.status(201).json({
+      success: true,
+
+      message: "Tutorial uploaded successfully",
+
+      tutorial,
+    });
   } catch (error) {
     console.error("CREATE TUTORIAL ERROR:", error);
 
     res.status(500).json({
+      success: false,
+
       message: error.message,
     });
   }
@@ -102,16 +162,24 @@ exports.deleteTutorial = async (req, res) => {
     }
 
     /* DELETE THUMBNAIL */
-    await cloudinary.uploader.destroy(tutorial.thumbnailPublicId);
+
+    if (tutorial.thumbnailPublicId) {
+      await cloudinary.uploader.destroy(tutorial.thumbnailPublicId);
+    }
 
     /* DELETE VIDEO */
-    await cloudinary.uploader.destroy(tutorial.videoPublicId, {
-      resource_type: "video",
-    });
+
+    if (tutorial.videoPublicId) {
+      await cloudinary.uploader.destroy(tutorial.videoPublicId, {
+        resource_type: "video",
+      });
+    }
 
     await Tutorial.findByIdAndDelete(req.params.id);
 
     res.status(200).json({
+      success: true,
+
       message: "Tutorial deleted successfully",
     });
   } catch (error) {
