@@ -1,6 +1,7 @@
 // routes/tutorialRoutes.js
 
 const express = require("express");
+
 const router = express.Router();
 
 const multer = require("multer");
@@ -31,7 +32,9 @@ const thumbnailStorage = new CloudinaryStorage({
     transformation: [
       {
         width: 1200,
+
         crop: "limit",
+
         quality: "auto",
       },
     ],
@@ -53,6 +56,20 @@ const videoStorage = new CloudinaryStorage({
     allowed_formats: ["mp4", "mov", "avi", "mkv", "webm"],
 
     public_id: Date.now() + "-" + file.originalname.split(".")[0],
+
+    transformation: [
+      {
+        quality: "auto:low",
+
+        fetch_format: "auto",
+
+        width: 1280,
+
+        crop: "limit",
+
+        video_codec: "h264",
+      },
+    ],
   }),
 });
 
@@ -62,10 +79,18 @@ const videoStorage = new CloudinaryStorage({
 
 const thumbnailUpload = multer({
   storage: thumbnailStorage,
+
+  limits: {
+    fileSize: 10 * 1024 * 1024, // 10MB
+  },
 });
 
 const videoUpload = multer({
   storage: videoStorage,
+
+  limits: {
+    fileSize: 100 * 1024 * 1024, // 100MB
+  },
 });
 
 /* =========================
@@ -93,6 +118,7 @@ const uploadTutorialFiles = (req, res, next) => {
 
       req.files = {
         thumbnail: [thumbnailFile],
+
         video: [videoFile],
       };
 
