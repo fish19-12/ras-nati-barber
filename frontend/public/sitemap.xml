@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+>
+  <url>
+    <loc>https://nhattythebarber.com/</loc>
+  </url>
+
+  <url>
+    <loc>https://nhattythebarber.com/about</loc>
+  </url>
+
+  <url>
+    <loc>https://nhattythebarber.com/services</loc>
+  </url>
+
+  <url>
+    <loc>https://nhattythebarber.com/gallery</loc>
+  </url>
+
+  <url>
+    <loc>https://nhattythebarber.com/reviews</loc>
+  </url>
+
+  <url>
+    <loc>https://nhattythebarber.com/contact</loc>
+  </url>
+
+  <url>
+    <loc>https://nhattythebarber.com/booking</loc>
+  </url>
+
+  <url>
+    <loc>https://nhattythebarber.com/tutorial</loc>
+  </url>
+</urlset>

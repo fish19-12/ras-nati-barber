@@ -6,9 +6,11 @@ import { useTypewriter, Cursor } from "react-simple-typewriter";
 const Hero = () => {
   const [text] = useTypewriter({
     words: [
-      "Nhatty The Barber ",
+      "Nhatty The Barber",
       "Premium Grooming Experience",
       "Modern Cuts & Clean Styles",
+      "Best Barber In Ethiopia",
+      "Luxury Barber Experience",
     ],
     loop: true,
     typeSpeed: 70,
@@ -17,15 +19,35 @@ const Hero = () => {
   });
 
   return (
-    <section className="relative w-full min-h-screen pt-20 flex items-center justify-center text-white overflow-hidden">
+    <section
+      className="relative w-full min-h-screen pt-20 flex items-center justify-center text-white overflow-hidden"
+      aria-label="Nhatty The Barber Hero Section"
+    >
+      {/* SEO FRIENDLY HIDDEN TEXT */}
+      <h1 className="sr-only">
+        Nhatty The Barber - Premium Barber Shop in Addis Ababa Ethiopia
+      </h1>
+
+      <p className="sr-only">
+        Nhatty The Barber provides premium grooming services, modern fades,
+        luxury haircuts, beard styling, VIP barber experiences, and professional
+        grooming in Ethiopia.
+      </p>
+
       {/* Background Image */}
       <div
-        className="absolute inset-0 bg-cover bg-center"
+        className="absolute inset-0 bg-cover bg-center scale-105"
         style={{ backgroundImage: `url(${hero})` }}
       />
 
       {/* Dark Overlay */}
-      <div className="absolute inset-0 bg-black/70" />
+      <div className="absolute inset-0 bg-black/75" />
+
+      {/* Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/90" />
+
+      {/* Glow Effect */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-amber-500/10 blur-[120px] rounded-full"></div>
 
       {/* Content */}
       <div className="relative z-10 max-w-5xl mx-auto px-6 text-center flex flex-col items-center">
@@ -34,33 +56,34 @@ const Hero = () => {
           initial={{ opacity: 0, y: -15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="mb-6 px-5 py-2 text-[10px] sm:text-xs uppercase tracking-widest border border-amber-400/40 rounded-full text-amber-400 backdrop-blur"
+          className="mb-6 px-5 py-2 text-[10px] sm:text-xs uppercase tracking-widest border border-amber-400/40 rounded-full text-amber-400 backdrop-blur bg-white/5"
         >
-          Premium Barber Experience
+          Premium Barber Experience In Ethiopia
         </motion.div>
 
         {/* Hero Title */}
-        <motion.h1
+        <motion.h2
           initial={{ opacity: 0, y: 35 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           className="font-extrabold leading-tight text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
         >
-          <span className="text-amber-400">
+          <span className="bg-gradient-to-r from-amber-300 via-yellow-400 to-orange-500 bg-clip-text text-transparent">
             {text}
             <Cursor cursorStyle="|" />
           </span>
-        </motion.h1>
+        </motion.h2>
 
         {/* Subtitle */}
         <motion.p
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="mt-5 text-cyan-300 text-sm sm:text-base md:text-lg max-w-xl"
+          className="mt-5 text-gray-300 text-sm sm:text-base md:text-lg max-w-2xl leading-relaxed"
         >
-          Clean fades, sharp lines, and a premium barber experience crafted for
-          men who value style, confidence, and precision.
+          Clean fades, sharp lineups, beard grooming, and luxury barber services
+          crafted for men who value confidence, precision, and modern style.
+          Trusted by influencers, celebrities, and clients across Ethiopia.
         </motion.p>
 
         {/* Buttons */}
@@ -68,21 +91,47 @@ const Hero = () => {
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="flex flex-col sm:flex-row gap-4 mt-8 justify-center"
+          className="flex flex-col sm:flex-row gap-4 mt-8 justify-center w-full sm:w-auto"
         >
           <Link
             to="/booking"
-            className="px-5 py-2.5 sm:px-8 sm:py-3 rounded-full bg-amber-400 text-black font-semibold hover:scale-105 hover:bg-amber-300 transition text-sm sm:text-base"
+            aria-label="Book barber appointment"
+            className="px-5 py-3 sm:px-8 sm:py-4 rounded-full bg-gradient-to-r from-amber-400 to-yellow-500 text-black font-semibold hover:scale-105 hover:shadow-[0_0_35px_rgba(251,191,36,0.45)] transition text-sm sm:text-base"
           >
             Book Appointment
           </Link>
 
           <Link
             to="/services"
-            className="px-5 py-2.5 sm:px-8 sm:py-3 rounded-full border border-white/40 hover:bg-white hover:text-black transition text-sm sm:text-base"
+            aria-label="View barber services"
+            className="px-5 py-3 sm:px-8 sm:py-4 rounded-full border border-white/30 bg-white/5 backdrop-blur hover:bg-white hover:text-black transition text-sm sm:text-base"
           >
-            View services
+            View Services
           </Link>
+        </motion.div>
+
+        {/* FEATURES */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.7 }}
+          className="mt-10 flex flex-wrap justify-center gap-3 text-[11px] sm:text-xs uppercase tracking-widest text-gray-300"
+        >
+          <span className="px-4 py-2 rounded-full bg-white/5 border border-white/10">
+            Skin Fades
+          </span>
+
+          <span className="px-4 py-2 rounded-full bg-white/5 border border-white/10">
+            Beard Styling
+          </span>
+
+          <span className="px-4 py-2 rounded-full bg-white/5 border border-white/10">
+            VIP Service
+          </span>
+
+          <span className="px-4 py-2 rounded-full bg-white/5 border border-white/10">
+            Luxury Grooming
+          </span>
         </motion.div>
 
         {/* Tagline */}
@@ -90,13 +139,21 @@ const Hero = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.9 }}
-          className="mt-10 text-[10px] sm:text-xs uppercase tracking-widest text-cyan-300 flex gap-3"
+          className="mt-10 text-[10px] sm:text-xs uppercase tracking-[0.35em] text-cyan-300 flex gap-3 flex-wrap justify-center"
         >
           <span>Confidence</span>
+
           <span>•</span>
+
           <span>Style</span>
+
           <span>•</span>
+
           <span>Precision</span>
+
+          <span>•</span>
+
+          <span>Luxury</span>
         </motion.div>
       </div>
 
@@ -104,9 +161,11 @@ const Hero = () => {
       <motion.div
         animate={{ y: [0, 12, 0] }}
         transition={{ repeat: Infinity, duration: 1.5 }}
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 text-cyan-300 text-sm"
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 text-cyan-300 text-sm flex flex-col items-center"
       >
-        ↓ Scroll
+        <span className="text-xs uppercase tracking-widest mb-2">Scroll</span>
+
+        <span className="text-lg">↓</span>
       </motion.div>
     </section>
   );
