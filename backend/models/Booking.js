@@ -61,4 +61,18 @@ const BookingSchema = new mongoose.Schema(
   },
 );
 
+// ========================================
+// PREVENT DUPLICATE BOOKINGS
+// SAME DATE + SAME TIME
+// ========================================
+BookingSchema.index(
+  {
+    date: 1,
+    time: 1,
+  },
+  {
+    unique: true,
+  },
+);
+
 module.exports = mongoose.model("Booking", BookingSchema);

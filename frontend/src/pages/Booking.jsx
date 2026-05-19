@@ -68,20 +68,12 @@ const timePeriods = [
 
   {
     label: "Afternoon",
-    times: [
-      "12:00 PM",
-      "1:00 PM",
-      "2:00 PM",
-      "3:00 PM",
-      "4:00 PM",
-      "5:00 PM",
-      "6:00 PM",
-    ],
+    times: ["8:00 PM", "9:00 PM", "10:00 PM", "11:00 PM", "12:00 PM"],
   },
 
   {
     label: "Evening",
-    times: ["7:00 PM", "8:00 PM", "9:00 PM", "10:00 PM", "11:00 PM"],
+    times: ["7:00 PM", "8:00 PM", "9:00 PM", "10:00 PM"],
   },
 ];
 

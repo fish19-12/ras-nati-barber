@@ -1,11 +1,17 @@
 const Booking = require("../models/Booking");
 const multer = require("multer");
-const { storage } = require("../config/cloudinary");
+const { storage, cloudinary } = require("../config/cloudinary");
 
-// Multer setup
+// ========================================
+// MULTER SETUP
+// ========================================
 const upload = multer({
   storage,
-  limits: { fileSize: 2 * 1024 * 1024 },
+
+  limits: {
+    fileSize: 2 * 1024 * 1024,
+  },
+
   fileFilter: (req, file, cb) => {
     if (!file.mimetype.startsWith("image/")) {
       return cb(new Error("Only image files are allowed!"));
@@ -15,10 +21,14 @@ const upload = multer({
   },
 });
 
-// Upload middleware
+// ========================================
+// UPLOAD MIDDLEWARE
+// ========================================
 exports.uploadBookingPhoto = upload.single("paymentPhoto");
 
+// ========================================
 // CREATE BOOKING
+// ========================================
 exports.createBooking = async (req, res) => {
   try {
     let photoUrl = "";
@@ -27,7 +37,9 @@ exports.createBooking = async (req, res) => {
       photoUrl = req.file.path;
     }
 
+    // ========================================
     // HANDLE SERVICES
+    // ========================================
     let services = [];
 
     if (req.body.service) {
@@ -38,38 +50,85 @@ exports.createBooking = async (req, res) => {
       }
     }
 
+    // ========================================
+    // FORMAT DATE
+    // ========================================
+    const bookingDate = new Date(req.body.date);
+
+    // RESET TIME
+    bookingDate.setHours(0, 0, 0, 0);
+
+    // ========================================
+    // CHECK IF TIME IS ALREADY BOOKED
+    // ========================================
+    const existingBooking = await Booking.findOne({
+      date: bookingDate,
+      time: req.body.time,
+    });
+
+    if (existingBooking) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "This date and time is already taken by another customer. Please choose another available time.",
+      });
+    }
+
+    // ========================================
+    // CREATE BOOKING
+    // ========================================
     const booking = await Booking.create({
       name: req.body.name,
+
       phone: req.body.phone,
 
-      // FIXED
       services: services,
 
-      date: req.body.date,
+      date: bookingDate,
+
       time: req.body.time,
 
       paymentPhotoUrl: photoUrl,
 
       message: req.body.message || "",
 
-      // EXTRA DETAILS
       outdoorAddress: req.body.outdoorAddress || "",
+
       cityLocation: req.body.cityLocation || "",
+
       cityNeedDate: req.body.cityNeedDate || "",
+
       timePeriod: req.body.timePeriod || "",
     });
 
-    res.status(201).json(booking);
+    res.status(201).json({
+      success: true,
+      message: "Booking created successfully",
+      booking,
+    });
   } catch (error) {
     console.error("Create booking error:", error.message);
 
+    // ========================================
+    // DUPLICATE BOOKING ERROR
+    // ========================================
+    if (error.code === 11000) {
+      return res.status(400).json({
+        success: false,
+        message: "This booking time is already reserved by another customer.",
+      });
+    }
+
     res.status(400).json({
+      success: false,
       message: error.message,
     });
   }
 };
 
+// ========================================
 // GET BOOKINGS
+// ========================================
 exports.getBookings = async (req, res) => {
   try {
     const bookings = await Booking.find().sort({
@@ -86,7 +145,9 @@ exports.getBookings = async (req, res) => {
   }
 };
 
+// ========================================
 // DELETE BOOKING
+// ========================================
 exports.deleteBooking = async (req, res) => {
   try {
     const { id } = req.params;
@@ -105,7 +166,9 @@ exports.deleteBooking = async (req, res) => {
       });
     }
 
+    // ========================================
     // DELETE CLOUDINARY IMAGE
+    // ========================================
     if (
       booking.paymentPhotoUrl &&
       booking.paymentPhotoUrl.includes("res.cloudinary.com")
@@ -115,8 +178,6 @@ exports.deleteBooking = async (req, res) => {
         .slice(-1)[0]
         .split(".")[0];
 
-      const cloudinary = require("../config/cloudinary").cloudinary;
-
       try {
         await cloudinary.uploader.destroy(publicId);
       } catch (err) {
@@ -124,17 +185,22 @@ exports.deleteBooking = async (req, res) => {
       }
     }
 
+    // ========================================
+    // DELETE BOOKING
+    // ========================================
     await Booking.deleteOne({
       _id: id,
     });
 
     res.json({
+      success: true,
       message: "Booking deleted successfully",
     });
   } catch (error) {
     console.error("Delete booking error:", error.message);
 
     res.status(500).json({
+      success: false,
       message: "Server failed to delete booking",
     });
   }
