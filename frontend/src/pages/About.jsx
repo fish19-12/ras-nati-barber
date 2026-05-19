@@ -39,7 +39,7 @@ const About = () => {
               "url('https://images.unsplash.com/photo-1588776814546-13e6763ad7e0?auto=format&fit=crop&w=1400&q=80')",
           }}
         />
-        <div className="absolute inset-0 bg-black/75"></div>
+        <div className="absolute inset-0 bg-black/75" />
 
         <motion.div
           initial={{ opacity: 0, y: -60 }}
@@ -48,7 +48,7 @@ const About = () => {
           className="relative text-center px-6 max-w-4xl"
         >
           <h1 className="text-5xl md:text-7xl font-extrabold uppercase">
-            About <span className="text-yellow-400">Ras Nati</span>
+            About <span className="text-yellow-400">Nhatty The Barber</span>
           </h1>
           <p className="mt-6 text-gray-300 text-lg md:text-xl">
             Where precision meets luxury. A world-class barber experience
@@ -59,20 +59,44 @@ const About = () => {
 
       {/* STORY */}
       <section className="max-w-7xl mx-auto py-24 px-6 grid md:grid-cols-2 gap-16 items-center">
-        {/* IMAGE */}
+        {/* IMAGE - FIXED PROFESSIONAL STYLE */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8 }}
-          className="relative"
+          className="relative flex justify-center"
         >
-          <div className="absolute -inset-6 bg-gradient-to-tr from-yellow-400/30 to-primary/20 blur-3xl rounded-3xl"></div>
+          {/* background glow */}
+          <div className="absolute -inset-10 bg-gradient-to-tr from-yellow-400/20 to-white/5 blur-3xl rounded-full"></div>
 
-          <img
-            src={ceoPhoto}
-            alt="CEO"
-            className="relative rounded-3xl shadow-2xl hover:scale-105 transition duration-500"
-          />
+          {/* frame card */}
+          <div className="relative w-full max-w-sm">
+            <div className="absolute -inset-2 bg-gradient-to-tr from-yellow-400/40 to-transparent rounded-3xl blur-sm"></div>
+
+            <div className="relative bg-zinc-950/60 border border-zinc-800 backdrop-blur-xl rounded-3xl p-4 shadow-2xl">
+              {/* image */}
+              <img
+                src={ceoPhoto}
+                alt="CEO"
+                className="w-full h-[420px] object-cover rounded-2xl"
+              />
+
+              {/* badge */}
+              <div className="mt-4 flex items-center justify-between">
+                <span className="text-yellow-400 text-sm font-semibold">
+                  Founder & Master Barber
+                </span>
+
+                <div className="flex gap-1 text-yellow-400">
+                  <FaStar />
+                  <FaStar />
+                  <FaStar />
+                  <FaStar />
+                  <FaStar />
+                </div>
+              </div>
+            </div>
+          </div>
         </motion.div>
 
         {/* TEXT */}
@@ -87,14 +111,23 @@ const About = () => {
           </h2>
 
           <p className="text-gray-300 leading-relaxed text-lg">
-            Founder of Ras Nati Barber Shop, Nati built a brand that stands for
+            Founder of Nhatty The Barber, Nati built a brand that stands for
             precision, style, and excellence. What started as passion is now a
-            global grooming destination.
+            global grooming destination trusted by modern professionals and
+            style leaders.
           </p>
 
           <p className="text-gray-300 leading-relaxed text-lg">
-            Every haircut reflects dedication, creativity, and attention to
-            detail — delivering not just a service, but a premium experience.
+            With years of experience in advanced fades, beard sculpting, and
+            modern grooming techniques, every cut is designed with a balance of
+            creativity and technical mastery.
+          </p>
+
+          {/* EXTRA PROFESSIONAL STORY (ADDED) */}
+          <p className="text-gray-400 leading-relaxed text-md">
+            The vision behind Nhatty The Barber is simple: deliver a luxury
+            experience where every client feels confident, refreshed, and
+            elevated after every visit.
           </p>
         </motion.div>
       </section>

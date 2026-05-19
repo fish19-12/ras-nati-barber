@@ -52,7 +52,7 @@ const Reviews = () => {
         <p className="text-gray-400 text-lg leading-relaxed">
           At{" "}
           <span className="text-yellow-400 font-semibold">
-            Ras Nati Barber Shop
+            Nhatty The Barber
           </span>
           , we provide premium grooming experiences trusted by influencers,
           celebrities, and thousands of loyal clients across Ethiopia.
