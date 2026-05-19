@@ -23,10 +23,6 @@ const Footer = () => {
             by influencers, celebrities, and hundreds of loyal clients for
             modern fades, stylish cuts, and luxury grooming.
           </p>
-
-          <p className="text-gray-500 text-sm mt-4">
-            © 2026 Nhatty The Barber. All rights reserved.
-          </p>
         </div>
 
         {/* CONTACT */}
@@ -106,6 +102,9 @@ const Footer = () => {
 
           <p className="text-gray-500 text-sm mt-4">
             Stay connected with Nhatty for the latest styles and updates.
+          </p>
+          <p className="text-gray-500 text-sm mt-4">
+            © 2026 Nhatty The Barber. All rights reserved.
           </p>
         </div>
       </div>
