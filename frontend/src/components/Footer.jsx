@@ -188,51 +188,6 @@ const Footer = () => {
                 <SiTiktok className="text-xl" />
               </a>
             </div>
-
-            {/* QUICK LINKS */}
-            <div className="flex flex-col gap-3 text-sm">
-              <Link
-                to="/"
-                className="text-gray-400 hover:text-yellow-400 transition"
-              >
-                Home
-              </Link>
-
-              <Link
-                to="/about"
-                className="text-gray-400 hover:text-yellow-400 transition"
-              >
-                About
-              </Link>
-
-              <Link
-                to="/services"
-                className="text-gray-400 hover:text-yellow-400 transition"
-              >
-                Services
-              </Link>
-
-              <Link
-                to="/gallery"
-                className="text-gray-400 hover:text-yellow-400 transition"
-              >
-                Gallery
-              </Link>
-
-              <Link
-                to="/reviews"
-                className="text-gray-400 hover:text-yellow-400 transition"
-              >
-                Reviews
-              </Link>
-
-              <Link
-                to="/contact"
-                className="text-gray-400 hover:text-yellow-400 transition"
-              >
-                Contact
-              </Link>
-            </div>
           </div>
         </div>
 
