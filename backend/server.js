@@ -1,13 +1,43 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
+const http = require("http");
+
+const { Server } = require("socket.io");
 
 const connectDB = require("./config/db");
 
 dotenv.config();
+
 connectDB();
 
 const app = express();
+
+const server = http.createServer(app);
+
+// ========================================
+// SOCKET IO
+// ========================================
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+  },
+});
+
+// MAKE IO GLOBAL
+app.set("io", io);
+
+// ========================================
+// SOCKET CONNECTION
+// ========================================
+io.on("connection", (socket) => {
+  console.log("✅ Admin connected:", socket.id);
+
+  socket.on("disconnect", () => {
+    console.log("❌ Admin disconnected:", socket.id);
+  });
+});
 
 /* =========================
    MIDDLEWARES
@@ -40,16 +70,10 @@ app.use("/api/reviews", require("./routes/reviewRoutes"));
 /* REGISTER */
 app.use("/api/register", require("./routes/registerRoutes"));
 
-/* =========================
-   NHATTY TUTORIALS
-========================= */
-
+/* TUTORIALS */
 app.use("/api/tutorials", require("./routes/tutorialRoutes"));
 
-/* =========================
-   TEST ROUTE
-========================= */
-
+/* TEST */
 app.get("/", (req, res) => {
   res.send("Nhatty Barber API Running...");
 });
@@ -60,4 +84,4 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+server.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

@@ -12,10 +12,16 @@ import {
   FaStar,
 } from "react-icons/fa";
 
+/* MAIN SERVICE IMAGES */
 import haircut from "../assets/haircut.jpg";
 import hairstyling from "../assets/hairstyiling.jpg";
 
-/* NEW SERVICE IMAGES */
+/* VIP EXTRA IMAGES */
+import faceSteamImg from "../assets/facesteem.jpg";
+import colorImg from "../assets/color.jpg";
+import pedicureImg from "../assets/pedicure.jpg";
+
+/* OTHER SERVICE IMAGES */
 import rebornImg from "../assets/reborn.jpg";
 import outdoorImg from "../assets/out.jpg";
 import cityImg from "../assets/city.jpg";
@@ -25,6 +31,7 @@ const services = [
     title: "VIP Service",
     subtitle: "Premium Grooming Experience",
     img: haircut,
+    gallery: [faceSteamImg, colorImg, pedicureImg],
     icon: <FaCrown />,
     color: "from-yellow-400 to-amber-600",
     badge: "VIP",
@@ -176,12 +183,12 @@ const Services = () => {
                 service.special ? "border-orange-500/40" : "border-white/10"
               } bg-white/5 backdrop-blur-xl group h-full`}
             >
-              {/* Image */}
+              {/* Main Image */}
               <div className="relative h-40 sm:h-52 lg:h-64 bg-black overflow-hidden flex items-center justify-center">
                 <img
                   src={service.img}
                   alt={service.title}
-                  className="w-full h-full object-contain transition duration-500 group-hover:scale-105"
+                  className="w-full h-full object-cover transition duration-500 group-hover:scale-105"
                 />
 
                 {/* Overlay */}
@@ -194,6 +201,24 @@ const Services = () => {
                   {service.badge}
                 </div>
               </div>
+
+              {/* VIP EXTRA PHOTOS */}
+              {service.gallery && (
+                <div className="grid grid-cols-3 gap-2 p-3">
+                  {service.gallery.map((photo, i) => (
+                    <div
+                      key={i}
+                      className="overflow-hidden rounded-xl border border-white/10"
+                    >
+                      <img
+                        src={photo}
+                        alt="VIP service"
+                        className="w-full h-20 sm:h-24 object-cover hover:scale-110 transition duration-300"
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
 
               {/* Content */}
               <div className="p-3 sm:p-5">
