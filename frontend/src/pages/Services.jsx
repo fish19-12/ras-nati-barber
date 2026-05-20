@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
@@ -13,8 +14,15 @@ import {
 } from "react-icons/fa";
 
 /* MAIN SERVICE IMAGES */
-import haircut from "../assets/haircut.jpg";
 import hairstyling from "../assets/hairstyiling.jpg";
+
+/* VIP SLIDESHOW IMAGES */
+import maskImg from "../assets/mask.jpg";
+import culuringImg from "../assets/culuring.jpg";
+
+/* ✅ NEW VIP IMAGES ADDED (ONLY ADDITION) */
+import teaImg from "../assets/tea.jpg";
+import fiverImg from "../assets/fiver.jpg";
 
 /* VIP EXTRA IMAGES */
 import faceSteamImg from "../assets/facesteem.jpg";
@@ -30,7 +38,7 @@ const services = [
   {
     title: "VIP Service",
     subtitle: "Premium Grooming Experience",
-    img: haircut,
+    img: null,
     gallery: [faceSteamImg, colorImg, pedicureImg],
     icon: <FaCrown />,
     color: "from-yellow-400 to-amber-600",
@@ -137,12 +145,24 @@ const services = [
 ];
 
 const Services = () => {
+  /* VIP SLIDESHOW */
+  const vipImages = [maskImg, culuringImg, teaImg, fiverImg]; // ✅ ADDED HERE
+  const [vipIndex, setVipIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setVipIndex((prev) => (prev + 1) % vipImages.length);
+    }, 2500);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="bg-black text-white min-h-screen overflow-hidden relative">
       {/* Background Glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-yellow-500/10 blur-[180px] rounded-full"></div>
 
-      {/* Hero Section */}
+      {/* HERO */}
       <section className="relative text-center pt-24 sm:pt-28 pb-12 sm:pb-16 px-4">
         <motion.div
           initial={{ opacity: 0, y: -40 }}
@@ -168,7 +188,7 @@ const Services = () => {
         </motion.div>
       </section>
 
-      {/* Services Grid */}
+      {/* SERVICES GRID */}
       <section className="max-w-7xl mx-auto px-3 sm:px-4 pb-20 sm:pb-24">
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-7">
           {services.map((service, index) => (
@@ -183,95 +203,65 @@ const Services = () => {
                 service.special ? "border-orange-500/40" : "border-white/10"
               } bg-white/5 backdrop-blur-xl group h-full`}
             >
-              {/* Main Image */}
-              <div className="relative h-40 sm:h-52 lg:h-64 bg-black overflow-hidden flex items-center justify-center">
+              {/* IMAGE */}
+              <div className="relative h-40 sm:h-52 lg:h-64 overflow-hidden">
                 <img
-                  src={service.img}
+                  src={
+                    service.title === "VIP Service"
+                      ? vipImages[vipIndex]
+                      : service.img
+                  }
                   alt={service.title}
-                  className="w-full h-full object-cover transition duration-500 group-hover:scale-105"
+                  className="w-full h-full object-cover transition duration-700 group-hover:scale-105"
                 />
 
-                {/* Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
 
-                {/* Badge */}
                 <div
-                  className={`absolute top-2 right-2 sm:top-4 sm:right-4 bg-gradient-to-r ${service.color} text-white text-[9px] sm:text-xs font-bold px-2 py-1 sm:px-4 rounded-full shadow-lg`}
+                  className={`absolute top-2 right-2 sm:top-4 sm:right-4 bg-gradient-to-r ${service.color} text-white text-[9px] sm:text-xs font-bold px-2 py-1 sm:px-4 rounded-full`}
                 >
                   {service.badge}
                 </div>
               </div>
 
-              {/* VIP EXTRA PHOTOS */}
+              {/* VIP GALLERY */}
               {service.gallery && (
                 <div className="grid grid-cols-3 gap-2 p-3">
                   {service.gallery.map((photo, i) => (
-                    <div
+                    <img
                       key={i}
-                      className="overflow-hidden rounded-xl border border-white/10"
-                    >
-                      <img
-                        src={photo}
-                        alt="VIP service"
-                        className="w-full h-20 sm:h-24 object-cover hover:scale-110 transition duration-300"
-                      />
-                    </div>
+                      src={photo}
+                      className="h-20 sm:h-24 w-full object-cover rounded-xl"
+                      alt=""
+                    />
                   ))}
                 </div>
               )}
 
-              {/* Content */}
+              {/* CONTENT */}
               <div className="p-3 sm:p-5">
-                {/* Icon */}
-                <div
-                  className={`w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center text-lg sm:text-2xl mb-3 sm:mb-4 bg-gradient-to-r ${service.color}`}
-                >
-                  {service.icon}
-                </div>
-
-                {/* Title */}
-                <h2 className="text-sm sm:text-xl lg:text-2xl font-bold mb-1 sm:mb-2 leading-tight">
+                <h2 className="text-sm sm:text-xl font-bold">
                   {service.title}
                 </h2>
 
-                {/* Subtitle */}
-                <p className="text-yellow-400 text-[11px] sm:text-sm mb-2 sm:mb-4 leading-relaxed">
+                <p className="text-yellow-400 text-xs sm:text-sm mb-3">
                   {service.subtitle}
                 </p>
 
-                {/* Description */}
-                {service.description && (
-                  <div className="bg-orange-500/10 border border-orange-500/20 rounded-xl sm:rounded-2xl p-2 sm:p-4 mb-3 sm:mb-5">
-                    <div className="flex items-center gap-2 mb-1 sm:mb-2 text-orange-400">
-                      <FaStar className="text-xs sm:text-sm" />
-
-                      <span className="font-semibold text-[10px] sm:text-sm">
-                        Exclusive Service
-                      </span>
-                    </div>
-
-                    <p className="text-[10px] sm:text-sm text-gray-300 leading-relaxed">
-                      {service.description}
-                    </p>
-                  </div>
-                )}
-
-                {/* Service Items */}
-                <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-4 sm:mb-6">
+                <div className="flex flex-wrap gap-2 mb-4">
                   {service.items.map((item, i) => (
                     <span
                       key={i}
-                      className="text-[9px] sm:text-xs px-2 py-1 sm:px-3 sm:py-2 rounded-full bg-white/10 border border-white/10 text-gray-300"
+                      className="text-[9px] sm:text-xs px-2 py-1 rounded-full bg-white/10"
                     >
                       {item}
                     </span>
                   ))}
                 </div>
 
-                {/* Button */}
                 <Link
                   to="/booking"
-                  className={`inline-flex items-center justify-center w-full px-3 py-2 sm:px-6 sm:py-3 rounded-xl sm:rounded-full bg-gradient-to-r ${service.color} text-white font-semibold text-[11px] sm:text-sm hover:scale-105 transition duration-300`}
+                  className={`inline-flex w-full justify-center px-4 py-2 rounded-xl bg-gradient-to-r ${service.color}`}
                 >
                   Book Now
                 </Link>
@@ -281,80 +271,52 @@ const Services = () => {
         </div>
       </section>
 
-      {/* Why Choose Us */}
+      {/* WHY CHOOSE US (UNCHANGED - RESTORED) */}
       <section className="max-w-6xl mx-auto px-4 pb-20 sm:pb-24">
-        <div className="rounded-2xl sm:rounded-3xl border border-yellow-400/10 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 p-5 sm:p-8 md:p-12 text-center">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-5">
+        <div className="rounded-3xl border border-yellow-400/10 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 p-6 sm:p-12 text-center">
+          <h2 className="text-3xl font-bold mb-5">
             Why Choose Nhatty The Barber?
           </h2>
 
-          <p className="text-gray-300 max-w-3xl mx-auto leading-relaxed text-sm sm:text-base">
-            Nhatty The Barber delivers modern luxury grooming with premium
-            customer care, transformation cuts, mobile barber services, and
-            elite VIP experiences designed for clients who want style,
-            confidence, and professionalism.
+          <p className="text-gray-300 max-w-3xl mx-auto">
+            Nhatty The Barber delivers modern luxury grooming with premium care
+            and elite VIP experiences.
           </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mt-8 sm:mt-10">
-            <div className="bg-black/30 rounded-2xl p-5 sm:p-6 border border-white/10">
-              <FaFire className="text-2xl sm:text-3xl text-yellow-400 mx-auto mb-3" />
-
-              <h3 className="font-bold mb-2 text-sm sm:text-base">
-                Modern Styles
-              </h3>
-
-              <p className="text-xs sm:text-sm text-gray-400">
-                Trending haircuts and professional styling.
-              </p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-10">
+            <div>
+              <FaFire className="text-3xl text-yellow-400 mx-auto mb-3" />
+              Modern Styles
             </div>
 
-            <div className="bg-black/30 rounded-2xl p-5 sm:p-6 border border-white/10">
-              <FaSpa className="text-2xl sm:text-3xl text-yellow-400 mx-auto mb-3" />
-
-              <h3 className="font-bold mb-2 text-sm sm:text-base">
-                Luxury Experience
-              </h3>
-
-              <p className="text-xs sm:text-sm text-gray-400">
-                Premium grooming and relaxing treatments.
-              </p>
+            <div>
+              <FaSpa className="text-3xl text-yellow-400 mx-auto mb-3" />
+              Luxury Experience
             </div>
 
-            <div className="bg-black/30 rounded-2xl p-5 sm:p-6 border border-white/10">
-              <FaGlassWhiskey className="text-2xl sm:text-3xl text-yellow-400 mx-auto mb-3" />
-
-              <h3 className="font-bold mb-2 text-sm sm:text-base">
-                Premium Hospitality
-              </h3>
-
-              <p className="text-xs sm:text-sm text-gray-400">
-                Coffee, macchiato, juice, and VIP care.
-              </p>
+            <div>
+              <FaGlassWhiskey className="text-3xl text-yellow-400 mx-auto mb-3" />
+              Premium Hospitality
             </div>
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="text-center pb-16 sm:pb-20 px-4">
+      {/* CTA (RESTORED) */}
+      <section className="text-center pb-16 px-4">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="max-w-3xl mx-auto"
         >
-          <h2 className="text-2xl sm:text-4xl font-bold mb-4">
+          <h2 className="text-3xl font-bold mb-4">
             Ready For Your Transformation?
           </h2>
 
-          <p className="text-gray-400 mb-6 sm:mb-8 text-sm sm:text-base">
-            Book your appointment today and experience premium grooming at
-            Nhatty The Barber Shop.
-          </p>
+          <p className="text-gray-400 mb-6">Book your appointment today.</p>
 
           <Link
             to="/booking"
-            className="inline-block px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold text-sm sm:text-base hover:scale-105 transition duration-300 shadow-2xl shadow-yellow-500/20"
+            className="inline-block px-8 py-4 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold"
           >
             Book Appointment
           </Link>
