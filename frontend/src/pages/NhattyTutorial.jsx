@@ -20,15 +20,10 @@ import {
   FaUser,
   FaUpload,
   FaCopy,
-  FaMoneyBillWave,
-  FaShieldAlt,
-  FaStar,
 } from "react-icons/fa";
 
 const API_URL = import.meta.env.VITE_API_URL;
 const YOUTUBE_LINK = "https://www.youtube.com/@Nhattythebarber1";
-
-const TUTORIAL_PRICE = 500;
 
 const categories = [
   "All",
@@ -164,7 +159,6 @@ const NhattyTutorial = () => {
       formData.append("phone", phone);
       formData.append("transactionId", transactionId);
       formData.append("paymentMethod", selectedPayment);
-      formData.append("amount", TUTORIAL_PRICE);
 
       if (selectedTutorial) {
         formData.append("tutorialId", selectedTutorial.id);
@@ -248,24 +242,10 @@ const NhattyTutorial = () => {
           </h1>
 
           <p className="mt-6 text-gray-300 text-lg md:text-2xl leading-relaxed">
-            Learn elite barbering skills from Nhatty The Barber with premium
-            step-by-step tutorials covering fades, beard styling, dreadlocks,
-            clipper mastery, modern grooming, and professional client
-            techniques.
+            Master premium barbering skills with professional tutorials from
+            Nhatty The Barber — fades, beard styling, dreadlocks, clipper
+            techniques, line-ups, and modern grooming education.
           </p>
-
-          {/* PRICE BADGES */}
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <div className="bg-yellow-400 text-black px-6 py-3 rounded-full font-black text-lg shadow-2xl flex items-center gap-3">
-              <FaMoneyBillWave />
-              Premium Access • 500 Birr
-            </div>
-
-            <div className="bg-black/60 backdrop-blur-md border border-yellow-400/20 px-6 py-3 rounded-full font-semibold flex items-center gap-3">
-              <FaShieldAlt className="text-yellow-400" />
-              Instant Unlock After Payment
-            </div>
-          </div>
 
           <div className="mt-10 flex flex-wrap justify-center gap-5">
             <a
@@ -354,17 +334,6 @@ const NhattyTutorial = () => {
               <p className="text-yellow-400 mt-3 text-lg">
                 {featuredTutorial.category}
               </p>
-
-              {/* PRICE */}
-              <div className="mt-5 flex flex-wrap gap-3">
-                <div className="bg-yellow-400 text-black px-5 py-2 rounded-full font-black text-lg shadow-xl">
-                  Premium Access • 500 Birr
-                </div>
-
-                <div className="bg-black/60 backdrop-blur-md border border-white/10 px-5 py-2 rounded-full text-white font-medium">
-                  Instant Unlock
-                </div>
-              </div>
             </div>
           </div>
         </section>
@@ -425,23 +394,12 @@ const NhattyTutorial = () => {
 
                   <p className="text-sm text-gray-400 mt-2">{t.category}</p>
 
-                  {/* PRICE */}
-                  <div className="mt-4 flex items-center justify-between">
-                    <div className="bg-yellow-400 text-black px-4 py-2 rounded-xl font-black text-sm">
-                      500 Birr
-                    </div>
-
-                    <span className="text-green-400 text-sm font-medium">
-                      Premium Access
-                    </span>
-                  </div>
-
                   <button
                     onClick={() => handleOpenTutorial(t)}
                     className="mt-6 w-full bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-3 rounded-2xl transition-all duration-300 flex items-center justify-center gap-3"
                   >
                     <FaLock />
-                    Pay 500 Birr & Unlock
+                    Unlock Tutorial
                   </button>
                 </div>
               </motion.div>
@@ -465,10 +423,6 @@ const NhattyTutorial = () => {
               skills, modern fade techniques, beard styling, client experience,
               and professional grooming secrets from real industry experience.
             </p>
-
-            <div className="mt-6 inline-flex bg-black text-yellow-400 px-6 py-3 rounded-full font-black text-lg">
-              Premium Tutorials • Only 500 Birr
-            </div>
 
             <div className="mt-10 flex flex-wrap gap-5">
               <a
@@ -519,11 +473,7 @@ const NhattyTutorial = () => {
                     </h2>
 
                     <p className="text-gray-400 mt-2">
-                      Pay only{" "}
-                      <span className="text-yellow-400 font-bold text-lg">
-                        500 Birr
-                      </span>{" "}
-                      to unlock this premium tutorial instantly.
+                      Complete payment to unlock this tutorial
                     </p>
                   </div>
 
@@ -557,49 +507,6 @@ const NhattyTutorial = () => {
                         <p className="text-gray-400 mt-3">
                           {selectedTutorial?.category}
                         </p>
-
-                        {/* PRICE CARD */}
-                        <div className="mt-5 bg-yellow-400/10 border border-yellow-400/30 rounded-3xl p-5">
-                          <div className="flex items-center justify-between flex-wrap gap-4">
-                            <div>
-                              <p className="text-gray-400 text-sm">
-                                Premium Tutorial Price
-                              </p>
-
-                              <h3 className="text-4xl font-black text-yellow-400 mt-1">
-                                500 Birr
-                              </h3>
-                            </div>
-
-                            <div className="bg-yellow-400 text-black px-5 py-3 rounded-2xl font-black">
-                              One Time Payment
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* HOW TO */}
-                    <div className="bg-gradient-to-r from-yellow-400/10 to-yellow-500/10 border border-yellow-400/20 rounded-3xl p-5 mt-8">
-                      <h4 className="text-xl font-bold text-yellow-400 mb-4 flex items-center gap-2">
-                        <FaStar />
-                        How To Unlock Tutorial
-                      </h4>
-
-                      <div className="space-y-3 text-gray-300">
-                        <p>
-                          1. Pay exactly{" "}
-                          <span className="text-yellow-400 font-bold">
-                            500 Birr
-                          </span>{" "}
-                          using Telebirr, CBE, or Abyssinia Bank.
-                        </p>
-
-                        <p>2. Enter your transaction reference number.</p>
-
-                        <p>3. Upload payment screenshot (recommended).</p>
-
-                        <p>4. Your premium tutorial unlocks instantly.</p>
                       </div>
                     </div>
 
@@ -685,14 +592,9 @@ const NhattyTutorial = () => {
 
                   {/* RIGHT */}
                   <div className="p-8">
-                    <h3 className="text-2xl font-bold mb-3">
+                    <h3 className="text-2xl font-bold mb-6">
                       Submit Payment Proof
                     </h3>
-
-                    <p className="text-gray-400 mb-6">
-                      Complete your payment and unlock premium barber education
-                      instantly.
-                    </p>
 
                     <form onSubmit={handleSubmitPayment} className="space-y-6">
                       {/* NAME */}
@@ -801,11 +703,6 @@ const NhattyTutorial = () => {
                         </div>
                       )}
 
-                      <p className="text-sm text-yellow-400 text-center">
-                        All premium tutorials require a one-time payment of 500
-                        Birr.
-                      </p>
-
                       {/* BUTTON */}
                       <button
                         type="submit"
@@ -813,8 +710,8 @@ const NhattyTutorial = () => {
                         className="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-black py-5 rounded-2xl transition-all duration-300 text-lg"
                       >
                         {submitting
-                          ? "Processing Payment..."
-                          : "Pay 500 Birr & Unlock Tutorial"}
+                          ? "Processing..."
+                          : "Submit & Unlock Tutorial"}
                       </button>
                     </form>
                   </div>
