@@ -6,14 +6,16 @@ import Gallery from "./Gallery";
 import Reviews from "./Reviews";
 import About from "./About";
 import Contact from "./Contact";
+import NhattyTutorial from "./NhattyTutorial";
 
 const Home = () => {
   return (
     <div>
       <Hero />
-      <Gallery />
       <Services />
+      <Gallery />
       <Reviews />
+      <NhattyTutorial />
       <About />
     </div>
   );
