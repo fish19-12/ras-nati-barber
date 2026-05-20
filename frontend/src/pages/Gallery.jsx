@@ -71,7 +71,7 @@ const Gallery = () => {
           transition={{ duration: 0.8 }}
           className="text-4xl sm:text-5xl md:text-6xl font-bold text-yellow-400 mb-6"
         >
-          Ras Nati Gallery
+          Nhatty The Barber
         </motion.h1>
 
         <p className="text-gray-400 text-lg leading-relaxed">

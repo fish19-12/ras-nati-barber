@@ -285,11 +285,11 @@ const Services = () => {
       <section className="max-w-6xl mx-auto px-4 pb-20 sm:pb-24">
         <div className="rounded-2xl sm:rounded-3xl border border-yellow-400/10 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 p-5 sm:p-8 md:p-12 text-center">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-5">
-            Why Choose Ras Nati Barber Shop?
+            Why Choose Nhatty The Barber?
           </h2>
 
           <p className="text-gray-300 max-w-3xl mx-auto leading-relaxed text-sm sm:text-base">
-            Ras Nati Barber Shop delivers modern luxury grooming with premium
+            Nhatty The Barber delivers modern luxury grooming with premium
             customer care, transformation cuts, mobile barber services, and
             elite VIP experiences designed for clients who want style,
             confidence, and professionalism.
@@ -348,8 +348,8 @@ const Services = () => {
           </h2>
 
           <p className="text-gray-400 mb-6 sm:mb-8 text-sm sm:text-base">
-            Book your appointment today and experience premium grooming at Ras
-            Nati Barber Shop.
+            Book your appointment today and experience premium grooming at
+            Nhatty The Barber Shop.
           </p>
 
           <Link
