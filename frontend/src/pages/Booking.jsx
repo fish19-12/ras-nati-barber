@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   FaCopy,
   FaCheck,
@@ -8,6 +8,8 @@ import {
   FaCar,
   FaCity,
   FaClock,
+  FaLock,
+  FaCheckCircle,
 } from "react-icons/fa";
 
 import axios from "axios";
@@ -51,7 +53,7 @@ const servicesList = [
   },
 ];
 
-// INDIVIDUAL TIME LIST
+// TIME LIST
 const timePeriods = [
   {
     label: "Morning",
@@ -73,7 +75,7 @@ const timePeriods = [
 
   {
     label: "Evening",
-    times: ["7:00 PM", "8:00 PM", "9:00 PM", "10:00 PM"],
+    times: ["1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM"],
   },
 ];
 
@@ -81,12 +83,10 @@ const Booking = () => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
 
-  // ONLY ONE SERVICE
   const [selectedService, setSelectedService] = useState("");
 
   const [selectedDate, setSelectedDate] = useState("");
 
-  // TIME STATES
   const [selectedPeriod, setSelectedPeriod] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
 
@@ -104,6 +104,10 @@ const Booking = () => {
 
   const [loading, setLoading] = useState(false);
 
+  // BOOKINGS
+  const [bookings, setBookings] = useState([]);
+  const [loadingBookings, setLoadingBookings] = useState(false);
+
   // SUCCESS POPUP
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
@@ -114,7 +118,52 @@ const Booking = () => {
     service: "",
   });
 
-  // SELECT ONLY ONE SERVICE
+  // FETCH BOOKINGS
+  const fetchBookings = async () => {
+    try {
+      setLoadingBookings(true);
+
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/bookings`,
+      );
+
+      setBookings(res.data || []);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoadingBookings(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchBookings();
+  }, []);
+
+  // BOOKED TIMES
+  const bookedTimes = useMemo(() => {
+    if (!selectedDate) return [];
+
+    return bookings
+      .filter((booking) => {
+        const bookingDate = new Date(booking.date).toISOString().split("T")[0];
+
+        return bookingDate === selectedDate;
+      })
+      .map((booking) => booking.time);
+  }, [bookings, selectedDate]);
+
+  // AVAILABLE TIMES
+  const availableTimes = useMemo(() => {
+    const foundPeriod = timePeriods.find(
+      (period) => period.label === selectedPeriod,
+    );
+
+    if (!foundPeriod) return [];
+
+    return foundPeriod.times;
+  }, [selectedPeriod]);
+
+  // SELECT SERVICE
   const handleServiceSelect = (service) => {
     setSelectedService(service);
   };
@@ -132,7 +181,7 @@ const Booking = () => {
     }, 2000);
   };
 
-  // IMAGE COMPRESS FUNCTION
+  // IMAGE COMPRESS
   const compressImage = (file) => {
     return new Promise((resolve) => {
       const reader = new FileReader();
@@ -189,36 +238,42 @@ const Booking = () => {
     });
   };
 
-  // FILE
+  // FILE CHANGE
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
 
     if (file) {
-      toast.info("Compressing image...");
+      try {
+        const compressedImage = await compressImage(file);
 
-      const compressedImage = await compressImage(file);
+        setPaymentPhoto(compressedImage);
 
-      setPaymentPhoto(compressedImage);
+        setPhotoPreview(URL.createObjectURL(compressedImage));
+      } catch (error) {
+        console.error(error);
 
-      setPhotoPreview(URL.createObjectURL(compressedImage));
-
-      toast.success("Image optimized successfully!");
+        toast.error("Failed to process image.");
+      }
     }
-  };
-
-  // GET TIMES
-  const getFilteredTimes = () => {
-    const foundPeriod = timePeriods.find(
-      (period) => period.label === selectedPeriod,
-    );
-
-    return foundPeriod ? foundPeriod.times : [];
   };
 
   // SUBMIT
   const handleSubmit = async () => {
     if (!name || !phone || !selectedService || !selectedDate || !selectedTime) {
       return toast.error("Please fill all required fields!");
+    }
+
+    // DUPLICATE CHECK
+    const isAlreadyBooked = bookings.some((booking) => {
+      const bookingDate = new Date(booking.date).toISOString().split("T")[0];
+
+      return bookingDate === selectedDate && booking.time === selectedTime;
+    });
+
+    if (isAlreadyBooked) {
+      return toast.error(
+        "This time slot is already booked. Please choose another time.",
+      );
     }
 
     // OUTDOOR VALIDATION
@@ -239,13 +294,12 @@ const Booking = () => {
     formData.append("name", name);
     formData.append("phone", phone);
 
-    // ONLY ONE SERVICE
     formData.append("service", selectedService);
 
     formData.append("date", selectedDate);
 
-    // SAVE BOTH
     formData.append("timePeriod", selectedPeriod);
+
     formData.append("time", selectedTime);
 
     formData.append("outdoorAddress", outdoorAddress);
@@ -273,7 +327,6 @@ const Booking = () => {
         },
       );
 
-      // MODERN SUCCESS POPUP
       setBookingInfo({
         customer: name,
         date: selectedDate,
@@ -284,6 +337,9 @@ const Booking = () => {
       setShowSuccessModal(true);
 
       toast.success("Booking Confirmed!");
+
+      // REFRESH BOOKINGS
+      fetchBookings();
 
       // RESET
       setName("");
@@ -301,11 +357,18 @@ const Booking = () => {
     } catch (err) {
       console.error(err);
 
-      toast.error("Booking Failed!");
+      if (err.response?.data?.message) {
+        toast.error(err.response.data.message);
+      } else {
+        toast.error("Booking Failed!");
+      }
     } finally {
       setLoading(false);
     }
   };
+
+  // TODAY DATE
+  const today = new Date().toISOString().split("T")[0];
 
   return (
     <div className="min-h-screen bg-black text-white relative overflow-hidden">
@@ -313,25 +376,25 @@ const Booking = () => {
 
       {/* SUCCESS MODAL */}
       {showSuccessModal && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
-          <div className="w-full max-w-lg rounded-[30px] border border-yellow-500/20 bg-[#0d0d0d] p-6 sm:p-8 relative overflow-hidden animate-popup">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-md p-3 sm:p-4">
+          <div className="w-full max-w-lg max-h-[92vh] overflow-y-auto rounded-[28px] border border-yellow-500/20 bg-[#0d0d0d] p-5 sm:p-7 relative animate-popup scrollbar-hide">
             {/* GLOW */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[250px] h-[250px] bg-yellow-500/10 blur-[120px] rounded-full"></div>
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[220px] sm:w-[260px] h-[220px] sm:h-[260px] bg-yellow-500/10 blur-[120px] rounded-full"></div>
 
-            {/* ICON */}
-            <div className="relative z-10 flex justify-center mb-5">
-              <div className="w-20 h-20 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 flex items-center justify-center text-black text-3xl shadow-2xl shadow-yellow-500/30">
+            {/* SUCCESS ICON */}
+            <div className="relative z-10 flex justify-center mb-4 sm:mb-5">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 flex items-center justify-center text-black text-2xl sm:text-3xl shadow-2xl shadow-yellow-500/30">
                 ✓
               </div>
             </div>
 
-            {/* TITLE */}
+            {/* HEADER */}
             <div className="relative z-10 text-center">
-              <h2 className="text-3xl font-black bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
+              <h2 className="text-2xl sm:text-3xl font-black bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
                 Booking Confirmed
               </h2>
 
-              <p className="text-gray-400 mt-3 text-sm sm:text-base leading-relaxed">
+              <p className="text-gray-400 mt-3 text-sm sm:text-base leading-relaxed px-1">
                 Thank you{" "}
                 <span className="text-yellow-400 font-semibold">
                   {bookingInfo.customer}
@@ -344,41 +407,57 @@ const Booking = () => {
               </p>
             </div>
 
-            {/* BOOKING DETAILS */}
-            <div className="relative z-10 mt-6 space-y-4">
+            {/* BOOKING INFO */}
+            <div className="relative z-10 mt-5 sm:mt-6 space-y-3 sm:space-y-4">
               <div className="bg-white/5 border border-white/10 rounded-2xl p-4">
                 <p className="text-xs text-gray-400 mb-1">Service</p>
 
-                <h4 className="font-bold text-lg">{bookingInfo.service}</h4>
+                <h4 className="font-bold text-base sm:text-lg break-words">
+                  {bookingInfo.service}
+                </h4>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-4">
                   <p className="text-xs text-gray-400 mb-1">Date</p>
 
-                  <h4 className="font-bold">{bookingInfo.date}</h4>
+                  <h4 className="font-bold text-sm sm:text-base break-words">
+                    {bookingInfo.date}
+                  </h4>
                 </div>
 
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-4">
                   <p className="text-xs text-gray-400 mb-1">Time</p>
 
-                  <h4 className="font-bold">{bookingInfo.time}</h4>
+                  <h4 className="font-bold text-sm sm:text-base break-words">
+                    {bookingInfo.time}
+                  </h4>
                 </div>
               </div>
 
-              {/* NOTICE */}
-              <div className="rounded-2xl border border-yellow-500/20 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 p-5">
-                <h4 className="text-yellow-400 font-bold mb-2">
-                  Important Notice
+              {/* POLICY */}
+              <div className="rounded-2xl border border-yellow-500/20 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 p-4 sm:p-5">
+                <h4 className="text-yellow-400 font-bold mb-2 text-sm sm:text-base">
+                  Appointment Policy • የቀጠሮ መመሪያ
                 </h4>
 
                 <p className="text-sm text-gray-300 leading-relaxed">
-                  Please arrive at your scheduled appointment time. If you are
-                  delayed by more than{" "}
+                  Clients are required to arrive at least{" "}
                   <span className="text-yellow-400 font-semibold">
-                    20 minutes
-                  </span>
-                  , availability may no longer be guaranteed.
+                    20 minutes before
+                  </span>{" "}
+                  their scheduled appointment time or exactly at the booked
+                  time. Late arrivals may result in cancellation of the
+                  appointment, and service availability cannot be guaranteed.
+                </p>
+
+                <p className="text-sm text-gray-400 leading-relaxed mt-3">
+                  ደንበኞች ከተያዘው የቀጠሮ ሰዓት ቢያንስ{" "}
+                  <span className="text-yellow-400 font-semibold">
+                    20 ደቂቃ በፊት
+                  </span>{" "}
+                  ወይም በትክክለኛው ሰዓት መገኘት አለባቸው። ከሰዓት በኋላ ከደረሱ አገልግሎቱ ላይገኝ ይችላል እና
+                  ሀላፊነት አንወስድም።
                 </p>
               </div>
             </div>
@@ -386,7 +465,7 @@ const Booking = () => {
             {/* BUTTON */}
             <button
               onClick={() => setShowSuccessModal(false)}
-              className="relative z-10 mt-6 w-full py-4 rounded-2xl bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold hover:scale-[1.01] transition-all duration-300"
+              className="relative z-10 mt-5 sm:mt-6 w-full py-3 sm:py-4 rounded-2xl bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold text-sm sm:text-base hover:scale-[1.01] transition-all duration-300"
             >
               Done
             </button>
@@ -497,6 +576,26 @@ const Booking = () => {
                 • Upload screenshot before booking
               </p>
             </div>
+
+            {/* LIVE STATUS */}
+            <div className="mt-6 rounded-2xl border border-yellow-500/20 bg-yellow-500/5 p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <FaCheckCircle className="text-green-400" />
+
+                <h4 className="font-semibold text-yellow-400">
+                  Booking Notice • የቀጠሮ ማስያዣ ማሳሰቢያ
+                </h4>
+              </div>
+
+              <p className="text-sm text-gray-300 leading-relaxed">
+                Already reserved appointment times are automatically locked to
+                avoid duplicate bookings and maintain premium service quality.
+                <br />
+                <span className="text-gray-400">
+                  አስቀድሞ የተያዙ ሰዓቶች እንደገና እንዳይያዙ ይዘጋሉ። እባክዎ ክፍት የሆነ ሰዓት ይምረጡ።
+                </span>
+              </p>
+            </div>
           </div>
 
           {/* FORM */}
@@ -570,7 +669,7 @@ const Booking = () => {
               </div>
             )}
 
-            {/* CITY TO CITY */}
+            {/* CITY */}
             {selectedService === "City To City" && (
               <div className="mb-7 bg-blue-500/5 border border-blue-500/20 rounded-2xl p-4">
                 <h3 className="text-blue-400 font-semibold mb-4">
@@ -584,6 +683,13 @@ const Booking = () => {
                     className="input"
                     value={cityLocation}
                     onChange={(e) => setCityLocation(e.target.value)}
+                  />
+
+                  <input
+                    type="date"
+                    className="input"
+                    value={cityNeedDate}
+                    onChange={(e) => setCityNeedDate(e.target.value)}
                   />
                 </div>
               </div>
@@ -599,9 +705,13 @@ const Booking = () => {
 
                   <input
                     type="date"
+                    min={today}
                     className="input"
                     value={selectedDate}
-                    onChange={(e) => setSelectedDate(e.target.value)}
+                    onChange={(e) => {
+                      setSelectedDate(e.target.value);
+                      setSelectedTime("");
+                    }}
                   />
                 </div>
 
@@ -627,6 +737,30 @@ const Booking = () => {
                 </div>
               </div>
 
+              {/* LIVE AVAILABILITY */}
+              {selectedDate && (
+                <div className="mb-4 rounded-2xl border border-white/10 bg-black/30 p-4">
+                  <div className="flex items-center justify-between gap-3 flex-wrap">
+                    <div>
+                      <h4 className="font-semibold text-sm sm:text-base">
+                        Live Appointment Availability
+                      </h4>
+
+                      <p className="text-xs text-gray-400 mt-1">
+                        Booked slots are locked instantly for a premium booking
+                        experience.
+                      </p>
+                    </div>
+
+                    <div className="px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 text-xs">
+                      {loadingBookings
+                        ? "Checking..."
+                        : `${bookedTimes.length} Slots Reserved`}
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* TIME GRID */}
               {selectedPeriod && (
                 <div className="bg-black/30 border border-white/10 rounded-2xl p-4">
@@ -639,20 +773,37 @@ const Booking = () => {
                   </div>
 
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                    {getFilteredTimes().map((time, i) => (
-                      <button
-                        key={i}
-                        type="button"
-                        onClick={() => setSelectedTime(time)}
-                        className={`py-3 rounded-xl text-sm font-medium border transition-all duration-300 ${
-                          selectedTime === time
-                            ? "bg-gradient-to-r from-yellow-400 to-orange-500 text-black border-yellow-400"
-                            : "bg-white/5 border-white/10 hover:border-yellow-400/40 hover:bg-white/10"
-                        }`}
-                      >
-                        {time}
-                      </button>
-                    ))}
+                    {availableTimes.map((time, i) => {
+                      const isBooked = bookedTimes.includes(time);
+
+                      return (
+                        <button
+                          key={i}
+                          type="button"
+                          disabled={isBooked}
+                          onClick={() => !isBooked && setSelectedTime(time)}
+                          className={`relative py-3 rounded-xl text-sm font-medium border transition-all duration-300 overflow-hidden ${
+                            isBooked
+                              ? "bg-red-500/10 border-red-500/20 text-red-300 cursor-not-allowed opacity-70"
+                              : selectedTime === time
+                                ? "bg-gradient-to-r from-yellow-400 to-orange-500 text-black border-yellow-400"
+                                : "bg-white/5 border-white/10 hover:border-yellow-400/40 hover:bg-white/10"
+                          }`}
+                        >
+                          <div className="flex items-center justify-center gap-2">
+                            {isBooked && <FaLock className="text-[10px]" />}
+
+                            <span>{time}</span>
+                          </div>
+
+                          {isBooked && (
+                            <span className="block text-[10px] mt-1">
+                              Reserved
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
                   </div>
 
                   {selectedTime && (
@@ -782,6 +933,14 @@ const Booking = () => {
             .section-title {
               font-size: 16px;
             }
+            .scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
           }
         `}
       </style>
