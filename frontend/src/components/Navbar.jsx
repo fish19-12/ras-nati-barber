@@ -6,7 +6,6 @@ import logo from "../assets/logo.jpg";
 
 import {
   FaHome,
-  FaServicestack,
   FaImages,
   FaStar,
   FaBars,
@@ -14,6 +13,8 @@ import {
   FaYoutube,
   FaTimes,
   FaCalendarAlt,
+  FaCut,
+  FaPhoneAlt,
 } from "react-icons/fa";
 
 const Navbar = () => {
@@ -43,15 +44,15 @@ const Navbar = () => {
   /* ---------------- DESKTOP LINKS ---------------- */
   const desktopLinks = [
     { name: "Home", path: "/" },
+    { name: "Tutorial", path: "/tutorial" },
+    { name: "Gallery", path: "/gallery" },
+    { name: "Reviews", path: "/reviews" },
     { name: "About", path: "/about" },
     { name: "Services", path: "/services" },
-    { name: "Gallery", path: "/gallery" },
-    { name: "Nhatty Tutorial", path: "/tutorial" },
-    { name: "Clients", path: "/reviews" },
     { name: "Contact", path: "/contact" },
   ];
 
-  /* ---------------- MOBILE LINKS ---------------- */
+  /* ---------------- MOBILE BOTTOM LINKS ---------------- */
   const mobileLinks = [
     {
       name: "Home",
@@ -59,9 +60,9 @@ const Navbar = () => {
       icon: <FaHome />,
     },
     {
-      name: "Services",
-      path: "/services",
-      icon: <FaServicestack />,
+      name: "Tutorial",
+      path: "/tutorial",
+      icon: <FaYoutube />,
     },
     {
       name: "Gallery",
@@ -69,14 +70,53 @@ const Navbar = () => {
       icon: <FaImages />,
     },
     {
+      name: "Reviews",
+      path: "/reviews",
+      icon: <FaStar />,
+    },
+    {
+      name: "About",
+      path: "/about",
+      icon: <FaInfoCircle />,
+    },
+  ];
+
+  /* ---------------- MOBILE MENU LINKS ---------------- */
+  const mobileMenuLinks = [
+    {
+      name: "Home",
+      path: "/",
+      icon: <FaHome />,
+    },
+    {
       name: "Tutorial",
       path: "/tutorial",
       icon: <FaYoutube />,
     },
     {
+      name: "Gallery",
+      path: "/gallery",
+      icon: <FaImages />,
+    },
+    {
       name: "Reviews",
       path: "/reviews",
       icon: <FaStar />,
+    },
+    {
+      name: "About",
+      path: "/about",
+      icon: <FaInfoCircle />,
+    },
+    {
+      name: "Services",
+      path: "/services",
+      icon: <FaCut />,
+    },
+    {
+      name: "Contact",
+      path: "/contact",
+      icon: <FaPhoneAlt />,
     },
   ];
 
@@ -96,13 +136,13 @@ const Navbar = () => {
           duration-500
           ${
             scrolled
-              ? "bg-black/90 backdrop-blur-xl border-b border-zinc-800 shadow-2xl"
+              ? "bg-black/85 backdrop-blur-2xl border-b border-yellow-400/10 shadow-2xl"
               : "bg-transparent"
           }
         `}
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex items-center justify-between h-[85px]">
+          <div className="flex items-center justify-between h-[88px]">
             {/* LOGO */}
             <Link to="/" className="flex items-center gap-3 group">
               <div className="relative">
@@ -116,29 +156,42 @@ const Navbar = () => {
                     object-cover
                     border-2
                     border-yellow-400
-                    shadow-lg
+                    shadow-[0_0_25px_rgba(250,204,21,0.35)]
                     group-hover:scale-110
-                    transition-transform
+                    transition-all
                     duration-300
                   "
                 />
 
-                <div className="absolute inset-0 rounded-full bg-yellow-400/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 rounded-full bg-yellow-400/20 blur-lg opacity-0 group-hover:opacity-100 transition-all duration-300" />
               </div>
 
               <div>
-                <h1 className="text-xl font-black tracking-wide text-white leading-none">
+                <h1
+                  className="
+                    text-xl
+                    font-black
+                    tracking-wide
+                    leading-none
+                    bg-gradient-to-r
+                    from-white
+                    via-yellow-200
+                    to-yellow-500
+                    bg-clip-text
+                    text-transparent
+                  "
+                >
                   NHATTY
                 </h1>
 
-                <p className="text-yellow-400 text-sm font-medium tracking-[3px] uppercase">
+                <p className="text-yellow-400 text-xs font-medium tracking-[4px] uppercase mt-1">
                   The Barber
                 </p>
               </div>
             </Link>
 
             {/* NAV LINKS */}
-            <div className="flex items-center gap-8">
+            <div className="flex items-center gap-6">
               {desktopLinks.map((link) => {
                 const isActive = location.pathname === link.path;
 
@@ -150,7 +203,7 @@ const Navbar = () => {
                       relative
                       text-sm
                       uppercase
-                      tracking-wider
+                      tracking-[2px]
                       font-semibold
                       transition-all
                       duration-300
@@ -171,6 +224,7 @@ const Navbar = () => {
                           h-[2px]
                           bg-yellow-400
                           rounded-full
+                          shadow-[0_0_12px_rgba(250,204,21,0.9)]
                         "
                       />
                     )}
@@ -183,11 +237,13 @@ const Navbar = () => {
             <Link
               to="/booking"
               className="
-                group
                 relative
                 overflow-hidden
-                bg-yellow-400
-                hover:bg-yellow-300
+                group
+                bg-gradient-to-r
+                from-yellow-300
+                via-yellow-400
+                to-yellow-500
                 text-black
                 px-7
                 py-3
@@ -196,15 +252,17 @@ const Navbar = () => {
                 transition-all
                 duration-300
                 hover:scale-105
-                shadow-xl
+                shadow-[0_0_30px_rgba(250,204,21,0.35)]
                 flex
                 items-center
                 gap-3
               "
             >
-              <FaCalendarAlt />
+              <span className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-all duration-300" />
 
-              <span>Book Now</span>
+              <FaCalendarAlt className="relative z-10" />
+
+              <span className="relative z-10">Book Now</span>
             </Link>
           </div>
         </div>
@@ -220,33 +278,50 @@ const Navbar = () => {
           z-50
           md:hidden
           bg-black/90
-          backdrop-blur-xl
+          backdrop-blur-2xl
           border-b
-          border-zinc-800
+          border-yellow-400/10
         "
       >
         <div className="flex items-center justify-between px-5 py-4">
           {/* MOBILE LOGO */}
           <Link to="/" className="flex items-center gap-3">
-            <img
-              src={logo}
-              alt="Nhatty The Barber"
-              className="
-                h-11
-                w-11
-                rounded-full
-                object-cover
-                border-2
-                border-yellow-400
-              "
-            />
+            <div className="relative">
+              <img
+                src={logo}
+                alt="Nhatty The Barber"
+                className="
+                  h-11
+                  w-11
+                  rounded-full
+                  object-cover
+                  border-2
+                  border-yellow-400
+                  shadow-[0_0_20px_rgba(250,204,21,0.35)]
+                "
+              />
+
+              <div className="absolute inset-0 rounded-full bg-yellow-400/20 blur-lg" />
+            </div>
 
             <div>
-              <h2 className="text-white font-black text-lg leading-none">
+              <h2
+                className="
+                  text-lg
+                  font-black
+                  leading-none
+                  bg-gradient-to-r
+                  from-white
+                  via-yellow-200
+                  to-yellow-500
+                  bg-clip-text
+                  text-transparent
+                "
+              >
                 NHATTY
               </h2>
 
-              <p className="text-yellow-400 text-xs tracking-[3px] uppercase">
+              <p className="text-yellow-400 text-[10px] tracking-[4px] uppercase mt-1">
                 The Barber
               </p>
             </div>
@@ -256,15 +331,20 @@ const Navbar = () => {
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="
+              relative
+              overflow-hidden
               text-white
-              text-2xl
+              text-xl
               bg-zinc-900
               hover:bg-yellow-400
               hover:text-black
               p-3
-              rounded-xl
+              rounded-2xl
               transition-all
               duration-300
+              border
+              border-zinc-700
+              shadow-lg
             "
           >
             {mobileMenuOpen ? <FaTimes /> : <FaBars />}
@@ -288,13 +368,13 @@ const Navbar = () => {
               z-50
               md:hidden
               bg-black/95
-              backdrop-blur-xl
+              backdrop-blur-2xl
               border-b
               border-zinc-800
             "
           >
-            <div className="px-6 py-8 flex flex-col gap-5">
-              {desktopLinks.map((link, idx) => {
+            <div className="px-6 py-8 flex flex-col gap-4">
+              {mobileMenuLinks.map((link, idx) => {
                 const isActive = location.pathname === link.path;
 
                 return (
@@ -321,12 +401,16 @@ const Navbar = () => {
                         duration-300
                         ${
                           isActive
-                            ? "bg-yellow-400 text-black"
+                            ? "bg-yellow-400 text-black shadow-[0_0_25px_rgba(250,204,21,0.35)]"
                             : "bg-zinc-900 text-white hover:bg-zinc-800"
                         }
                       `}
                     >
-                      <span>{link.name}</span>
+                      <div className="flex items-center gap-4">
+                        <span className="text-xl">{link.icon}</span>
+
+                        <span>{link.name}</span>
+                      </div>
 
                       {isActive && (
                         <div className="w-2 h-2 rounded-full bg-black" />
@@ -341,8 +425,10 @@ const Navbar = () => {
                 to="/booking"
                 className="
                   mt-4
-                  bg-yellow-400
-                  hover:bg-yellow-300
+                  bg-gradient-to-r
+                  from-yellow-300
+                  via-yellow-400
+                  to-yellow-500
                   text-black
                   py-4
                   rounded-2xl
@@ -354,6 +440,7 @@ const Navbar = () => {
                   items-center
                   justify-center
                   gap-3
+                  shadow-[0_0_30px_rgba(250,204,21,0.35)]
                 "
               >
                 <FaCalendarAlt />
@@ -378,9 +465,9 @@ const Navbar = () => {
         <div
           className="
             bg-black/95
-            backdrop-blur-xl
+            backdrop-blur-2xl
             border-t
-            border-zinc-800
+            border-yellow-400/10
             rounded-t-[30px]
             shadow-2xl
             px-6
@@ -394,7 +481,7 @@ const Navbar = () => {
           {mobileLinks.map((link, idx) => {
             const isActive = location.pathname === link.path;
 
-            /* SPECIAL CENTER BUTTON */
+            /* CENTER GALLERY BUTTON */
             if (link.name === "Gallery") {
               return (
                 <Link
@@ -405,21 +492,21 @@ const Navbar = () => {
                     left-1/2
                     -translate-x-1/2
                     -top-7
-                    w-16
-                    h-16
+                    w-[68px]
+                    h-[68px]
                     rounded-full
                     flex
                     items-center
                     justify-center
                     text-2xl
-                    shadow-2xl
                     transition-all
                     duration-300
                     border-4
                     border-black
+                    shadow-2xl
                     ${
                       isActive
-                        ? "bg-yellow-400 text-black scale-110"
+                        ? "bg-gradient-to-r from-yellow-300 to-yellow-500 text-black scale-110 shadow-[0_0_35px_rgba(250,204,21,0.45)]"
                         : "bg-white text-black"
                     }
                   `}
@@ -438,7 +525,7 @@ const Navbar = () => {
                   flex-col
                   items-center
                   justify-center
-                  text-xs
+                  text-[11px]
                   transition-all
                   duration-300
                   ${isActive ? "text-yellow-400 scale-110" : "text-gray-400"}
