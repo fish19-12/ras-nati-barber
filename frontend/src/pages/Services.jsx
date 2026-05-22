@@ -20,7 +20,7 @@ import hairstyling from "../assets/hairstyiling.jpg";
 import maskImg from "../assets/mask.jpg";
 import culuringImg from "../assets/culuring.jpg";
 
-/* ✅ NEW VIP IMAGES ADDED (ONLY ADDITION) */
+/* NEW VIP IMAGES */
 import teaImg from "../assets/tea.jpg";
 import fiverImg from "../assets/fiver.jpg";
 
@@ -34,8 +34,7 @@ import rebornImg from "../assets/reborn.jpg";
 import outdoorImg from "../assets/out.jpg";
 import cityImg from "../assets/city.jpg";
 
-/* ✅ SOLUTION 1 FIX */
-/* MOVED OUTSIDE COMPONENT TO PREVENT RECREATING ARRAY ON EVERY RE-RENDER */
+/* FIX 1: moved outside + stable reference */
 const vipImages = [maskImg, culuringImg, teaImg, fiverImg];
 
 const services = [
@@ -93,8 +92,6 @@ const services = [
     color: "from-red-500 to-orange-500",
     badge: "Exclusive",
     special: true,
-    description:
-      "Only available at Ras Nati Barber Shop. Complete transformation service designed to give you a fresh, modern, youthful appearance.",
     items: [
       "Tea",
       "Coffee",
@@ -149,11 +146,12 @@ const services = [
 ];
 
 const Services = () => {
-  /* VIP SLIDESHOW */
   const [vipIndex, setVipIndex] = useState(0);
 
+  /* FIX 2: safe interval (prevents mobile crash + tab switch issue) */
   useEffect(() => {
     const interval = setInterval(() => {
+      if (document.hidden) return;
       setVipIndex((prev) => (prev + 1) % vipImages.length);
     }, 2500);
 
@@ -162,63 +160,65 @@ const Services = () => {
 
   return (
     <div className="bg-black text-white min-h-screen overflow-hidden relative">
-      {/* Background Glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-yellow-500/10 blur-[180px] rounded-full"></div>
+      {/* FIX 3: reduced heavy blur (mobile crash fix) */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[350px] h-[350px] bg-yellow-500/10 blur-3xl rounded-full"></div>
 
       {/* HERO */}
       <section className="relative text-center pt-24 sm:pt-28 pb-12 sm:pb-16 px-4">
         <motion.div
-          initial={{ opacity: 0, y: -40 }}
+          initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
+          transition={{ duration: 0.5 }}
         >
           <span className="inline-block px-4 py-1 rounded-full bg-yellow-400/10 border border-yellow-400/20 text-yellow-400 text-xs sm:text-sm mb-5">
             Premium Grooming Experience
           </span>
 
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black uppercase leading-tight">
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black uppercase">
             Our{" "}
             <span className="bg-gradient-to-r from-yellow-400 via-orange-500 to-yellow-300 bg-clip-text text-transparent">
               Services
             </span>
           </h1>
 
-          <p className="text-gray-400 max-w-2xl mx-auto mt-4 sm:mt-5 text-xs sm:text-base leading-relaxed">
-            Experience modern luxury grooming with exclusive VIP, VVIP, Nhatty
-            Reborn transformation, outdoor, and city-to-city barber services
-            only at Ras Nati Barber Shop.
+          <p className="text-gray-400 max-w-2xl mx-auto mt-4">
+            Experience modern luxury grooming services at Ras Nati Barber Shop.
           </p>
         </motion.div>
       </section>
 
       {/* SERVICES GRID */}
       <section className="max-w-7xl mx-auto px-3 sm:px-4 pb-20 sm:pb-24">
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-7">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-7">
           {services.map((service, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 60 }}
+              /* FIX 4: lighter animation (prevents scroll crash) */
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              transition={{ duration: 0.3 }}
               viewport={{ once: true }}
-              whileHover={{ y: -8 }}
+              /* FIX 5: safer hover (no GPU spike) */
+              whileHover={{ scale: 1.02 }}
               className={`relative rounded-2xl overflow-hidden border ${
                 service.special ? "border-orange-500/40" : "border-white/10"
-              } bg-white/5 backdrop-blur-xl group h-full`}
+              } bg-[#111]/90 group h-full transform-gpu`}
             >
               {/* IMAGE */}
               <div className="relative h-40 sm:h-52 lg:h-64 overflow-hidden">
                 <img
+                  loading="lazy"
+                  decoding="async"
                   src={
                     service.title === "VIP Service"
                       ? vipImages[vipIndex]
                       : service.img
                   }
                   alt={service.title}
-                  className="w-full h-full object-cover transition duration-700 group-hover:scale-105"
+                  className="w-full h-full object-cover transition duration-500 group-hover:scale-105"
                 />
 
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
 
                 <div
                   className={`absolute top-2 right-2 sm:top-4 sm:right-4 bg-gradient-to-r ${service.color} text-white text-[9px] sm:text-xs font-bold px-2 py-1 sm:px-4 rounded-full`}
@@ -226,20 +226,6 @@ const Services = () => {
                   {service.badge}
                 </div>
               </div>
-
-              {/* VIP GALLERY */}
-              {service.gallery && (
-                <div className="grid grid-cols-3 gap-2 p-3">
-                  {service.gallery.map((photo, i) => (
-                    <img
-                      key={i}
-                      src={photo}
-                      className="h-20 sm:h-24 w-full object-cover rounded-xl"
-                      alt=""
-                    />
-                  ))}
-                </div>
-              )}
 
               {/* CONTENT */}
               <div className="p-3 sm:p-5">
@@ -274,16 +260,15 @@ const Services = () => {
         </div>
       </section>
 
-      {/* WHY CHOOSE US (UNCHANGED - RESTORED) */}
-      <section className="max-w-6xl mx-auto px-4 pb-20 sm:pb-24">
+      {/* WHY CHOOSE US */}
+      <section className="max-w-6xl mx-auto px-4 pb-20">
         <div className="rounded-3xl border border-yellow-400/10 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 p-6 sm:p-12 text-center">
           <h2 className="text-3xl font-bold mb-5">
             Why Choose Nhatty The Barber?
           </h2>
 
           <p className="text-gray-300 max-w-3xl mx-auto">
-            Nhatty The Barber delivers modern luxury grooming with premium care
-            and elite VIP experiences.
+            Premium luxury grooming experience with modern style.
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-10">
@@ -305,17 +290,15 @@ const Services = () => {
         </div>
       </section>
 
-      {/* CTA (RESTORED) */}
+      {/* CTA */}
       <section className="text-center pb-16 px-4">
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
         >
           <h2 className="text-3xl font-bold mb-4">
             Ready For Your Transformation?
           </h2>
-
-          <p className="text-gray-400 mb-6">Book your appointment today.</p>
 
           <Link
             to="/booking"
