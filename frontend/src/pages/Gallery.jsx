@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { X, ZoomIn } from "lucide-react";
 
 const Gallery = () => {
   const [images, setImages] = useState([]);
@@ -9,6 +10,9 @@ const Gallery = () => {
 
   // SHOW FIRST 10 FAST
   const [visibleCount, setVisibleCount] = useState(10);
+
+  // IMAGE PREVIEW
+  const [selectedImage, setSelectedImage] = useState(null);
 
   // PRELOAD FIRST 10 IMAGES
   const preloadImages = (imageArray) => {
@@ -115,7 +119,7 @@ const Gallery = () => {
           pb-10
         "
       >
-        {/* MODERN GLOW */}
+        {/* GLOW */}
         <div className="absolute inset-0 bg-yellow-400/10 blur-3xl pointer-events-none" />
 
         {/* TITLE */}
@@ -186,7 +190,7 @@ const Gallery = () => {
       </div>
 
       {/* GALLERY */}
-      <div className="max-w-[1800px] mx-auto px-2 sm:px-4 md:px-6 pb-10">
+      <div className="max-w-[1800px] mx-auto px-3 sm:px-4 md:px-6 pb-10">
         <div
           className="
             grid
@@ -194,7 +198,7 @@ const Gallery = () => {
             sm:grid-cols-2
             md:grid-cols-3
             lg:grid-cols-5
-            gap-2
+            gap-3
             sm:gap-4
             md:gap-5
           "
@@ -226,26 +230,48 @@ const Gallery = () => {
                   border
                   border-zinc-800
                   group
+                  shadow-lg
                 "
               >
                 {/* IMAGE */}
-                <div className="relative bg-black">
+                <div className="relative bg-black overflow-hidden">
                   <img
                     src={item.imageUrl}
                     alt={item.title}
                     loading={index < 10 ? "eager" : "lazy"}
                     className="
                       w-full
-                      h-44
-                      sm:h-56
+                      h-[170px]
+                      sm:h-[230px]
                       md:h-72
-                      object-contain
-                      bg-black
+                      object-cover
                       transition-transform
                       duration-500
                       group-hover:scale-105
                     "
                   />
+
+                  {/* QUICK VIEW BUTTON */}
+                  <button
+                    onClick={() => setSelectedImage(item)}
+                    className="
+                      absolute
+                      top-3
+                      right-3
+                      bg-black/70
+                      backdrop-blur-md
+                      p-2
+                      rounded-full
+                      text-white
+                      opacity-100
+                      sm:opacity-0
+                      sm:group-hover:opacity-100
+                      transition
+                      z-20
+                    "
+                  >
+                    <ZoomIn size={18} />
+                  </button>
                 </div>
 
                 {/* OVERLAY */}
@@ -253,7 +279,7 @@ const Gallery = () => {
                   className="
                     absolute
                     inset-0
-                    bg-black/55
+                    bg-black/45
                     opacity-0
                     group-hover:opacity-100
                     transition-all
@@ -263,24 +289,48 @@ const Gallery = () => {
                     justify-center
                   "
                 >
-                  <Link
-                    to="/booking"
-                    className="
-                      bg-yellow-400
-                      text-black
-                      text-sm
-                      sm:text-base
-                      px-4
-                      sm:px-5
-                      py-2
-                      rounded-full
-                      font-bold
-                      hover:scale-105
-                      transition
-                    "
-                  >
-                    Book Now
-                  </Link>
+                  <div className="flex flex-col gap-3 items-center">
+                    {/* PREVIEW */}
+                    <button
+                      onClick={() => setSelectedImage(item)}
+                      className="
+                        bg-white/10
+                        backdrop-blur-md
+                        border
+                        border-white/20
+                        text-white
+                        text-xs
+                        sm:text-sm
+                        px-4
+                        py-2
+                        rounded-full
+                        font-semibold
+                        hover:scale-105
+                        transition
+                      "
+                    >
+                      Preview Style
+                    </button>
+
+                    {/* BOOK */}
+                    <Link
+                      to="/booking"
+                      className="
+                        bg-yellow-400
+                        text-black
+                        text-xs
+                        sm:text-base
+                        px-5
+                        py-2
+                        rounded-full
+                        font-bold
+                        hover:scale-105
+                        transition
+                      "
+                    >
+                      Book Now
+                    </Link>
+                  </div>
                 </div>
               </motion.div>
             ))}
@@ -315,6 +365,116 @@ const Gallery = () => {
           </motion.button>
         </div>
       )}
+
+      {/* IMAGE PREVIEW MODAL */}
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="
+              fixed
+              inset-0
+              z-[999]
+              bg-black/90
+              backdrop-blur-md
+              flex
+              items-center
+              justify-center
+              p-4
+            "
+          >
+            {/* CLOSE */}
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="
+                absolute
+                top-5
+                right-5
+                bg-white/10
+                hover:bg-white/20
+                p-3
+                rounded-full
+                transition
+              "
+            >
+              <X size={24} />
+            </button>
+
+            {/* CONTENT */}
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="
+                w-full
+                max-w-5xl
+                rounded-3xl
+                overflow-hidden
+                border
+                border-zinc-800
+                bg-zinc-950
+                shadow-2xl
+              "
+            >
+              {/* IMAGE */}
+              <div className="bg-black">
+                <img
+                  src={selectedImage.imageUrl}
+                  alt={selectedImage.title}
+                  className="
+                    w-full
+                    max-h-[75vh]
+                    object-contain
+                  "
+                />
+              </div>
+
+              {/* BOTTOM */}
+              <div
+                className="
+                  p-5
+                  sm:p-6
+                  flex
+                  flex-col
+                  sm:flex-row
+                  items-center
+                  justify-between
+                  gap-4
+                "
+              >
+                <div>
+                  <h2 className="text-xl sm:text-2xl font-black text-white">
+                    {selectedImage.title}
+                  </h2>
+
+                  <p className="text-gray-400 mt-1 text-sm sm:text-base">
+                    Premium haircut inspiration from NHATTY THE BARBER.
+                  </p>
+                </div>
+
+                <Link
+                  to="/booking"
+                  className="
+                    bg-yellow-400
+                    text-black
+                    px-6
+                    py-3
+                    rounded-full
+                    font-black
+                    hover:scale-105
+                    transition
+                    whitespace-nowrap
+                  "
+                >
+                  Book This Style
+                </Link>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
