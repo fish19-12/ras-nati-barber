@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
@@ -7,121 +7,125 @@ const Gallery = () => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [visibleCount, setVisibleCount] = useState(10);
+
+  const fetchImages = async () => {
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/gallery`,
+        { timeout: 8000 },
+      );
+
+      setImages(res.data);
+      sessionStorage.setItem("galleryImages", JSON.stringify(res.data));
+    } catch (error) {
+      console.error("Gallery fetch failed:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     const cached = sessionStorage.getItem("galleryImages");
 
     if (cached) {
       setImages(JSON.parse(cached));
       setLoading(false);
-      return;
     }
 
-    const controller = new AbortController();
-
-    const fetchImages = async () => {
-      try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/gallery`,
-          {
-            signal: controller.signal,
-            timeout: 5000,
-          },
-        );
-
-        setImages(res.data);
-        sessionStorage.setItem("galleryImages", JSON.stringify(res.data));
-      } catch (error) {
-        if (!axios.isCancel(error)) {
-          console.error("Gallery fetch failed:", error);
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchImages();
-
-    return () => controller.abort();
   }, []);
 
-  /* ---------------- LOADING SKELETON ---------------- */
+  const showMore = () => {
+    setVisibleCount((prev) => prev + 10);
+  };
 
-  if (loading) {
-    return (
-      <div className="w-full min-h-screen bg-black flex items-center justify-center px-6">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full max-w-6xl">
-          {Array.from({ length: 8 }).map((_, i) => (
+  return (
+    <div className="w-full bg-black text-white min-h-screen">
+      {/* ===== HEADER ===== */}
+      <div className="text-center pt-20 pb-10 px-5">
+        <motion.h1
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-3xl sm:text-5xl font-extrabold text-yellow-400"
+        >
+          Nhatty The Barber Gallery
+        </motion.h1>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+          className="text-gray-400 mt-4 max-w-2xl mx-auto"
+        >
+          Explore modern hairstyles, premium fades, luxury grooming, and elite
+          barber transformations crafted with perfection.
+        </motion.p>
+      </div>
+
+      {/* ===== GRID ===== */}
+      <div className="max-w-7xl mx-auto px-4 pb-16 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-5">
+        <AnimatePresence>
+          {images.slice(0, visibleCount).map((item, index) => (
+            <motion.div
+              key={item._id}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3, delay: index * 0.02 }}
+              whileHover={{ scale: 1.02 }}
+              className="relative rounded-xl overflow-hidden group bg-[#111]"
+            >
+              {/* IMAGE (FULL VIEW - NO ZOOM CROP) */}
+              <img
+                src={item.imageUrl}
+                alt={item.title}
+                loading="lazy"
+                className="w-full h-48 sm:h-56 object-contain bg-black transition duration-300"
+              />
+
+              {/* OVERLAY */}
+              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
+                <Link
+                  to="/booking"
+                  className="bg-yellow-400 text-black px-4 py-2 rounded-full font-bold text-sm"
+                >
+                  Book Now
+                </Link>
+              </div>
+
+              {/* TITLE (SMALL LABEL) */}
+              <div className="absolute bottom-0 left-0 w-full bg-black/60 text-center py-1 text-xs text-white">
+                {item.title}
+              </div>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </div>
+
+      {/* ===== SHOW MORE ===== */}
+      {visibleCount < images.length && (
+        <div className="flex justify-center pb-12">
+          <button
+            onClick={showMore}
+            className="px-7 py-3 bg-yellow-400 text-black font-bold rounded-full hover:scale-105 transition"
+          >
+            Show More
+          </button>
+        </div>
+      )}
+
+      {/* ===== LOADING ANIMATION ===== */}
+      {loading && (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 px-4 pb-10">
+          {Array.from({ length: 10 }).map((_, i) => (
             <div
               key={i}
-              className="h-64 bg-gray-800 rounded-2xl animate-pulse"
+              className="h-48 bg-gray-800 animate-pulse rounded-xl"
             />
           ))}
         </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="w-full bg-gradient-to-b from-black via-[#0b0b0b] to-black text-white font-exo">
-      {/* HEADER */}
-      <div className="max-w-4xl mx-auto text-center pt-20 pb-16 px-6">
-        <motion.h1
-          initial={{ opacity: 0, y: -30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-4xl sm:text-5xl md:text-6xl font-bold text-yellow-400 mb-6"
-        >
-          Nhatty The Barber
-        </motion.h1>
-
-        <p className="text-gray-400 text-lg leading-relaxed">
-          Welcome to the premium gallery of{" "}
-          <span className="text-yellow-400 font-semibold">
-            Nhatty The Barber
-          </span>
-          . Our barbers create modern styles, fades, and luxury grooming
-          experiences trusted by influencers, celebrities, and thousands of
-          satisfied clients across Ethiopia.
-        </p>
-
-        <p className="text-gray-500 mt-4">
-          Precision haircuts. Premium grooming. Iconic style.
-        </p>
-      </div>
-
-      {/* GALLERY GRID */}
-      <div className="max-w-7xl mx-auto px-6 pb-20 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {images.map((item) => (
-          <motion.div
-            key={item._id}
-            whileHover={{ y: -6 }}
-            transition={{ duration: 0.3 }}
-            className="relative rounded-2xl overflow-hidden shadow-xl group"
-          >
-            {/* IMAGE */}
-            <img
-              src={`${item.imageUrl}?w=600&h=600&c_fill&q_auto&fm=webp`}
-              alt={item.title}
-              loading="lazy"
-              className="w-full h-60 sm:h-64 md:h-64 lg:h-72 object-cover transition-transform duration-500 group-hover:scale-110"
-            />
-
-            {/* OVERLAY */}
-            <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300">
-              <h2 className="text-md md:text-lg font-bold text-white mb-3 text-center px-3">
-                {item.title}
-              </h2>
-
-              <Link
-                to="/booking"
-                className="bg-yellow-400 text-black px-5 py-2 md:px-6 md:py-3 rounded-full font-semibold uppercase tracking-wide hover:scale-105 transition"
-              >
-                Book Now
-              </Link>
-            </div>
-          </motion.div>
-        ))}
-      </div>
+      )}
     </div>
   );
 };
