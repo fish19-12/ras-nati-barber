@@ -34,6 +34,10 @@ import rebornImg from "../assets/reborn.jpg";
 import outdoorImg from "../assets/out.jpg";
 import cityImg from "../assets/city.jpg";
 
+/* ✅ SOLUTION 1 FIX */
+/* MOVED OUTSIDE COMPONENT TO PREVENT RECREATING ARRAY ON EVERY RE-RENDER */
+const vipImages = [maskImg, culuringImg, teaImg, fiverImg];
+
 const services = [
   {
     title: "VIP Service",
@@ -146,7 +150,6 @@ const services = [
 
 const Services = () => {
   /* VIP SLIDESHOW */
-  const vipImages = [maskImg, culuringImg, teaImg, fiverImg]; // ✅ ADDED HERE
   const [vipIndex, setVipIndex] = useState(0);
 
   useEffect(() => {
