@@ -12,12 +12,29 @@ global.latestBookings = global.latestBookings || [];
 // 📧 EMAIL TRANSPORTER
 // ========================================
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
 
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
+
+  connectionTimeout: 10000,
+  greetingTimeout: 10000,
+  socketTimeout: 10000,
+});
+
+// ========================================
+// ✅ VERIFY EMAIL SERVER
+// ========================================
+transporter.verify((error, success) => {
+  if (error) {
+    console.log("❌ Email transporter error:", error.message);
+  } else {
+    console.log("✅ Email server ready");
+  }
 });
 
 // ========================================
@@ -119,6 +136,32 @@ exports.createBooking = async (req, res) => {
       cityNeedDate: req.body.cityNeedDate || "",
 
       timePeriod: req.body.timePeriod || "",
+    });
+
+    // ========================================
+    // 🔔 SAVE FOR LIVE NOTIFICATIONS
+    // ========================================
+    global.latestBookings.unshift({
+      _id: booking._id,
+
+      name: booking.name,
+
+      services: booking.services,
+
+      createdAt: booking.createdAt,
+    });
+
+    // KEEP ONLY LAST 20
+    global.latestBookings = global.latestBookings.slice(0, 20);
+
+    // ========================================
+    // 🚀 SEND RESPONSE IMMEDIATELY
+    // ========================================
+    res.status(201).json({
+      success: true,
+      message: "Booking created successfully",
+
+      booking,
     });
 
     // ========================================
@@ -383,32 +426,6 @@ exports.createBooking = async (req, res) => {
       .catch((emailError) => {
         console.error("❌ Email send failed:", emailError.message);
       });
-
-    // ========================================
-    // 🔔 SAVE FOR LIVE NOTIFICATIONS
-    // ========================================
-    global.latestBookings.unshift({
-      _id: booking._id,
-
-      name: booking.name,
-
-      services: booking.services,
-
-      createdAt: booking.createdAt,
-    });
-
-    // KEEP ONLY LAST 20
-    global.latestBookings = global.latestBookings.slice(0, 20);
-
-    // ========================================
-    // RESPONSE
-    // ========================================
-    res.status(201).json({
-      success: true,
-      message: "Booking created successfully",
-
-      booking,
-    });
   } catch (error) {
     console.error("Create booking error:", error.message);
 
