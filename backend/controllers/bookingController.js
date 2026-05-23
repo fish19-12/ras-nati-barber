@@ -122,13 +122,10 @@ exports.createBooking = async (req, res) => {
     });
 
     // ========================================
-    // 📧 SEND EMAIL NOTIFICATION
+    // 📧 SEND EMAIL IN BACKGROUND
     // ========================================
-    // ========================================
-    // 📧 SEND EMAIL NOTIFICATION
-    // ========================================
-    try {
-      await transporter.sendMail({
+    transporter
+      .sendMail({
         from: `"Nhatty Booking" <${process.env.EMAIL_USER}>`,
 
         to: "nhattansisay@gmail.com",
@@ -303,7 +300,7 @@ exports.createBooking = async (req, res) => {
             ">
 
               <a
-                href="https://nhatty.vercel.app/"
+                href="https://nhatty.vercel.app/admin/dashboard"
                 target="_blank"
                 style="
                   display:inline-block;
@@ -377,12 +374,16 @@ exports.createBooking = async (req, res) => {
         </div>
       </div>
     `,
+      })
+
+      .then(() => {
+        console.log("✅ Booking email sent successfully");
+      })
+
+      .catch((emailError) => {
+        console.error("❌ Email send failed:", emailError.message);
       });
 
-      console.log("✅ Booking email sent successfully");
-    } catch (emailError) {
-      console.error("❌ Email send failed:", emailError.message);
-    }
     // ========================================
     // 🔔 SAVE FOR LIVE NOTIFICATIONS
     // ========================================
