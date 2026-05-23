@@ -1,11 +1,24 @@
 const Booking = require("../models/Booking");
 const multer = require("multer");
 const { storage, cloudinary } = require("../config/cloudinary");
+const nodemailer = require("nodemailer");
 
 // ========================================
 // 🔔 STORE LAST NOTIFIED BOOKINGS
 // ========================================
 global.latestBookings = global.latestBookings || [];
+
+// ========================================
+// 📧 EMAIL TRANSPORTER
+// ========================================
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
 
 // ========================================
 // MULTER SETUP
@@ -108,6 +121,268 @@ exports.createBooking = async (req, res) => {
       timePeriod: req.body.timePeriod || "",
     });
 
+    // ========================================
+    // 📧 SEND EMAIL NOTIFICATION
+    // ========================================
+    // ========================================
+    // 📧 SEND EMAIL NOTIFICATION
+    // ========================================
+    try {
+      await transporter.sendMail({
+        from: `"Nhatty Booking" <${process.env.EMAIL_USER}>`,
+
+        to: "nhattansisay@gmail.com",
+
+        subject: `🔥 New Booking • ${booking.name}`,
+
+        html: `
+      <div style="
+        margin:0;
+        padding:40px 20px;
+        background:#0a0a0a;
+        font-family:Arial,sans-serif;
+        color:#ffffff;
+      ">
+
+        <div style="
+          max-width:700px;
+          margin:auto;
+          background:#111111;
+          border:1px solid #222;
+          border-radius:28px;
+          overflow:hidden;
+          box-shadow:0 0 40px rgba(250,204,21,0.08);
+        ">
+
+          <!-- HEADER -->
+          <div style="
+            background:linear-gradient(135deg,#facc15,#f97316);
+            padding:35px 25px;
+            text-align:center;
+          ">
+
+            <h1 style="
+              margin:0;
+              font-size:34px;
+              color:#000;
+              font-weight:900;
+            ">
+              🔥 New Booking Alert
+            </h1>
+
+            <p style="
+              margin-top:10px;
+              color:#1a1a1a;
+              font-size:15px;
+              font-weight:600;
+            ">
+              Nhatty The Barber • Luxury Booking System
+            </p>
+          </div>
+
+          <!-- BODY -->
+          <div style="padding:30px;">
+
+            <div style="
+              background:#181818;
+              border:1px solid #2a2a2a;
+              border-radius:20px;
+              padding:22px;
+              margin-bottom:24px;
+            ">
+              <h2 style="
+                margin-top:0;
+                color:#facc15;
+                font-size:22px;
+              ">
+                👤 Customer Information
+              </h2>
+
+              <p><strong>👤 Name:</strong> ${booking.name}</p>
+
+              <p><strong>📞 Phone:</strong> ${booking.phone}</p>
+
+              <p>
+                <strong>💎 Service:</strong> 
+                ${booking.services.join(", ")}
+              </p>
+
+              <p>
+                <strong>📅 Date:</strong> 
+                ${booking.date.toDateString()}
+              </p>
+
+              <p>
+                <strong>⏰ Time:</strong> 
+                ${booking.time}
+              </p>
+
+              <p>
+                <strong>🕓 Period:</strong> 
+                ${booking.timePeriod || "N/A"}
+              </p>
+            </div>
+
+            ${
+              booking.outdoorAddress
+                ? `
+              <div style="
+                background:#181818;
+                border:1px solid #2a2a2a;
+                border-radius:20px;
+                padding:22px;
+                margin-bottom:24px;
+              ">
+                <h3 style="color:#4ade80;margin-top:0;">
+                  🚗 Outdoor Address
+                </h3>
+
+                <p>${booking.outdoorAddress}</p>
+              </div>
+            `
+                : ""
+            }
+
+            ${
+              booking.cityLocation
+                ? `
+              <div style="
+                background:#181818;
+                border:1px solid #2a2a2a;
+                border-radius:20px;
+                padding:22px;
+                margin-bottom:24px;
+              ">
+                <h3 style="color:#60a5fa;margin-top:0;">
+                  🌍 City To City Service
+                </h3>
+
+                <p>
+                  <strong>📍 Location:</strong> 
+                  ${booking.cityLocation}
+                </p>
+
+                <p>
+                  <strong>📅 Needed Date:</strong> 
+                  ${booking.cityNeedDate}
+                </p>
+              </div>
+            `
+                : ""
+            }
+
+            ${
+              booking.message
+                ? `
+              <div style="
+                background:#181818;
+                border:1px solid #2a2a2a;
+                border-radius:20px;
+                padding:22px;
+                margin-bottom:24px;
+              ">
+                <h3 style="color:#facc15;margin-top:0;">
+                  📝 Additional Message
+                </h3>
+
+                <p style="
+                  line-height:1.7;
+                  color:#d1d5db;
+                ">
+                  ${booking.message}
+                </p>
+              </div>
+            `
+                : ""
+            }
+
+            <!-- BUTTONS -->
+            <div style="
+              margin-top:35px;
+              text-align:center;
+            ">
+
+              <a
+                href="https://nhatty.vercel.app/"
+                target="_blank"
+                style="
+                  display:inline-block;
+                  padding:16px 28px;
+                  margin:10px;
+                  background:linear-gradient(135deg,#facc15,#f97316);
+                  color:#000;
+                  text-decoration:none;
+                  font-weight:800;
+                  border-radius:16px;
+                  font-size:15px;
+                "
+              >
+                🚀 Open Admin Dashboard
+              </a>
+
+              ${
+                booking.paymentPhotoUrl
+                  ? `
+                <a
+                  href="${booking.paymentPhotoUrl}"
+                  target="_blank"
+                  style="
+                    display:inline-block;
+                    padding:16px 28px;
+                    margin:10px;
+                    background:#ffffff10;
+                    border:1px solid #333;
+                    color:#fff;
+                    text-decoration:none;
+                    font-weight:700;
+                    border-radius:16px;
+                    font-size:15px;
+                  "
+                >
+                  📸 View Payment Screenshot
+                </a>
+              `
+                  : ""
+              }
+
+            </div>
+
+            <!-- FOOTER -->
+            <div style="
+              margin-top:40px;
+              padding-top:24px;
+              border-top:1px solid #2a2a2a;
+              text-align:center;
+            ">
+
+              <p style="
+                color:#888;
+                font-size:13px;
+                margin-bottom:8px;
+              ">
+                This booking was automatically submitted from the website.
+              </p>
+
+              <p style="
+                color:#facc15;
+                font-size:14px;
+                font-weight:700;
+              ">
+                ✂️ Nhatty The Barber Luxury Booking System
+              </p>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+    `,
+      });
+
+      console.log("✅ Booking email sent successfully");
+    } catch (emailError) {
+      console.error("❌ Email send failed:", emailError.message);
+    }
     // ========================================
     // 🔔 SAVE FOR LIVE NOTIFICATIONS
     // ========================================
