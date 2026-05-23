@@ -11,10 +11,18 @@ global.latestBookings = global.latestBookings || [];
 // ========================================
 // 📧 EMAIL TRANSPORTER
 // ========================================
+// ✅ FIXED FOR RENDER + IPV6 ERROR
+// ✅ USES IPV4 ONLY
+// ✅ BETTER TIMEOUTS
+// ========================================
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
+
+  port: 587,
+
+  secure: false,
+
+  family: 4, // ✅ FORCE IPV4 (FIXES ENETUNREACH)
 
   auth: {
     user: process.env.EMAIL_USER,
@@ -22,16 +30,22 @@ const transporter = nodemailer.createTransport({
   },
 
   connectionTimeout: 10000,
+
   greetingTimeout: 10000,
-  socketTimeout: 10000,
+
+  socketTimeout: 15000,
+
+  tls: {
+    rejectUnauthorized: false,
+  },
 });
 
 // ========================================
-// ✅ VERIFY EMAIL SERVER
+// TEST EMAIL CONNECTION
 // ========================================
 transporter.verify((error, success) => {
   if (error) {
-    console.log("❌ Email transporter error:", error.message);
+    console.error("❌ Email transporter error:", error.message);
   } else {
     console.log("✅ Email server ready");
   }
@@ -136,32 +150,6 @@ exports.createBooking = async (req, res) => {
       cityNeedDate: req.body.cityNeedDate || "",
 
       timePeriod: req.body.timePeriod || "",
-    });
-
-    // ========================================
-    // 🔔 SAVE FOR LIVE NOTIFICATIONS
-    // ========================================
-    global.latestBookings.unshift({
-      _id: booking._id,
-
-      name: booking.name,
-
-      services: booking.services,
-
-      createdAt: booking.createdAt,
-    });
-
-    // KEEP ONLY LAST 20
-    global.latestBookings = global.latestBookings.slice(0, 20);
-
-    // ========================================
-    // 🚀 SEND RESPONSE IMMEDIATELY
-    // ========================================
-    res.status(201).json({
-      success: true,
-      message: "Booking created successfully",
-
-      booking,
     });
 
     // ========================================
@@ -426,6 +414,33 @@ exports.createBooking = async (req, res) => {
       .catch((emailError) => {
         console.error("❌ Email send failed:", emailError.message);
       });
+
+    // ========================================
+    // 🔔 SAVE FOR LIVE NOTIFICATIONS
+    // ========================================
+    global.latestBookings.unshift({
+      _id: booking._id,
+
+      name: booking.name,
+
+      services: booking.services,
+
+      createdAt: booking.createdAt,
+    });
+
+    // KEEP ONLY LAST 20
+    global.latestBookings = global.latestBookings.slice(0, 20);
+
+    // ========================================
+    // RESPONSE
+    // ========================================
+    res.status(201).json({
+      success: true,
+
+      message: "Booking created successfully",
+
+      booking,
+    });
   } catch (error) {
     console.error("Create booking error:", error.message);
 
@@ -435,6 +450,7 @@ exports.createBooking = async (req, res) => {
     if (error.code === 11000) {
       return res.status(400).json({
         success: false,
+
         message: "This booking time is already reserved by another customer.",
       });
     }
@@ -477,6 +493,7 @@ exports.getLatestBookings = async (req, res) => {
 
     res.status(500).json({
       success: false,
+
       message: "Failed to get latest bookings",
     });
   }
