@@ -10,34 +10,35 @@ global.latestBookings = global.latestBookings || [];
 
 // ========================================
 // 📧 EMAIL TRANSPORTER
-// ========================================
-// ✅ FIXED FOR RENDER + IPV6 ERROR
-// ✅ USES IPV4 ONLY
-// ✅ BETTER TIMEOUTS
+// ✅ FULLY FIXED FOR RENDER
+// ✅ FIXED IPV6 ERROR
+// ✅ FIXED ECONNRESET
+// ✅ BETTER GMAIL SMTP
 // ========================================
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
 
-  port: 587,
+  port: 465,
 
-  secure: false,
+  secure: true,
 
-  family: 4, // ✅ FORCE IPV4 (FIXES ENETUNREACH)
+  family: 4,
 
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
 
-  connectionTimeout: 10000,
-
-  greetingTimeout: 10000,
-
-  socketTimeout: 15000,
-
   tls: {
     rejectUnauthorized: false,
+    minVersion: "TLSv1.2",
   },
+
+  connectionTimeout: 20000,
+
+  greetingTimeout: 20000,
+
+  socketTimeout: 30000,
 });
 
 // ========================================
@@ -231,22 +232,22 @@ exports.createBooking = async (req, res) => {
               <p><strong>📞 Phone:</strong> ${booking.phone}</p>
 
               <p>
-                <strong>💎 Service:</strong> 
+                <strong>💎 Service:</strong>
                 ${booking.services.join(", ")}
               </p>
 
               <p>
-                <strong>📅 Date:</strong> 
+                <strong>📅 Date:</strong>
                 ${booking.date.toDateString()}
               </p>
 
               <p>
-                <strong>⏰ Time:</strong> 
+                <strong>⏰ Time:</strong>
                 ${booking.time}
               </p>
 
               <p>
-                <strong>🕓 Period:</strong> 
+                <strong>🕓 Period:</strong>
                 ${booking.timePeriod || "N/A"}
               </p>
             </div>
@@ -286,12 +287,12 @@ exports.createBooking = async (req, res) => {
                 </h3>
 
                 <p>
-                  <strong>📍 Location:</strong> 
+                  <strong>📍 Location:</strong>
                   ${booking.cityLocation}
                 </p>
 
                 <p>
-                  <strong>📅 Needed Date:</strong> 
+                  <strong>📅 Needed Date:</strong>
                   ${booking.cityNeedDate}
                 </p>
               </div>
@@ -407,12 +408,21 @@ exports.createBooking = async (req, res) => {
     `,
       })
 
-      .then(() => {
+      .then((info) => {
         console.log("✅ Booking email sent successfully");
+        console.log("📧 Message ID:", info.messageId);
       })
 
       .catch((emailError) => {
         console.error("❌ Email send failed:", emailError.message);
+
+        if (emailError.code) {
+          console.error("❌ Error code:", emailError.code);
+        }
+
+        if (emailError.command) {
+          console.error("❌ Failed command:", emailError.command);
+        }
       });
 
     // ========================================
