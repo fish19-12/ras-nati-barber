@@ -10,36 +10,38 @@ global.latestBookings = global.latestBookings || [];
 
 // ========================================
 // 📧 EMAIL TRANSPORTER
-// ✅ FIXED FOR RENDER
+// ✅ FAST FOR RENDER
 // ✅ FIXED IPV6 ERROR
-// ✅ FIXED ECONNRESET
-// ✅ STABLE GMAIL SMTP
+// ✅ FIXED TIMEOUT
+// ✅ NON-BLOCKING EMAIL
+// ✅ FASTER RESPONSE
 // ========================================
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
 
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
+  port: 465,
+
+  secure: true,
 
   family: 4,
 
   pool: true,
 
-  maxConnections: 5,
+  maxConnections: 3,
 
   maxMessages: 100,
 
-  rateDelta: 20000,
+  connectionTimeout: 10000,
 
-  rateLimit: 5,
+  greetingTimeout: 10000,
 
-  connectionTimeout: 30000,
+  socketTimeout: 10000,
 
-  greetingTimeout: 30000,
+  auth: {
+    user: process.env.EMAIL_USER,
 
-  socketTimeout: 30000,
+    pass: process.env.EMAIL_PASS,
+  },
 
   tls: {
     rejectUnauthorized: false,
@@ -120,15 +122,15 @@ exports.createBooking = async (req, res) => {
     // ========================================
     const existingBooking = await Booking.findOne({
       date: bookingDate,
+
       time: req.body.time,
-    });
+    }).lean();
 
     if (existingBooking) {
       return res.status(400).json({
         success: false,
 
-        message:
-          "This date and time is already taken by another customer. Please choose another available time.",
+        message: "This date and time is already taken by another customer.",
       });
     }
 
@@ -140,7 +142,7 @@ exports.createBooking = async (req, res) => {
 
       phone: req.body.phone,
 
-      services: services,
+      services,
 
       date: bookingDate,
 
@@ -157,6 +159,33 @@ exports.createBooking = async (req, res) => {
       cityNeedDate: req.body.cityNeedDate || "",
 
       timePeriod: req.body.timePeriod || "",
+    });
+
+    // ========================================
+    // 🔔 SAVE LIVE NOTIFICATIONS
+    // ========================================
+    global.latestBookings.unshift({
+      _id: booking._id,
+
+      name: booking.name,
+
+      services: booking.services,
+
+      createdAt: booking.createdAt,
+    });
+
+    // KEEP ONLY LAST 20
+    global.latestBookings = global.latestBookings.slice(0, 20);
+
+    // ========================================
+    // 🚀 SEND RESPONSE IMMEDIATELY
+    // ========================================
+    res.status(201).json({
+      success: true,
+
+      message: "Booking created successfully",
+
+      booking,
     });
 
     // ========================================
@@ -214,6 +243,7 @@ exports.createBooking = async (req, res) => {
                 ">
                   Nhatty The Barber • Luxury Booking System
                 </p>
+
               </div>
 
               <!-- BODY -->
@@ -226,6 +256,7 @@ exports.createBooking = async (req, res) => {
                   padding:22px;
                   margin-bottom:24px;
                 ">
+
                   <h2 style="
                     margin-top:0;
                     color:#facc15;
@@ -263,6 +294,7 @@ exports.createBooking = async (req, res) => {
                     <strong>🕓 Period:</strong>
                     ${booking.timePeriod || "N/A"}
                   </p>
+
                 </div>
 
                 ${
@@ -275,6 +307,7 @@ exports.createBooking = async (req, res) => {
                     padding:22px;
                     margin-bottom:24px;
                   ">
+
                     <h3 style="
                       color:#4ade80;
                       margin-top:0;
@@ -285,6 +318,7 @@ exports.createBooking = async (req, res) => {
                     <p>
                       ${booking.outdoorAddress}
                     </p>
+
                   </div>
                 `
                     : ""
@@ -300,6 +334,7 @@ exports.createBooking = async (req, res) => {
                     padding:22px;
                     margin-bottom:24px;
                   ">
+
                     <h3 style="
                       color:#60a5fa;
                       margin-top:0;
@@ -316,6 +351,7 @@ exports.createBooking = async (req, res) => {
                       <strong>📅 Needed Date:</strong>
                       ${booking.cityNeedDate}
                     </p>
+
                   </div>
                 `
                     : ""
@@ -331,6 +367,7 @@ exports.createBooking = async (req, res) => {
                     padding:22px;
                     margin-bottom:24px;
                   ">
+
                     <h3 style="
                       color:#facc15;
                       margin-top:0;
@@ -344,6 +381,7 @@ exports.createBooking = async (req, res) => {
                     ">
                       ${booking.message}
                     </p>
+
                   </div>
                 `
                     : ""
@@ -427,7 +465,9 @@ exports.createBooking = async (req, res) => {
                 </div>
 
               </div>
+
             </div>
+
           </div>
           `,
         });
@@ -446,35 +486,8 @@ exports.createBooking = async (req, res) => {
         // DO NOT CRASH SERVER
       }
     });
-
-    // ========================================
-    // 🔔 SAVE FOR LIVE NOTIFICATIONS
-    // ========================================
-    global.latestBookings.unshift({
-      _id: booking._id,
-
-      name: booking.name,
-
-      services: booking.services,
-
-      createdAt: booking.createdAt,
-    });
-
-    // KEEP ONLY LAST 20
-    global.latestBookings = global.latestBookings.slice(0, 20);
-
-    // ========================================
-    // RESPONSE
-    // ========================================
-    res.status(201).json({
-      success: true,
-
-      message: "Booking created successfully",
-
-      booking,
-    });
   } catch (error) {
-    console.error("Create booking error:", error.message);
+    console.error("❌ Create booking error:", error.message);
 
     // ========================================
     // DUPLICATE ERROR
@@ -483,14 +496,14 @@ exports.createBooking = async (req, res) => {
       return res.status(400).json({
         success: false,
 
-        message: "This booking time is already reserved by another customer.",
+        message: "This booking time is already reserved.",
       });
     }
 
-    res.status(400).json({
+    res.status(500).json({
       success: false,
 
-      message: error.message,
+      message: error.message || "Server error while creating booking",
     });
   }
 };
@@ -500,9 +513,11 @@ exports.createBooking = async (req, res) => {
 // ========================================
 exports.getBookings = async (req, res) => {
   try {
-    const bookings = await Booking.find().sort({
-      createdAt: -1,
-    });
+    const bookings = await Booking.find()
+      .sort({
+        createdAt: -1,
+      })
+      .lean();
 
     res.status(200).json(bookings);
   } catch (error) {
