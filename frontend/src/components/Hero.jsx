@@ -35,9 +35,12 @@ const Hero = () => {
       </p>
 
       {/* Background Image */}
+      {/* Background Image */}
       <div
-        className="absolute inset-0 bg-cover bg-center scale-105"
-        style={{ backgroundImage: `url(${hero})` }}
+        className="absolute inset-0 bg-cover bg-top md:bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `url(${hero})`,
+        }}
       />
 
       {/* Dark Overlay */}
@@ -75,28 +78,32 @@ const Hero = () => {
         </motion.h2>
 
         {/* Subtitle */}
-        <motion.p
-          initial={{ opacity: 0, y: 25 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="mt-5 text-gray-300 text-sm sm:text-base md:text-lg max-w-2xl leading-relaxed"
-        >
-          Clean fades, sharp lineups, beard grooming, and luxury barber services
-          crafted for men who value confidence, precision, and modern style.
-          Trusted by influencers, celebrities, and clients across Ethiopia.
-        </motion.p>
 
         {/* Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="flex flex-col sm:flex-row gap-4 mt-8 justify-center w-full sm:w-auto"
+          className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4"
         >
           <Link
             to="/booking"
             aria-label="Book barber appointment"
-            className="px-5 py-3 sm:px-8 sm:py-4 rounded-full bg-gradient-to-r from-amber-400 to-yellow-500 text-black font-semibold hover:scale-105 hover:shadow-[0_0_35px_rgba(251,191,36,0.45)] transition text-sm sm:text-base"
+            className="
+      group
+      inline-flex items-center justify-center
+      min-w-[190px]
+      px-6 py-3.5
+      rounded-2xl
+      bg-gradient-to-r from-amber-400 via-yellow-400 to-orange-500
+      text-black font-bold
+      text-sm sm:text-base
+      shadow-[0_10px_40px_rgba(251,191,36,0.25)]
+      hover:scale-105
+      hover:shadow-[0_0_45px_rgba(251,191,36,0.45)]
+      active:scale-95
+      transition-all duration-300
+    "
           >
             Book Appointment
           </Link>
@@ -104,7 +111,23 @@ const Hero = () => {
           <Link
             to="/services"
             aria-label="View barber services"
-            className="px-5 py-3 sm:px-8 sm:py-4 rounded-full border border-white/30 bg-white/5 backdrop-blur hover:bg-white hover:text-black transition text-sm sm:text-base"
+            className="
+      inline-flex items-center justify-center
+      min-w-[190px]
+      px-6 py-3.5
+      rounded-2xl
+      border border-white/15
+      bg-white/5
+      backdrop-blur-xl
+      text-white
+      font-semibold
+      text-sm sm:text-base
+      hover:bg-white
+      hover:text-black
+      hover:scale-105
+      active:scale-95
+      transition-all duration-300
+    "
           >
             View Services
           </Link>

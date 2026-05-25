@@ -57,15 +57,7 @@ const servicesList = [
 const timePeriods = [
   {
     label: "Morning",
-    times: [
-      "12:00 AM",
-      "1:00 AM",
-      "2:00 AM",
-      "3:00 AM",
-      "4:00 AM",
-      "5:00 AM",
-      "6:00 AM",
-    ],
+    times: ["2:00 AM", "3:00 AM", "4:00 AM", "5:00 AM", "6:00 AM"],
   },
 
   {
@@ -829,7 +821,13 @@ const Booking = () => {
                 type="file"
                 accept="image/*"
                 onChange={handleFileChange}
-                className="w-full text-sm text-gray-400"
+                className="file:mr-4 file:py-3 file:px-5
+  file:rounded-xl file:border-0
+  file:text-sm file:font-semibold
+  file:bg-yellow-400 file:text-black
+  hover:file:bg-yellow-300
+  file:cursor-pointer
+  w-full text-sm text-gray-400"
               />
 
               <p className="text-xs text-gray-500 mt-2">
@@ -847,7 +845,7 @@ const Booking = () => {
 
             {/* MESSAGE */}
             <div className="mb-7">
-              <h3 className="section-title">Additional Message</h3>
+              <h3 className="section-title">Additional Message(optional)</h3>
 
               <textarea
                 placeholder="Write additional information..."
