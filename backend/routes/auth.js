@@ -1,3 +1,8 @@
+const express = require("express");
+const router = express.Router();
+
+const User = require("../models/User");
+
 // REGISTER ADMIN
 router.post("/register", async (req, res) => {
   const { username, password, adminKey } = req.body;
@@ -37,3 +42,5 @@ router.post("/register", async (req, res) => {
     });
   }
 });
+
+module.exports = router;
