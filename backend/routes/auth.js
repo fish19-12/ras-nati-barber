@@ -12,35 +12,28 @@ router.post("/register", async (req, res) => {
   const { username, password, adminKey } = req.body;
 
   try {
-    // 1. CHECK ADMIN KEY
+    // check admin key
     if (adminKey !== process.env.ADMIN_SECRET_KEY) {
-      return res.status(403).json({
-        message: "Unauthorized admin creation",
-      });
+      return res.status(403).json({ message: "Unauthorized admin creation" });
     }
 
-    // 2. CHECK IF USER EXISTS
+    // check exists
     const exists = await User.findOne({ username });
-
     if (exists) {
-      return res.status(400).json({
-        message: "User already exists",
-      });
+      return res.status(400).json({ message: "User already exists" });
     }
 
-    // 3. HASH PASSWORD
+    // hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // 4. CREATE USER
-    const newUser = new User({
+    // create user
+    const newUser = await User.create({
       username,
       password: hashedPassword,
       role: "admin",
     });
 
-    await newUser.save();
-
-    // 5. AUTO LOGIN TOKEN (OPTIONAL BUT USEFUL)
+    // optional auto login token
     const token = jwt.sign(
       { id: newUser._id, role: newUser.role },
       process.env.JWT_SECRET,
@@ -55,9 +48,7 @@ router.post("/register", async (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({
-      message: "Server error",
-    });
+    res.status(500).json({ message: "Server error" });
   }
 });
 
@@ -68,32 +59,24 @@ router.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    // 1. FIND USER
     const user = await User.findOne({ username });
 
     if (!user) {
-      return res.status(400).json({
-        message: "Invalid username or password",
-      });
+      return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    // 2. COMPARE PASSWORD
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return res.status(400).json({
-        message: "Invalid username or password",
-      });
+      return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    // 3. GENERATE TOKEN
     const token = jwt.sign(
       { id: user._id, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: "1d" },
     );
 
-    // 4. RESPONSE
     res.json({
       token,
       username: user.username,
@@ -101,9 +84,7 @@ router.post("/login", async (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({
-      message: "Server error",
-    });
+    res.status(500).json({ message: "Server error" });
   }
 });
 
