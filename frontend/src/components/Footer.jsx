@@ -82,7 +82,7 @@ const Footer = () => {
                     href="tel:+251915369490"
                     className="hover:text-yellow-400 transition"
                   >
-                    +251 91 536 9490
+                    +251 975700510
                   </a>
                 </div>
               </div>
@@ -146,7 +146,7 @@ const Footer = () => {
             <div className="flex gap-4 mb-8">
               {/* WHATSAPP */}
               <a
-                href="https://wa.me/251915369490"
+                href="https://wa.me/251975700510"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="WhatsApp"

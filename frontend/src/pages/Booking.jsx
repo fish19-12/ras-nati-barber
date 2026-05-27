@@ -90,8 +90,6 @@ const Booking = () => {
   const [paymentPhoto, setPaymentPhoto] = useState(null);
   const [photoPreview, setPhotoPreview] = useState(null);
 
-  const [message, setMessage] = useState("");
-
   const [copied, setCopied] = useState("");
 
   const [loading, setLoading] = useState(false);
@@ -300,8 +298,6 @@ const Booking = () => {
 
     formData.append("cityNeedDate", cityNeedDate);
 
-    formData.append("message", message);
-
     if (paymentPhoto) {
       formData.append("paymentPhoto", paymentPhoto);
     }
@@ -345,7 +341,6 @@ const Booking = () => {
       setCityNeedDate("");
       setPaymentPhoto(null);
       setPhotoPreview(null);
-      setMessage("");
     } catch (err) {
       console.error(err);
 
@@ -365,7 +360,6 @@ const Booking = () => {
   return (
     <div className="min-h-screen bg-black text-white relative overflow-hidden">
       <ToastContainer position="top-right" autoClose={3000} theme="dark" />
-
       {/* SUCCESS MODAL */}
       {showSuccessModal && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-md p-3 sm:p-4">
@@ -403,8 +397,7 @@ const Booking = () => {
             <div className="relative z-10 mt-5 sm:mt-6 space-y-3 sm:space-y-4">
               <div className="bg-white/5 border border-white/10 rounded-2xl p-4">
                 <p className="text-xs text-gray-400 mb-1">Service</p>
-
-                <h4 className="font-bold text-base sm:text-lg break-words">
+                <h4 className="font-bold text-base sm:text-lg">
                   {bookingInfo.service}
                 </h4>
               </div>
@@ -412,16 +405,14 @@ const Booking = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-4">
                   <p className="text-xs text-gray-400 mb-1">Date</p>
-
-                  <h4 className="font-bold text-sm sm:text-base break-words">
+                  <h4 className="font-bold text-sm sm:text-base">
                     {bookingInfo.date}
                   </h4>
                 </div>
 
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-4">
                   <p className="text-xs text-gray-400 mb-1">Time</p>
-
-                  <h4 className="font-bold text-sm sm:text-base break-words">
+                  <h4 className="font-bold text-sm sm:text-base">
                     {bookingInfo.time}
                   </h4>
                 </div>
@@ -433,23 +424,31 @@ const Booking = () => {
                   Appointment Policy • የቀጠሮ መመሪያ
                 </h4>
 
-                <p className="text-sm text-gray-300 leading-relaxed">
-                  Clients are required to arrive at least{" "}
+                {/* PREPAYMENT */}
+                <div className="mb-4 rounded-2xl border border-white/10 bg-black/20 p-3 sm:p-4">
+                  <p className="text-sm text-gray-300">
+                    💳 Your booking includes a{" "}
+                    <span className="text-yellow-400 font-semibold">
+                      1000 Birr prepayment
+                    </span>{" "}
+                    (deposit only).
+                  </p>
+
+                  <p className="text-xs text-gray-400 mt-2">
+                    ይህ ቅድመ ክፍያ ብቻ ነው። ቀሪ ክፍያ ከአገልግሎቱ በኋላ ይከፈላል።
+                  </p>
+                </div>
+
+                <p className="text-sm text-gray-300">
+                  Clients must arrive{" "}
                   <span className="text-yellow-400 font-semibold">
-                    20 minutes before
-                  </span>{" "}
-                  their scheduled appointment time or exactly at the booked
-                  time. Late arrivals may result in cancellation of the
-                  appointment, and service availability cannot be guaranteed.
+                    20 minutes early
+                  </span>
+                  .
                 </p>
 
-                <p className="text-sm text-gray-400 leading-relaxed mt-3">
-                  ደንበኞች ከተያዘው የቀጠሮ ሰዓት ቢያንስ{" "}
-                  <span className="text-yellow-400 font-semibold">
-                    20 ደቂቃ በፊት
-                  </span>{" "}
-                  ወይም በትክክለኛው ሰዓት መገኘት አለባቸው። ከሰዓት በኋላ ከደረሱ አገልግሎቱ ላይገኝ ይችላል እና
-                  ሀላፊነት አንወስድም።
+                <p className="text-sm text-gray-400 mt-3">
+                  ደንበኞች 20 ደቂቃ በፊት መገኘት አለባቸው።
                 </p>
               </div>
             </div>
@@ -457,14 +456,13 @@ const Booking = () => {
             {/* BUTTON */}
             <button
               onClick={() => setShowSuccessModal(false)}
-              className="relative z-10 mt-5 sm:mt-6 w-full py-3 sm:py-4 rounded-2xl bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold text-sm sm:text-base hover:scale-[1.01] transition-all duration-300"
+              className="relative z-10 mt-6 w-full py-3 sm:py-4 rounded-2xl bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold"
             >
               Done
             </button>
           </div>
         </div>
       )}
-
       {/* BG */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[450px] h-[450px] bg-yellow-500/10 blur-[130px] rounded-full"></div>
 
@@ -646,43 +644,109 @@ const Booking = () => {
 
             {/* OUTDOOR */}
             {selectedService === "Outdoor" && (
-              <div className="mb-7 bg-green-500/5 border border-green-500/20 rounded-2xl p-4">
-                <h3 className="text-green-400 font-semibold mb-4">
-                  Outdoor Service Details
-                </h3>
+              <div className="mb-7 bg-gradient-to-br from-green-500/10 to-emerald-500/5 border border-green-500/20 rounded-3xl p-5 relative overflow-hidden">
+                {/* GLOW */}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-green-500/10 blur-3xl rounded-full"></div>
 
-                <input
-                  type="text"
-                  placeholder="Customer home address in Addis Abeba"
-                  className="input"
-                  value={outdoorAddress}
-                  onChange={(e) => setOutdoorAddress(e.target.value)}
-                />
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-green-400 to-emerald-600 flex items-center justify-center text-white text-lg shadow-lg">
+                      <FaCar />
+                    </div>
+
+                    <div>
+                      <h3 className="text-green-400 font-bold text-lg">
+                        Home To Home Service
+                      </h3>
+
+                      <p className="text-gray-400 text-sm">
+                        Premium barber service at your location
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* NOTICE */}
+                  <div className="mb-5 rounded-2xl border border-yellow-500/20 bg-yellow-500/10 p-4">
+                    <p className="text-sm text-yellow-300 leading-relaxed">
+                      ⚠️ Outdoor appointments must be booked at least{" "}
+                      <span className="font-bold text-yellow-400">
+                        7 days before
+                      </span>{" "}
+                      the service date to ensure availability and travel
+                      preparation.
+                    </p>
+
+                    <p className="text-xs text-gray-400 mt-2">
+                      ከቤት ወደ ቤት አገልግሎት ቢያንስ 7 ቀን በፊት መያዝ አለበት።
+                    </p>
+                  </div>
+
+                  <input
+                    type="text"
+                    placeholder="Customer home address in Addis Abeba"
+                    className="input"
+                    value={outdoorAddress}
+                    onChange={(e) => setOutdoorAddress(e.target.value)}
+                  />
+                </div>
               </div>
             )}
 
             {/* CITY */}
             {selectedService === "City To City" && (
-              <div className="mb-7 bg-blue-500/5 border border-blue-500/20 rounded-2xl p-4">
-                <h3 className="text-blue-400 font-semibold mb-4">
-                  City To City Details
-                </h3>
+              <div className="mb-7 bg-gradient-to-br from-blue-500/10 to-cyan-500/5 border border-blue-500/20 rounded-3xl p-5 relative overflow-hidden">
+                {/* GLOW */}
+                <div className="absolute bottom-0 left-0 w-32 h-32 bg-blue-500/10 blur-3xl rounded-full"></div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <input
-                    type="text"
-                    placeholder="Customer location / city"
-                    className="input"
-                    value={cityLocation}
-                    onChange={(e) => setCityLocation(e.target.value)}
-                  />
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center text-white text-lg shadow-lg">
+                      <FaCity />
+                    </div>
 
-                  <input
-                    type="date"
-                    className="input"
-                    value={cityNeedDate}
-                    onChange={(e) => setCityNeedDate(e.target.value)}
-                  />
+                    <div>
+                      <h3 className="text-blue-400 font-bold text-lg">
+                        City To City Service
+                      </h3>
+
+                      <p className="text-gray-400 text-sm">
+                        Luxury travel grooming experience
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* NOTICE */}
+                  <div className="mb-5 rounded-2xl border border-orange-500/20 bg-orange-500/10 p-4">
+                    <p className="text-sm text-orange-300 leading-relaxed">
+                      ✨ City-to-city appointments require advance planning and
+                      must be booked at least{" "}
+                      <span className="font-bold text-orange-400">
+                        15 days before
+                      </span>{" "}
+                      the requested service date.
+                    </p>
+
+                    <p className="text-xs text-gray-400 mt-2">
+                      ከከተማ ወደ ከተማ አገልግሎት ቢያንስ 15 ቀን በፊት መያዝ ያስፈልጋል።
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input
+                      type="text"
+                      placeholder="Customer location / city"
+                      className="input"
+                      value={cityLocation}
+                      onChange={(e) => setCityLocation(e.target.value)}
+                    />
+
+                    <input
+                      type="date"
+                      className="input"
+                      value={cityNeedDate}
+                      onChange={(e) => setCityNeedDate(e.target.value)}
+                    />
+                  </div>
                 </div>
               </div>
             )}
@@ -841,18 +905,6 @@ const Booking = () => {
                   className="mt-4 w-full h-52 object-cover rounded-2xl border border-white/10"
                 />
               )}
-            </div>
-
-            {/* MESSAGE */}
-            <div className="mb-7">
-              <h3 className="section-title">Additional Message(optional)</h3>
-
-              <textarea
-                placeholder="Write additional information..."
-                className="input resize-none h-32"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-              />
             </div>
 
             {/* BTN */}

@@ -34,42 +34,69 @@ const Hero = () => {
         grooming in Ethiopia.
       </p>
 
-      {/* Background Image */}
-      {/* Background Image */}
+      {/* BACKGROUND IMAGE */}
       <div
-        className="absolute inset-0 bg-cover bg-top md:bg-center bg-no-repeat"
+        className="
+          absolute
+          inset-0
+          bg-cover
+          bg-center
+          bg-no-repeat
+          scale-100
+        "
         style={{
           backgroundImage: `url(${hero})`,
         }}
       />
 
-      {/* Dark Overlay */}
-      <div className="absolute inset-0 bg-black/75" />
+      {/* DARK OVERLAY */}
+      <div className="absolute inset-0 bg-black/60" />
 
-      {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/90" />
+      {/* GRADIENT OVERLAY */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-black/85" />
 
-      {/* Glow Effect */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-amber-500/10 blur-[120px] rounded-full"></div>
+      {/* GLOW EFFECT */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-amber-500/10 blur-[120px] rounded-full pointer-events-none"></div>
 
-      {/* Content */}
+      {/* CONTENT */}
       <div className="relative z-10 max-w-5xl mx-auto px-6 text-center flex flex-col items-center">
-        {/* Badge */}
+        {/* BADGE */}
         <motion.div
           initial={{ opacity: 0, y: -15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="mb-6 px-5 py-2 text-[10px] sm:text-xs uppercase tracking-widest border border-amber-400/40 rounded-full text-amber-400 backdrop-blur bg-white/5"
+          className="
+            mb-6
+            px-5
+            py-2
+            text-[10px]
+            sm:text-xs
+            uppercase
+            tracking-widest
+            border
+            border-amber-400/40
+            rounded-full
+            text-amber-400
+            backdrop-blur-sm
+            bg-white/5
+          "
         >
           Premium Barber Experience In Ethiopia
         </motion.div>
 
-        {/* Hero Title */}
+        {/* HERO TITLE */}
         <motion.h2
           initial={{ opacity: 0, y: 35 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="font-extrabold leading-tight text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
+          className="
+            font-extrabold
+            leading-tight
+            text-3xl
+            sm:text-4xl
+            md:text-5xl
+            lg:text-6xl
+          "
         >
           <span className="bg-gradient-to-r from-amber-300 via-yellow-400 to-orange-500 bg-clip-text text-transparent">
             {text}
@@ -77,9 +104,7 @@ const Hero = () => {
           </span>
         </motion.h2>
 
-        {/* Subtitle */}
-
-        {/* Buttons */}
+        {/* BUTTONS */}
         <motion.div
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
@@ -90,20 +115,29 @@ const Hero = () => {
             to="/booking"
             aria-label="Book barber appointment"
             className="
-      group
-      inline-flex items-center justify-center
-      min-w-[190px]
-      px-6 py-3.5
-      rounded-2xl
-      bg-gradient-to-r from-amber-400 via-yellow-400 to-orange-500
-      text-black font-bold
-      text-sm sm:text-base
-      shadow-[0_10px_40px_rgba(251,191,36,0.25)]
-      hover:scale-105
-      hover:shadow-[0_0_45px_rgba(251,191,36,0.45)]
-      active:scale-95
-      transition-all duration-300
-    "
+              group
+              inline-flex
+              items-center
+              justify-center
+              min-w-[190px]
+              px-6
+              py-3.5
+              rounded-2xl
+              bg-gradient-to-r
+              from-amber-400
+              via-yellow-400
+              to-orange-500
+              text-black
+              font-bold
+              text-sm
+              sm:text-base
+              shadow-[0_10px_40px_rgba(251,191,36,0.25)]
+              hover:scale-105
+              hover:shadow-[0_0_45px_rgba(251,191,36,0.45)]
+              active:scale-95
+              transition-all
+              duration-300
+            "
           >
             Book Appointment
           </Link>
@@ -112,57 +146,50 @@ const Hero = () => {
             to="/services"
             aria-label="View barber services"
             className="
-      inline-flex items-center justify-center
-      min-w-[190px]
-      px-6 py-3.5
-      rounded-2xl
-      border border-white/15
-      bg-white/5
-      backdrop-blur-xl
-      text-white
-      font-semibold
-      text-sm sm:text-base
-      hover:bg-white
-      hover:text-black
-      hover:scale-105
-      active:scale-95
-      transition-all duration-300
-    "
+              inline-flex
+              items-center
+              justify-center
+              min-w-[190px]
+              px-6
+              py-3.5
+              rounded-2xl
+              border
+              border-white/15
+              bg-white/5
+              backdrop-blur-xl
+              text-white
+              font-semibold
+              text-sm
+              sm:text-base
+              hover:bg-white
+              hover:text-black
+              hover:scale-105
+              active:scale-95
+              transition-all
+              duration-300
+            "
           >
             View Services
           </Link>
         </motion.div>
 
-        {/* FEATURES */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.7 }}
-          className="mt-10 flex flex-wrap justify-center gap-3 text-[11px] sm:text-xs uppercase tracking-widest text-gray-300"
-        >
-          <span className="px-4 py-2 rounded-full bg-white/5 border border-white/10">
-            Skin Fades
-          </span>
-
-          <span className="px-4 py-2 rounded-full bg-white/5 border border-white/10">
-            Beard Styling
-          </span>
-
-          <span className="px-4 py-2 rounded-full bg-white/5 border border-white/10">
-            VIP Service
-          </span>
-
-          <span className="px-4 py-2 rounded-full bg-white/5 border border-white/10">
-            Luxury Grooming
-          </span>
-        </motion.div>
-
-        {/* Tagline */}
+        {/* TAGLINE */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.9 }}
-          className="mt-10 text-[10px] sm:text-xs uppercase tracking-[0.35em] text-cyan-300 flex gap-3 flex-wrap justify-center"
+          className="
+            mt-10
+            text-[10px]
+            sm:text-xs
+            uppercase
+            tracking-[0.35em]
+            text-cyan-300
+            flex
+            gap-3
+            flex-wrap
+            justify-center
+          "
         >
           <span>Confidence</span>
 
@@ -180,11 +207,21 @@ const Hero = () => {
         </motion.div>
       </div>
 
-      {/* Scroll Indicator */}
+      {/* SCROLL INDICATOR */}
       <motion.div
         animate={{ y: [0, 12, 0] }}
         transition={{ repeat: Infinity, duration: 1.5 }}
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 text-cyan-300 text-sm flex flex-col items-center"
+        className="
+          absolute
+          bottom-6
+          left-1/2
+          -translate-x-1/2
+          text-cyan-300
+          text-sm
+          flex
+          flex-col
+          items-center
+        "
       >
         <span className="text-xs uppercase tracking-widest mb-2">Scroll</span>
 

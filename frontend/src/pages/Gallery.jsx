@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { X, ZoomIn } from "lucide-react";
+import { X, ZoomIn, ChevronLeft, ChevronRight } from "lucide-react";
 
 const Gallery = () => {
   const [images, setImages] = useState([]);
@@ -14,13 +14,23 @@ const Gallery = () => {
   // IMAGE PREVIEW
   const [selectedImage, setSelectedImage] = useState(null);
 
-  // PRELOAD FIRST 10 IMAGES
+  // CURRENT INDEX
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  /* =========================================================
+     PRELOAD FIRST 10 IMAGES
+  ========================================================= */
+
   const preloadImages = (imageArray) => {
     imageArray.slice(0, 10).forEach((img) => {
       const image = new Image();
       image.src = img.imageUrl;
     });
   };
+
+  /* =========================================================
+     FETCH IMAGES
+  ========================================================= */
 
   const fetchImages = async () => {
     try {
@@ -31,8 +41,16 @@ const Gallery = () => {
       if (cached) {
         const parsedImages = JSON.parse(cached);
 
-        setImages(parsedImages);
-        preloadImages(parsedImages);
+        // PIN FIRST 8
+        const sortedCached = [...parsedImages].sort((a, b) => {
+          if (a.pinned && !b.pinned) return -1;
+          if (!a.pinned && b.pinned) return 1;
+          return 0;
+        });
+
+        setImages(sortedCached);
+
+        preloadImages(sortedCached);
 
         setLoading(false);
       }
@@ -45,7 +63,17 @@ const Gallery = () => {
         },
       );
 
-      const newImages = res.data;
+      let newImages = Array.isArray(res.data) ? res.data : [];
+
+      /* =========================================================
+         PIN FIRST 8 IMAGES
+      ========================================================= */
+
+      newImages = [...newImages].sort((a, b) => {
+        if (a.pinned && !b.pinned) return -1;
+        if (!a.pinned && b.pinned) return 1;
+        return 0;
+      });
 
       setImages(newImages);
 
@@ -64,11 +92,49 @@ const Gallery = () => {
     fetchImages();
   }, []);
 
+  /* =========================================================
+     SHOW MORE
+  ========================================================= */
+
   const showMore = () => {
     setVisibleCount((prev) => prev + 10);
   };
 
-  // LOADER
+  /* =========================================================
+     MODAL FUNCTIONS
+  ========================================================= */
+
+  const openPreview = (image, index) => {
+    setSelectedImage(image);
+    setSelectedIndex(index);
+
+    document.body.style.overflow = "hidden";
+  };
+
+  const closePreview = () => {
+    setSelectedImage(null);
+
+    document.body.style.overflow = "auto";
+  };
+
+  const nextImage = () => {
+    const next = (selectedIndex + 1) % images.length;
+
+    setSelectedImage(images[next]);
+    setSelectedIndex(next);
+  };
+
+  const prevImage = () => {
+    const prev = (selectedIndex - 1 + images.length) % images.length;
+
+    setSelectedImage(images[prev]);
+    setSelectedIndex(prev);
+  };
+
+  /* =========================================================
+     LOADER
+  ========================================================= */
+
   if (loading) {
     return (
       <div className="w-full min-h-screen bg-black flex flex-col items-center justify-center overflow-hidden">
@@ -223,16 +289,23 @@ const Gallery = () => {
                   y: -6,
                 }}
                 className="
-                  relative
-                  overflow-hidden
-                  rounded-2xl
-                  bg-zinc-900
-                  border
-                  border-zinc-800
-                  group
-                  shadow-lg
-                "
+                    relative
+                    overflow-hidden
+                    rounded-2xl
+                    bg-zinc-900
+                    border
+                    border-zinc-800
+                    group
+                    shadow-lg
+                  "
               >
+                {/* PINNED BADGE */}
+                {index < 8 && (
+                  <div className="absolute top-3 left-3 z-30 bg-yellow-400 text-black text-[10px] sm:text-xs font-black px-3 py-1 rounded-full shadow-xl">
+                    TOP STYLE
+                  </div>
+                )}
+
                 {/* IMAGE */}
                 <div className="relative bg-black overflow-hidden">
                   <img
@@ -240,35 +313,35 @@ const Gallery = () => {
                     alt={item.title}
                     loading={index < 10 ? "eager" : "lazy"}
                     className="
-                      w-full
-                      h-[170px]
-                      sm:h-[230px]
-                      md:h-72
-                      object-cover
-                      transition-transform
-                      duration-500
-                      group-hover:scale-105
-                    "
+                        w-full
+                        h-[170px]
+                        sm:h-[230px]
+                        md:h-72
+                        object-cover
+                        transition-transform
+                        duration-500
+                        group-hover:scale-105
+                      "
                   />
 
-                  {/* QUICK VIEW BUTTON */}
+                  {/* QUICK VIEW */}
                   <button
-                    onClick={() => setSelectedImage(item)}
+                    onClick={() => openPreview(item, index)}
                     className="
-                      absolute
-                      top-3
-                      right-3
-                      bg-black/70
-                      backdrop-blur-md
-                      p-2
-                      rounded-full
-                      text-white
-                      opacity-100
-                      sm:opacity-0
-                      sm:group-hover:opacity-100
-                      transition
-                      z-20
-                    "
+                        absolute
+                        top-3
+                        right-3
+                        bg-black/70
+                        backdrop-blur-md
+                        p-2
+                        rounded-full
+                        text-white
+                        opacity-100
+                        sm:opacity-0
+                        sm:group-hover:opacity-100
+                        transition
+                        z-20
+                      "
                   >
                     <ZoomIn size={18} />
                   </button>
@@ -277,37 +350,37 @@ const Gallery = () => {
                 {/* OVERLAY */}
                 <div
                   className="
-                    absolute
-                    inset-0
-                    bg-black/45
-                    opacity-0
-                    group-hover:opacity-100
-                    transition-all
-                    duration-300
-                    flex
-                    items-center
-                    justify-center
-                  "
+                      absolute
+                      inset-0
+                      bg-black/45
+                      opacity-0
+                      group-hover:opacity-100
+                      transition-all
+                      duration-300
+                      flex
+                      items-center
+                      justify-center
+                    "
                 >
                   <div className="flex flex-col gap-3 items-center">
                     {/* PREVIEW */}
                     <button
-                      onClick={() => setSelectedImage(item)}
+                      onClick={() => openPreview(item, index)}
                       className="
-                        bg-white/10
-                        backdrop-blur-md
-                        border
-                        border-white/20
-                        text-white
-                        text-xs
-                        sm:text-sm
-                        px-4
-                        py-2
-                        rounded-full
-                        font-semibold
-                        hover:scale-105
-                        transition
-                      "
+                          bg-white/10
+                          backdrop-blur-md
+                          border
+                          border-white/20
+                          text-white
+                          text-xs
+                          sm:text-sm
+                          px-4
+                          py-2
+                          rounded-full
+                          font-semibold
+                          hover:scale-105
+                          transition
+                        "
                     >
                       Preview Style
                     </button>
@@ -316,17 +389,17 @@ const Gallery = () => {
                     <Link
                       to="/booking"
                       className="
-                        bg-yellow-400
-                        text-black
-                        text-xs
-                        sm:text-base
-                        px-5
-                        py-2
-                        rounded-full
-                        font-bold
-                        hover:scale-105
-                        transition
-                      "
+                          bg-yellow-400
+                          text-black
+                          text-xs
+                          sm:text-base
+                          px-5
+                          py-2
+                          rounded-full
+                          font-bold
+                          hover:scale-105
+                          transition
+                        "
                     >
                       Book Now
                     </Link>
@@ -376,102 +449,209 @@ const Gallery = () => {
             className="
               fixed
               inset-0
-              z-[999]
-              bg-black/90
-              backdrop-blur-md
+              z-[9999]
+              bg-black/95
+              backdrop-blur-xl
               flex
               items-center
               justify-center
-              p-4
             "
           >
             {/* CLOSE */}
             <button
-              onClick={() => setSelectedImage(null)}
+              onClick={closePreview}
               className="
-                absolute
-                top-5
-                right-5
-                bg-white/10
-                hover:bg-white/20
+                fixed
+                top-4
+                right-4
+                sm:top-6
+                sm:right-6
+                z-50
+                bg-black/60
+                border
+                border-white/10
+                hover:bg-red-500
                 p-3
                 rounded-full
                 transition
+                backdrop-blur-xl
               "
             >
               <X size={24} />
             </button>
 
+            {/* PREV */}
+            <button
+              onClick={prevImage}
+              className="
+                hidden
+                sm:flex
+                fixed
+                left-4
+                top-1/2
+                -translate-y-1/2
+                z-50
+                w-14
+                h-14
+                rounded-full
+                bg-black/60
+                border
+                border-white/10
+                items-center
+                justify-center
+                hover:bg-yellow-400
+                hover:text-black
+                transition
+              "
+            >
+              <ChevronLeft size={28} />
+            </button>
+
+            {/* NEXT */}
+            <button
+              onClick={nextImage}
+              className="
+                hidden
+                sm:flex
+                fixed
+                right-4
+                top-1/2
+                -translate-y-1/2
+                z-50
+                w-14
+                h-14
+                rounded-full
+                bg-black/60
+                border
+                border-white/10
+                items-center
+                justify-center
+                hover:bg-yellow-400
+                hover:text-black
+                transition
+              "
+            >
+              <ChevronRight size={28} />
+            </button>
+
             {/* CONTENT */}
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
+              initial={{
+                scale: 0.92,
+                opacity: 0,
+              }}
+              animate={{
+                scale: 1,
+                opacity: 1,
+              }}
+              exit={{
+                scale: 0.92,
+                opacity: 0,
+              }}
               className="
+                relative
                 w-full
-                max-w-5xl
-                rounded-3xl
-                overflow-hidden
-                border
-                border-zinc-800
-                bg-zinc-950
-                shadow-2xl
+                h-full
+                flex
+                items-center
+                justify-center
+                p-3
+                sm:p-8
               "
             >
               {/* IMAGE */}
-              <div className="bg-black">
-                <img
-                  src={selectedImage.imageUrl}
-                  alt={selectedImage.title}
-                  className="
-                    w-full
-                    max-h-[75vh]
-                    object-contain
-                  "
-                />
-              </div>
+              <img
+                src={selectedImage.imageUrl}
+                alt={selectedImage.title}
+                className="
+                  max-w-full
+                  max-h-[75vh]
+                  sm:max-h-[88vh]
+                  object-contain
+                  rounded-3xl
+                  shadow-[0_0_80px_rgba(255,215,0,0.18)]
+                "
+              />
 
-              {/* BOTTOM */}
+              {/* INFO CARD */}
               <div
                 className="
-                  p-5
-                  sm:p-6
-                  flex
-                  flex-col
-                  sm:flex-row
-                  items-center
-                  justify-between
-                  gap-4
-                "
+    absolute
+    bottom-4
+    left-1/2
+    -translate-x-1/2
+    w-[94%]
+    sm:w-auto
+    max-w-2xl
+    bg-black/55
+    backdrop-blur-2xl
+    border
+    border-white/10
+    rounded-3xl
+    p-4
+    sm:p-6
+  "
               >
-                <div>
-                  <h2 className="text-xl sm:text-2xl font-black text-white">
-                    {selectedImage.title}
-                  </h2>
-
-                  <p className="text-gray-400 mt-1 text-sm sm:text-base">
-                    Premium haircut inspiration from NHATTY THE BARBER.
-                  </p>
-                </div>
+                <p className="text-gray-400 text-sm sm:text-base">
+                  Premium haircut inspiration from NHATTY THE BARBER.
+                </p>
 
                 <Link
                   to="/booking"
                   className="
-                    bg-yellow-400
-                    text-black
-                    px-6
-                    py-3
-                    rounded-full
-                    font-black
-                    hover:scale-105
-                    transition
-                    whitespace-nowrap
-                  "
+      inline-flex
+      mt-5
+      bg-yellow-400
+      text-black
+      px-6
+      py-3
+      rounded-full
+      font-black
+      hover:scale-105
+      transition
+    "
                 >
                   Book This Style
                 </Link>
               </div>
             </motion.div>
+
+            {/* MOBILE NAVIGATION */}
+            <div className="sm:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex gap-4">
+              <button
+                onClick={prevImage}
+                className="
+                  w-12
+                  h-12
+                  rounded-full
+                  bg-black/60
+                  border
+                  border-white/10
+                  flex
+                  items-center
+                  justify-center
+                "
+              >
+                <ChevronLeft size={22} />
+              </button>
+
+              <button
+                onClick={nextImage}
+                className="
+                  w-12
+                  h-12
+                  rounded-full
+                  bg-black/60
+                  border
+                  border-white/10
+                  flex
+                  items-center
+                  justify-center
+                "
+              >
+                <ChevronRight size={22} />
+              </button>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
