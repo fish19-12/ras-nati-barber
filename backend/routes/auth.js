@@ -16,16 +16,10 @@ router.get("/test", (req, res) => {
   });
 });
 
-/* =========================
-   REGISTER ADMIN
-========================= */
 router.post("/register", async (req, res) => {
   try {
     const { username, password, adminKey } = req.body;
 
-    console.log("📌 REGISTER REQUEST RECEIVED");
-
-    /* VALIDATION */
     if (!username || !password || !adminKey) {
       return res.status(400).json({
         success: false,
@@ -33,7 +27,6 @@ router.post("/register", async (req, res) => {
       });
     }
 
-    /* CHECK ADMIN KEY */
     if (adminKey !== process.env.ADMIN_SECRET_KEY) {
       return res.status(403).json({
         success: false,
@@ -41,7 +34,6 @@ router.post("/register", async (req, res) => {
       });
     }
 
-    /* CHECK USER EXISTS */
     const exists = await User.findOne({ username });
 
     if (exists) {
@@ -51,29 +43,18 @@ router.post("/register", async (req, res) => {
       });
     }
 
-    /* HASH PASSWORD */
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    /* CREATE USER */
+    // ✅ NO HASHING HERE
     const newUser = await User.create({
       username,
-      password: hashedPassword,
+      password,
       role: "admin",
     });
 
-    /* CREATE TOKEN */
     const token = jwt.sign(
-      {
-        id: newUser._id,
-        role: newUser.role,
-      },
+      { id: newUser._id, role: newUser.role },
       process.env.JWT_SECRET,
-      {
-        expiresIn: "1d",
-      },
+      { expiresIn: "1d" },
     );
-
-    console.log("✅ ADMIN CREATED:", newUser.username);
 
     return res.status(201).json({
       success: true,
@@ -83,8 +64,6 @@ router.post("/register", async (req, res) => {
       role: newUser.role,
     });
   } catch (err) {
-    console.error("❌ REGISTER ERROR:", err);
-
     return res.status(500).json({
       success: false,
       message: "Server error",
