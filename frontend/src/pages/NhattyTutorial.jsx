@@ -24,6 +24,7 @@ import {
 
 const API_URL = import.meta.env.VITE_API_URL;
 const YOUTUBE_LINK = "https://www.youtube.com/@Nhattythebarber1";
+const TUTORIAL_PRICE = 1000;
 
 const categories = [
   "All",
@@ -246,6 +247,9 @@ const NhattyTutorial = () => {
             Nhatty The Barber — fades, beard styling, dreadlocks, clipper
             techniques, line-ups, and modern grooming education.
           </p>
+          <div className="mt-6 text-yellow-400 text-2xl font-bold">
+            Price: {TUTORIAL_PRICE} Birr per tutorial
+          </div>
 
           <div className="mt-10 flex flex-wrap justify-center gap-5">
             <a
@@ -323,7 +327,7 @@ const NhattyTutorial = () => {
 
             <div className="absolute top-6 left-6 bg-yellow-400 text-black px-5 py-2 rounded-full font-bold flex items-center gap-2">
               <FaLock />
-              Premium Tutorial
+              {TUTORIAL_PRICE} Birr
             </div>
 
             <div className="absolute bottom-8 left-8">
@@ -469,7 +473,7 @@ const NhattyTutorial = () => {
                 <div className="flex items-center justify-between p-6 border-b border-zinc-800">
                   <div>
                     <h2 className="text-3xl font-black">
-                      Premium Tutorial Access
+                      Pay {TUTORIAL_PRICE} Birr to Unlock Tutorial
                     </h2>
 
                     <p className="text-gray-400 mt-2">
@@ -711,7 +715,7 @@ const NhattyTutorial = () => {
                       >
                         {submitting
                           ? "Processing..."
-                          : "Submit & Unlock Tutorial"}
+                          : `Pay ${TUTORIAL_PRICE} Birr & Unlock`}
                       </button>
                     </form>
                   </div>
