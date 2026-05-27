@@ -1,9 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
 const User = require("../models/User");
 
 /* =========================
@@ -16,10 +14,14 @@ router.get("/test", (req, res) => {
   });
 });
 
+/* =========================
+   REGISTER ADMIN
+========================= */
 router.post("/register", async (req, res) => {
   try {
     const { username, password, adminKey } = req.body;
 
+    // validation
     if (!username || !password || !adminKey) {
       return res.status(400).json({
         success: false,
@@ -27,6 +29,7 @@ router.post("/register", async (req, res) => {
       });
     }
 
+    // admin key check
     if (adminKey !== process.env.ADMIN_SECRET_KEY) {
       return res.status(403).json({
         success: false,
@@ -34,7 +37,8 @@ router.post("/register", async (req, res) => {
       });
     }
 
-    const exists = await User.findOne({ username });
+    // check existing user
+    const exists = await User.findOne({ username: username.trim() });
 
     if (exists) {
       return res.status(400).json({
@@ -43,13 +47,14 @@ router.post("/register", async (req, res) => {
       });
     }
 
-    // ✅ NO HASHING HERE
+    // create user (NO HASHING HERE — model handles it)
     const newUser = await User.create({
-      username,
+      username: username.trim(),
       password,
       role: "admin",
     });
 
+    // generate token
     const token = jwt.sign(
       { id: newUser._id, role: newUser.role },
       process.env.JWT_SECRET,
@@ -64,6 +69,8 @@ router.post("/register", async (req, res) => {
       role: newUser.role,
     });
   } catch (err) {
+    console.error("❌ REGISTER ERROR:", err);
+
     return res.status(500).json({
       success: false,
       message: "Server error",
@@ -76,11 +83,9 @@ router.post("/register", async (req, res) => {
 ========================= */
 router.post("/login", async (req, res) => {
   try {
-    console.log("📌 LOGIN ROUTE HIT");
-
     const { username, password } = req.body;
 
-    /* VALIDATION */
+    // validation
     if (!username || !password) {
       return res.status(400).json({
         success: false,
@@ -88,43 +93,34 @@ router.post("/login", async (req, res) => {
       });
     }
 
-    /* FIND USER */
-    const user = await User.findOne({ username });
+    // find user
+    const user = await User.findOne({
+      username: username.trim(),
+    });
 
     if (!user) {
-      console.log("❌ USER NOT FOUND");
-
       return res.status(400).json({
         success: false,
         message: "Invalid credentials",
       });
     }
 
-    /* CHECK PASSWORD */
-    const isMatch = await bcrypt.compare(password, user.password);
+    // ✅ USE MODEL METHOD (FIX)
+    const isMatch = await user.comparePassword(password);
 
     if (!isMatch) {
-      console.log("❌ WRONG PASSWORD");
-
       return res.status(400).json({
         success: false,
         message: "Invalid credentials",
       });
     }
 
-    /* CREATE TOKEN */
+    // generate token
     const token = jwt.sign(
-      {
-        id: user._id,
-        role: user.role,
-      },
+      { id: user._id, role: user.role },
       process.env.JWT_SECRET,
-      {
-        expiresIn: "1d",
-      },
+      { expiresIn: "1d" },
     );
-
-    console.log("✅ LOGIN SUCCESS:", user.username);
 
     return res.status(200).json({
       success: true,
