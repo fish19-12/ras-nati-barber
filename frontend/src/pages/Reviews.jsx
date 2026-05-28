@@ -34,6 +34,12 @@ const Reviews = () => {
   const mountedRef = useRef(true);
 
   /* =========================================================
+     MOBILE DETECTION
+  ========================================================= */
+
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+
+  /* =========================================================
      FETCH REVIEWS
   ========================================================= */
 
@@ -181,14 +187,14 @@ const Reviews = () => {
     <>
       <section className="relative w-full bg-gradient-to-b from-black via-[#0b0b0b] to-black text-white py-24 px-4 sm:px-6 md:px-12 font-exo overflow-hidden">
         {/* BACKGROUND GLOW */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-yellow-500/10 blur-[140px] rounded-full pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-yellow-500/10 blur-[80px] rounded-full pointer-events-none" />
 
         {/* HEADER */}
         <div className="max-w-4xl mx-auto text-center mb-16 relative z-10">
           <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
             className="text-4xl md:text-6xl font-black mb-6 bg-gradient-to-r from-yellow-300 via-yellow-500 to-yellow-700 bg-clip-text text-transparent"
           >
             Client Reviews
@@ -196,7 +202,7 @@ const Reviews = () => {
 
           <motion.p
             initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+            animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
             className="text-gray-400 text-lg leading-relaxed max-w-3xl mx-auto"
           >
@@ -223,8 +229,8 @@ const Reviews = () => {
           ].map((item, i) => (
             <motion.div
               key={i}
-              whileHover={{ y: -6 }}
-              className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-3xl p-6"
+              whileHover={!isMobile ? { y: -6 } : {}}
+              className="bg-white/5 border border-white/10 backdrop-blur-md rounded-3xl p-6"
             >
               <h2 className="text-3xl font-bold text-yellow-400">
                 {item.value}
@@ -237,14 +243,14 @@ const Reviews = () => {
 
         {/* REVIEWS */}
         <div className="max-w-7xl mx-auto relative z-10">
-          <div className="flex lg:grid lg:grid-cols-3 gap-8 overflow-x-auto lg:overflow-visible pb-4 snap-x snap-mandatory scrollbar-hide">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* LOADING */}
             {loading &&
               reviews.length === 0 &&
               Array.from({ length: 6 }).map((_, i) => (
                 <div
                   key={i}
-                  className="flex-shrink-0 w-[320px] lg:w-auto bg-white/10 rounded-3xl overflow-hidden animate-pulse"
+                  className="bg-white/10 rounded-3xl overflow-hidden animate-pulse"
                 >
                   <div className="w-full h-72 bg-gray-700"></div>
 
@@ -260,12 +266,11 @@ const Reviews = () => {
             {reviews.map((review, index) => (
               <motion.div
                 key={review._id}
-                initial={{ opacity: 0, y: 60 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4 }}
-                whileHover={{ y: -10 }}
-                className={`group relative flex-shrink-0 w-[320px] lg:w-auto rounded-[30px] overflow-hidden border backdrop-blur-xl snap-center ${
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                whileHover={!isMobile ? { y: -10 } : {}}
+                className={`group relative rounded-[30px] overflow-hidden border backdrop-blur-md ${
                   index < 5
                     ? "border-yellow-400/40 bg-gradient-to-b from-yellow-500/10 to-white/5"
                     : "border-white/10 bg-white/5"
@@ -285,7 +290,7 @@ const Reviews = () => {
                     alt={review.name}
                     loading="lazy"
                     decoding="async"
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    className="w-full h-full object-cover"
                   />
 
                   {/* OVERLAY */}
@@ -336,12 +341,12 @@ const Reviews = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[9999] bg-black/98 backdrop-blur-2xl flex items-center justify-center"
+            className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-md flex items-center justify-center"
           >
             {/* CLOSE */}
             <button
               onClick={closeModal}
-              className="fixed top-3 right-3 sm:top-6 sm:right-6 z-50 w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-black/50 border border-white/10 hover:bg-red-500 transition flex items-center justify-center text-white text-lg sm:text-xl backdrop-blur-xl"
+              className="fixed top-3 right-3 sm:top-6 sm:right-6 z-50 w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-black/50 border border-white/10 hover:bg-red-500 transition flex items-center justify-center text-white text-lg sm:text-xl backdrop-blur-md"
             >
               <FaTimes />
             </button>
@@ -349,7 +354,7 @@ const Reviews = () => {
             {/* PREV */}
             <button
               onClick={prevReview}
-              className="fixed left-2 sm:left-6 top-1/2 -translate-y-1/2 z-50 w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-black/50 border border-white/10 hover:bg-yellow-400 hover:text-black transition hidden sm:flex items-center justify-center text-white backdrop-blur-xl"
+              className="fixed left-2 sm:left-6 top-1/2 -translate-y-1/2 z-50 w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-black/50 border border-white/10 hover:bg-yellow-400 hover:text-black transition hidden sm:flex items-center justify-center text-white backdrop-blur-md"
             >
               <FaChevronLeft />
             </button>
@@ -357,7 +362,7 @@ const Reviews = () => {
             {/* NEXT */}
             <button
               onClick={nextReview}
-              className="fixed right-2 sm:right-6 top-1/2 -translate-y-1/2 z-50 w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-black/50 border border-white/10 hover:bg-yellow-400 hover:text-black transition hidden sm:flex items-center justify-center text-white backdrop-blur-xl"
+              className="fixed right-2 sm:right-6 top-1/2 -translate-y-1/2 z-50 w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-black/50 border border-white/10 hover:bg-yellow-400 hover:text-black transition hidden sm:flex items-center justify-center text-white backdrop-blur-md"
             >
               <FaChevronRight />
             </button>
@@ -366,14 +371,14 @@ const Reviews = () => {
             <div className="sm:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex gap-4">
               <button
                 onClick={prevReview}
-                className="w-12 h-12 rounded-full bg-black/60 border border-white/10 text-white flex items-center justify-center backdrop-blur-xl"
+                className="w-12 h-12 rounded-full bg-black/60 border border-white/10 text-white flex items-center justify-center backdrop-blur-md"
               >
                 <FaChevronLeft />
               </button>
 
               <button
                 onClick={nextReview}
-                className="w-12 h-12 rounded-full bg-black/60 border border-white/10 text-white flex items-center justify-center backdrop-blur-xl"
+                className="w-12 h-12 rounded-full bg-black/60 border border-white/10 text-white flex items-center justify-center backdrop-blur-md"
               >
                 <FaChevronRight />
               </button>
@@ -382,7 +387,7 @@ const Reviews = () => {
             {/* FULL IMAGE VIEW */}
             <motion.div
               initial={{
-                scale: 0.9,
+                scale: 0.95,
                 opacity: 0,
               }}
               animate={{
@@ -390,10 +395,10 @@ const Reviews = () => {
                 opacity: 1,
               }}
               exit={{
-                scale: 0.9,
+                scale: 0.95,
                 opacity: 0,
               }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.25 }}
               className="relative w-full h-full flex items-center justify-center p-3 sm:p-6"
             >
               {/* IMAGE */}
@@ -406,7 +411,7 @@ const Reviews = () => {
                   sm:max-h-[85vh]
                   object-contain
                   rounded-2xl
-                  shadow-[0_0_80px_rgba(255,215,0,0.15)]
+                  shadow-[0_0_60px_rgba(255,215,0,0.12)]
                 "
               />
 
@@ -421,7 +426,7 @@ const Reviews = () => {
                   sm:w-auto
                   max-w-2xl
                   bg-black/55
-                  backdrop-blur-2xl
+                  backdrop-blur-md
                   border
                   border-white/10
                   rounded-3xl
