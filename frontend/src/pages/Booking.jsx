@@ -57,17 +57,17 @@ const servicesList = [
 const timePeriods = [
   {
     label: "Morning",
-    times: ["2:00 AM", "3:00 AM", "4:00 AM", "5:00 AM", "6:00 AM"],
+    times: ["8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM"],
   },
 
   {
     label: "Afternoon",
-    times: ["8:00 PM", "9:00 PM", "10:00 PM", "11:00 PM", "12:00 PM"],
+    times: ["12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM"],
   },
 
   {
     label: "Evening",
-    times: ["1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM"],
+    times: ["4:00 PM", "5:00 PM", "6:00 PM", "7:00 PM"],
   },
 ];
 
@@ -229,30 +229,109 @@ const Booking = () => {
   };
 
   // FILE CHANGE
+  // FILE CHANGE
   const handleFileChange = async (e) => {
-    const file = e.target.files[0];
+    try {
+      const file = e.target.files[0];
 
-    if (file) {
-      try {
-        const compressedImage = await compressImage(file);
+      // RESET INPUT
+      e.target.value = null;
 
-        setPaymentPhoto(compressedImage);
+      if (!file) return;
 
-        setPhotoPreview(URL.createObjectURL(compressedImage));
-      } catch (error) {
-        console.error(error);
+      // FILE TYPE VALIDATION
+      if (!file.type.startsWith("image/")) {
+        toast.error("⚠️ Please upload a valid image");
 
-        toast.error("Failed to process image.");
+        return;
       }
+
+      // FILE SIZE VALIDATION (10MB)
+      if (file.size > 10 * 1024 * 1024) {
+        toast.error("⚠️ Image size must be less than 10MB");
+
+        return;
+      }
+
+      toast.info("📸 Processing payment screenshot...");
+
+      const compressedImage = await compressImage(file);
+
+      setPaymentPhoto(compressedImage);
+
+      setPhotoPreview(URL.createObjectURL(compressedImage));
+
+      toast.success("✅ Payment screenshot uploaded successfully");
+    } catch (error) {
+      console.error(error);
+
+      toast.error("❌ Failed to upload image. Please try again.");
     }
+  };
+  // MODERN VALIDATION
+  const validateForm = () => {
+    if (!name.trim()) {
+      toast.error("⚠️ Please enter your full name");
+      return false;
+    }
+
+    if (!phone.trim()) {
+      toast.error("⚠️ Please enter your phone number");
+      return false;
+    }
+
+    if (!selectedService) {
+      toast.error("⚠️ Please choose a service");
+      return false;
+    }
+
+    if (!selectedDate) {
+      toast.error("⚠️ Please select appointment date");
+      return false;
+    }
+
+    if (!selectedPeriod) {
+      toast.error("⚠️ Please select time period");
+      return false;
+    }
+
+    if (!selectedTime) {
+      toast.error("⚠️ Please select appointment time");
+      return false;
+    }
+
+    // PAYMENT SCREENSHOT REQUIRED
+    if (!paymentPhoto) {
+      toast.error(
+        "⚠️ Payment screenshot is required before confirming booking",
+      );
+
+      return false;
+    }
+
+    // OUTDOOR VALIDATION
+    if (selectedService === "Outdoor" && !outdoorAddress.trim()) {
+      toast.error("⚠️ Please enter home address for outdoor service");
+
+      return false;
+    }
+
+    // CITY TO CITY VALIDATION
+    if (
+      selectedService === "City To City" &&
+      (!cityLocation.trim() || !cityNeedDate)
+    ) {
+      toast.error("⚠️ Please complete city-to-city information");
+
+      return false;
+    }
+
+    return true;
   };
 
   // SUBMIT
   const handleSubmit = async () => {
-    if (!name || !phone || !selectedService || !selectedDate || !selectedTime) {
-      return toast.error("Please fill all required fields!");
-    }
-
+    if (!validateForm()) return;
     // DUPLICATE CHECK
     const isAlreadyBooked = bookings.some((booking) => {
       const bookingDate = new Date(booking.date).toISOString().split("T")[0];
@@ -264,19 +343,6 @@ const Booking = () => {
       return toast.error(
         "This time slot is already booked. Please choose another time.",
       );
-    }
-
-    // OUTDOOR VALIDATION
-    if (selectedService === "Outdoor" && !outdoorAddress) {
-      return toast.error("Please enter customer home address!");
-    }
-
-    // CITY VALIDATION
-    if (
-      selectedService === "City To City" &&
-      (!cityLocation || !cityNeedDate)
-    ) {
-      return toast.error("Please complete city-to-city details!");
     }
 
     const formData = new FormData();
@@ -881,18 +947,34 @@ const Booking = () => {
             <div className="mb-7">
               <h3 className="section-title">Payment Screenshot</h3>
 
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                className="file:mr-4 file:py-3 file:px-5
-  file:rounded-xl file:border-0
-  file:text-sm file:font-semibold
-  file:bg-yellow-400 file:text-black
-  hover:file:bg-yellow-300
-  file:cursor-pointer
-  w-full text-sm text-gray-400"
-              />
+              <label className="block">
+                <div className="w-full rounded-2xl border-2 border-dashed border-yellow-500/20 bg-black/30 p-6 text-center cursor-pointer hover:border-yellow-400 transition-all duration-300">
+                  <div className="flex flex-col items-center justify-center">
+                    <div className="w-14 h-14 rounded-full bg-yellow-500/10 flex items-center justify-center mb-3 text-2xl">
+                      📸
+                    </div>
+
+                    <h4 className="font-semibold text-white">
+                      Upload Payment Screenshot
+                    </h4>
+
+                    <p className="text-sm text-gray-400 mt-1">
+                      JPG, PNG or WEBP • Max 10MB
+                    </p>
+
+                    <div className="mt-4 px-5 py-2 rounded-xl bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-semibold text-sm">
+                      Choose File
+                    </div>
+                  </div>
+
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    className="hidden"
+                  />
+                </div>
+              </label>
 
               <p className="text-xs text-gray-500 mt-2">
                 Images are automatically optimized for faster booking.
@@ -911,9 +993,20 @@ const Booking = () => {
             <button
               onClick={handleSubmit}
               disabled={loading}
-              className="w-full py-4 rounded-2xl bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold text-sm sm:text-base hover:scale-[1.01] transition-all duration-300 disabled:opacity-50"
+              className={`w-full py-4 rounded-2xl font-bold text-sm sm:text-base transition-all duration-300 ${
+                loading
+                  ? "bg-gray-700 text-gray-400 cursor-not-allowed"
+                  : "bg-gradient-to-r from-yellow-400 to-orange-500 text-black hover:scale-[1.01]"
+              }`}
             >
-              {loading ? "Submitting Booking..." : "Confirm Booking"}
+              {loading ? (
+                <div className="flex items-center justify-center gap-2">
+                  <div className="w-5 h-5 border-2 border-black/20 border-t-black rounded-full animate-spin"></div>
+                  Submitting Booking...
+                </div>
+              ) : (
+                "Confirm Booking"
+              )}
             </button>
           </div>
         </div>
