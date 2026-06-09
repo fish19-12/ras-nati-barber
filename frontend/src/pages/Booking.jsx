@@ -907,16 +907,15 @@ const Booking = () => {
 
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                     {availableTimes.map((time, i) => {
+                      const selectedISODate = selectedDate;
+
                       const isBooked =
                         bookedTimes.includes(time) ||
-                        unavailableSlots.some((slot) => {
-                          const slotDate = new Date(slot.date)
-                            .toISOString()
-                            .split("T")[0];
-                          return (
-                            slotDate === selectedDate && slot.time === time
-                          );
-                        });
+                        unavailableSlots.some(
+                          (slot) =>
+                            new Date(slot.date).toISOString().split("T")[0] ===
+                              selectedISODate && slot.time === time,
+                        );
 
                       return (
                         <button
