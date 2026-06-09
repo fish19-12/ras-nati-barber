@@ -100,6 +100,17 @@ const Booking = () => {
 
   // SUCCESS POPUP
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [unavailableSlots, setUnavailableSlots] = useState([]);
+  const fetchUnavailableSlots = async () => {
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/unavailable-slots`,
+      );
+      setUnavailableSlots(res.data || []);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const [bookingInfo, setBookingInfo] = useState({
     customer: "",
@@ -124,9 +135,9 @@ const Booking = () => {
       setLoadingBookings(false);
     }
   };
-
   useEffect(() => {
     fetchBookings();
+    fetchUnavailableSlots();
   }, []);
 
   // BOOKED TIMES
@@ -896,7 +907,16 @@ const Booking = () => {
 
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                     {availableTimes.map((time, i) => {
-                      const isBooked = bookedTimes.includes(time);
+                      const isBooked =
+                        bookedTimes.includes(time) ||
+                        unavailableSlots.some((slot) => {
+                          const slotDate = new Date(slot.date)
+                            .toISOString()
+                            .split("T")[0];
+                          return (
+                            slotDate === selectedDate && slot.time === time
+                          );
+                        });
 
                       return (
                         <button

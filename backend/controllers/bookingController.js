@@ -2,6 +2,7 @@ const Booking = require("../models/Booking");
 const multer = require("multer");
 const { storage, cloudinary } = require("../config/cloudinary");
 const nodemailer = require("nodemailer");
+const UnavailableSlot = require("../models/UnavailableSlot");
 
 // ========================================
 // 🔔 STORE LAST NOTIFIED BOOKINGS
@@ -100,6 +101,12 @@ exports.createBooking = async (req, res) => {
     // ========================================
     // HANDLE SERVICES
     // ========================================
+    if (!req.body.name || !req.body.phone || !req.body.date || !req.body.time) {
+      return res.status(400).json({
+        success: false,
+        message: "Please fill all required fields.",
+      });
+    }
     let services = [];
 
     if (req.body.service) {
@@ -116,7 +123,29 @@ exports.createBooking = async (req, res) => {
     const bookingDate = new Date(req.body.date);
 
     bookingDate.setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
+    if (bookingDate < today) {
+      return res.status(400).json({
+        success: false,
+        message: "You cannot book a past date.",
+      });
+    }
+    // ========================================
+    // CHECK BLOCKED SLOT
+    // ========================================
+    const blockedSlot = await UnavailableSlot.findOne({
+      date: bookingDate,
+      time: req.body.time,
+    }).lean();
+
+    if (blockedSlot) {
+      return res.status(400).json({
+        success: false,
+        message: "This time is unavailable. Please choose another time.",
+      });
+    }
     // ========================================
     // CHECK EXISTING BOOKING
     // ========================================
