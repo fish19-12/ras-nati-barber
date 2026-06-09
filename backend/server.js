@@ -15,9 +15,10 @@ const app = express();
 
 const server = http.createServer(app);
 
-// ========================================
-// SOCKET IO
-// ========================================
+/* =========================
+   SOCKET IO
+========================= */
+
 const io = new Server(server, {
   cors: {
     origin: "*",
@@ -28,9 +29,10 @@ const io = new Server(server, {
 // MAKE IO GLOBAL
 app.set("io", io);
 
-// ========================================
-// SOCKET CONNECTION
-// ========================================
+/* =========================
+   SOCKET CONNECTION
+========================= */
+
 io.on("connection", (socket) => {
   console.log("✅ Admin connected:", socket.id);
 
@@ -62,6 +64,9 @@ app.use("/api/auth", require("./routes/auth"));
 /* BOOKINGS */
 app.use("/api/bookings", require("./routes/bookingRoutes"));
 
+/* UNAVAILABLE SLOTS */
+app.use("/api/unavailable-slots", require("./routes/unavailableSlotRoutes"));
+
 /* GALLERY */
 app.use("/api/gallery", require("./routes/galleryRoutes"));
 
@@ -85,4 +90,6 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 
-server.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+server.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
