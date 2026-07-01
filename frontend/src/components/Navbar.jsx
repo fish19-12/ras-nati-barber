@@ -16,10 +16,13 @@ import {
   FaCut,
   FaPhoneAlt,
 } from "react-icons/fa";
+import { Globe, ChevronDown } from "lucide-react";
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [language, setLanguage] = useState("EN");
+  const [languageOpen, setLanguageOpen] = useState(false);
 
   const location = useLocation();
 
@@ -328,27 +331,123 @@ const Navbar = () => {
           </Link>
 
           {/* MENU BUTTON */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="
-              relative
-              overflow-hidden
+          <div className="flex items-center gap-3">
+            {/* Language Switcher */}
+            <div className="relative">
+              <button
+                onClick={() => setLanguageOpen(!languageOpen)}
+                className="
+        flex
+        items-center
+        gap-1.5
+        px-3
+        py-3
+        rounded-2xl
+        bg-zinc-900
+        border
+        border-zinc-700
+        text-white
+        hover:border-yellow-400
+        hover:text-yellow-400
+        transition-all
+        duration-300
+      "
+              >
+                <Globe size={18} />
+                <span className="text-xs font-semibold">{language}</span>
+                <ChevronDown
+                  size={14}
+                  className={`transition-transform duration-300 ${
+                    languageOpen ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+
+              <AnimatePresence>
+                {languageOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.2 }}
+                    className="
+            absolute
+            right-0
+            mt-2
+            w-32
+            rounded-2xl
+            bg-zinc-900
+            border
+            border-zinc-700
+            overflow-hidden
+            shadow-2xl
+          "
+                  >
+                    <button
+                      onClick={() => {
+                        setLanguage("EN");
+                        setLanguageOpen(false);
+                      }}
+                      className="
+              w-full
+              px-4
+              py-3
+              text-left
               text-white
-              text-xl
-              bg-zinc-900
               hover:bg-yellow-400
               hover:text-black
-              p-3
-              rounded-2xl
               transition-all
-              duration-300
-              border
-              border-zinc-700
-              shadow-lg
             "
-          >
-            {mobileMenuOpen ? <FaTimes /> : <FaBars />}
-          </button>
+                    >
+                      🇺🇸 English
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        setLanguage("AM");
+                        setLanguageOpen(false);
+                      }}
+                      className="
+              w-full
+              px-4
+              py-3
+              text-left
+              text-white
+              hover:bg-yellow-400
+              hover:text-black
+              transition-all
+            "
+                    >
+                      🇪🇹 አማርኛ
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* Existing Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="
+      relative
+      overflow-hidden
+      text-white
+      text-xl
+      bg-zinc-900
+      hover:bg-yellow-400
+      hover:text-black
+      p-3
+      rounded-2xl
+      transition-all
+      duration-300
+      border
+      border-zinc-700
+      shadow-lg
+    "
+            >
+              {mobileMenuOpen ? <FaTimes /> : <FaBars />}
+            </button>
+          </div>
         </div>
       </div>
 

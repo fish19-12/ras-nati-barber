@@ -563,108 +563,6 @@ const Booking = () => {
 
         {/* LAYOUT */}
         <div className="flex flex-col xl:grid xl:grid-cols-[360px_1fr] gap-5">
-          {/* PAYMENT */}
-          <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-4 sm:p-6 h-fit sticky top-5">
-            <div className="flex items-center justify-between mb-5">
-              <h2 className="text-xl font-bold text-yellow-400">Payment</h2>
-
-              <div className="px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 text-xs">
-                Active
-              </div>
-            </div>
-
-            {/* AMOUNT */}
-            <div className="bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/10 rounded-2xl p-5 mb-5">
-              <p className="text-gray-400 text-sm mb-2">Required Deposit</p>
-
-              <h3 className="text-4xl font-black text-yellow-400">1000 Birr</h3>
-            </div>
-
-            {/* NAME */}
-            <div className="flex items-center justify-between mb-5">
-              <span className="text-gray-400 text-sm">Account Name</span>
-
-              <span className="font-semibold">Nhattan Sisay</span>
-            </div>
-
-            {/* ACCOUNTS */}
-            <div className="space-y-3">
-              {[
-                {
-                  label: "Telebirr",
-                  number: "0975700510",
-                },
-
-                {
-                  label: "CBE",
-                  number: "1000676408267",
-                },
-
-                {
-                  label: "Abyssinia Bank",
-                  number: "77154938",
-                },
-              ].map((item, i) => (
-                <div
-                  key={i}
-                  className="bg-black/40 border border-white/10 rounded-2xl p-4"
-                >
-                  <p className="text-gray-400 text-xs mb-2">{item.label}</p>
-
-                  <div className="flex items-center justify-between gap-3">
-                    <span className="font-semibold text-sm truncate">
-                      {item.number}
-                    </span>
-
-                    <button
-                      onClick={() => copyNumber(item.number)}
-                      className="min-w-[42px] h-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center"
-                    >
-                      {copied === item.number ? (
-                        <FaCheck className="text-green-400 text-sm" />
-                      ) : (
-                        <FaCopy className="text-sm" />
-                      )}
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* INFO */}
-            <div className="mt-6 pt-5 border-t border-white/10 space-y-2">
-              <p className="text-xs text-gray-400">
-                • Send the deposit payment
-              </p>
-
-              <p className="text-xs text-gray-400">• Take payment screenshot</p>
-
-              <p className="text-xs text-gray-400">
-                • Upload screenshot before booking
-              </p>
-            </div>
-
-            {/* LIVE STATUS */}
-            <div className="mt-6 rounded-2xl border border-yellow-500/20 bg-yellow-500/5 p-4">
-              <div className="flex items-center gap-2 mb-2">
-                <FaCheckCircle className="text-green-400" />
-
-                <h4 className="font-semibold text-yellow-400">
-                  Booking Notice • የቀጠሮ ማስያዣ ማሳሰቢያ
-                </h4>
-              </div>
-
-              <p className="text-sm text-gray-300 leading-relaxed">
-                Already reserved appointment times are automatically locked to
-                avoid duplicate bookings and maintain premium service quality.
-                <br />
-                <span className="text-gray-400">
-                  አስቀድሞ የተያዙ ሰዓቶች እንደገና እንዳይያዙ ይዘጋሉ። እባክዎ ክፍት የሆነ ሰዓት ይምረጡ።
-                </span>
-              </p>
-            </div>
-          </div>
-
           {/* FORM */}
           <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-4 sm:p-7">
             {/* CUSTOMER INFO */}
@@ -960,6 +858,121 @@ const Booking = () => {
                   )}
                 </div>
               )}
+            </div>
+            {/* PAYMENT */}
+            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-4 sm:p-6 h-fit sticky top-5">
+              <div className="flex items-center justify-between mb-5">
+                <h2 className="text-xl font-bold text-yellow-400">Payment</h2>
+
+                <div className="px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 text-xs">
+                  Active
+                </div>
+              </div>
+
+              {/* AMOUNT */}
+              <div className="bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/10 rounded-2xl p-5 mb-5">
+                <p className="text-gray-400 text-sm mb-2">Required Deposit</p>
+
+                <h3 className="text-4xl font-black text-yellow-400">
+                  1000 Birr
+                </h3>
+              </div>
+
+              {/* NAME */}
+              <div className="flex items-center justify-between mb-5">
+                <span className="text-gray-400 text-sm">Account Name</span>
+
+                <span className="font-semibold">Nhattan Sisay</span>
+              </div>
+
+              {/* ACCOUNTS */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {[
+                  {
+                    label: "Telebirr",
+                    number: "0975700510",
+                  },
+                  {
+                    label: "CBE",
+                    number: "1000676408267",
+                  },
+                  {
+                    label: "Abyssinia Bank",
+                    number: "77154938",
+                  },
+                  {
+                    label: "Awash Bank",
+                    number: "013201147501701",
+                  },
+                  {
+                    label: "Dashen Bank",
+                    number: "5444102610011",
+                  },
+                  {
+                    label: "E-Birr",
+                    number: "0975700510",
+                  },
+                ].map((item, i) => (
+                  <div
+                    key={i}
+                    className="bg-black/40 border border-white/10 rounded-2xl p-4 hover:border-yellow-500/30 hover:bg-white/5 transition-all duration-300"
+                  >
+                    <p className="text-gray-400 text-xs mb-2">{item.label}</p>
+
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-semibold text-sm break-all">
+                        {item.number}
+                      </span>
+
+                      <button
+                        onClick={() => copyNumber(item.number)}
+                        className="min-w-[40px] h-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 hover:bg-yellow-500 hover:text-black transition"
+                      >
+                        {copied === item.number ? (
+                          <FaCheck className="text-green-400 mx-auto" />
+                        ) : (
+                          <FaCopy className="mx-auto" />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* INFO */}
+              <div className="mt-6 pt-5 border-t border-white/10 space-y-2">
+                <p className="text-xs text-gray-400">
+                  • Send the deposit payment
+                </p>
+
+                <p className="text-xs text-gray-400">
+                  • Take payment screenshot
+                </p>
+
+                <p className="text-xs text-gray-400">
+                  • Upload screenshot before booking
+                </p>
+              </div>
+
+              {/* LIVE STATUS */}
+              <div className="mt-6 rounded-2xl border border-yellow-500/20 bg-yellow-500/5 p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <FaCheckCircle className="text-green-400" />
+
+                  <h4 className="font-semibold text-yellow-400">
+                    Booking Notice • የቀጠሮ ማስያዣ ማሳሰቢያ
+                  </h4>
+                </div>
+
+                <p className="text-sm text-gray-300 leading-relaxed">
+                  Already reserved appointment times are automatically locked to
+                  avoid duplicate bookings and maintain premium service quality.
+                  <br />
+                  <span className="text-gray-400">
+                    አስቀድሞ የተያዙ ሰዓቶች እንደገና እንዳይያዙ ይዘጋሉ። እባክዎ ክፍት የሆነ ሰዓት ይምረጡ።
+                  </span>
+                </p>
+              </div>
             </div>
 
             {/* SCREENSHOT */}
