@@ -79,6 +79,9 @@ app.use("/api/register", require("./routes/registerRoutes"));
 /* TUTORIALS */
 app.use("/api/tutorials", require("./routes/tutorialRoutes"));
 
+/* AI CHAT */
+app.use("/api/ai-chat", require("./routes/aiChatRoutes"));
+
 /* TEST */
 app.get("/", (req, res) => {
   res.send("Nhatty Barber API Running...");

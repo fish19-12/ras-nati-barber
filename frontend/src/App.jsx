@@ -6,10 +6,10 @@ import {
 } from "react-router-dom";
 
 import { useEffect } from "react";
-import { FaWhatsapp } from "react-icons/fa";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import NatiAIChat from "./components/NatiAIChat";
 
 /* PAGES */
 import Home from "./pages/Home";
@@ -33,42 +33,6 @@ function ScrollToTop() {
   }, [pathname]);
 
   return null;
-}
-
-/* ---------------- WHATSAPP BUTTON ---------------- */
-function WhatsAppButton() {
-  return (
-    <a
-      href="https://wa.me/251912345678"
-      target="_blank"
-      rel="noopener noreferrer"
-      title="Chat on WhatsApp"
-      className="
-        fixed
-        bottom-28
-        md:bottom-8
-        right-5
-        md:right-8
-        w-16
-        h-16
-        flex
-        items-center
-        justify-center
-        rounded-full
-        bg-green-500
-        hover:bg-green-600
-        text-white
-        shadow-[0_10px_40px_rgba(0,0,0,0.4)]
-        z-[999]
-        transition-all
-        duration-300
-        hover:scale-110
-        animate-pulse
-      "
-    >
-      <FaWhatsapp className="text-3xl" />
-    </a>
-  );
 }
 
 /* ---------------- APP ---------------- */
@@ -153,8 +117,8 @@ function App() {
         {/* FOOTER */}
         <Footer />
 
-        {/* WHATSAPP */}
-        <WhatsAppButton />
+        {/* Nati AI */}
+        <NatiAIChat />
       </div>
     </Router>
   );
