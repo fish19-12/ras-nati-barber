@@ -900,17 +900,10 @@ const Booking = () => {
                     label: "Abyssinia Bank",
                     number: "77154938",
                   },
-                  {
-                    label: "Awash Bank",
-                    number: "013201147501701",
-                  },
+
                   {
                     label: "Dashen Bank",
                     number: "5444102610011",
-                  },
-                  {
-                    label: "E-Birr",
-                    number: "0975700510",
                   },
                 ].map((item, i) => (
                   <div
