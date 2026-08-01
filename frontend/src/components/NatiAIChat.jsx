@@ -884,42 +884,48 @@ justify-center
             )}
 
             {/* =====================================================
-    INPUT AREA
+    INPUT AREA FIXED MOBILE VERSION
 ===================================================== */}
 
             <div
               className="
-shrink-0
-border-t
-border-white/10
-bg-black/90
-p-3
-safe-area-bottom
-"
+    shrink-0
+    border-t
+    border-white/10
+    bg-black/95
+    backdrop-blur-xl
+    p-3
+    safe-area-bottom
+  "
             >
               <div
                 className="
-flex
-items-center
-gap-2
-rounded-full
-border
-border-white/10
-bg-white/5
-px-3
-py-2
-"
+      flex
+      items-center
+      gap-2
+      w-full
+      rounded-full
+      border
+      border-white/10
+      bg-white/5
+      px-3
+      py-2
+    "
               >
                 {/* IMAGE BUTTON */}
 
                 <label
                   className="
-cursor-pointer
-text-yellow-400
-hover:text-yellow-300
-"
+        flex
+        items-center
+        justify-center
+        shrink-0
+        cursor-pointer
+        text-yellow-400
+        hover:text-yellow-300
+      "
                 >
-                  <FaImage size={18} />
+                  <FaImage size={19} />
 
                   <input
                     type="file"
@@ -929,7 +935,7 @@ hover:text-yellow-300
                   />
                 </label>
 
-                {/* INPUT */}
+                {/* TEXT INPUT */}
 
                 <input
                   value={input}
@@ -941,22 +947,15 @@ hover:text-yellow-300
                   }}
                   placeholder="Ask Nati AI anything..."
                   className="
-
-flex-1
-
-bg-transparent
-
-outline-none
-
-text-sm
-
-text-white
-
-placeholder:text-zinc-500
-
-px-2
-
-"
+        flex-1
+        min-w-0
+        bg-transparent
+        outline-none
+        text-sm
+        text-white
+        placeholder:text-zinc-500
+        px-2
+      "
                 />
 
                 {/* VOICE */}
@@ -964,50 +963,50 @@ px-2
                 <button
                   onClick={startVoice}
                   className={`
+        shrink-0
+        flex
+        items-center
+        justify-center
 
-transition
+        ${listening ? "text-red-400" : "text-zinc-400"}
 
-${listening ? "text-red-400" : "text-zinc-400"}
-
-`}
+        transition
+      `}
                 >
                   <FaMicrophone size={18} />
                 </button>
 
-                {/* SEND */}
+                {/* SEND BUTTON */}
 
                 <button
-                  disabled={loading}
                   onClick={() => sendMessage()}
+                  disabled={loading}
                   className="
+        shrink-0
+        flex
+        items-center
+        justify-center
 
-h-10
+        h-10
+        w-10
 
-w-10
+        rounded-full
 
-rounded-full
+        bg-gradient-to-r
+        from-yellow-400
+        to-orange-500
 
-flex
+        text-black
 
-items-center
+        shadow-lg
 
-justify-center
+        transition
 
-bg-gradient-to-r
+        hover:scale-105
 
-from-yellow-400
+        disabled:opacity-50
 
-to-orange-500
-
-text-black
-
-transition
-
-hover:scale-105
-
-disabled:opacity-50
-
-"
+      "
                 >
                   <FaPaperPlane size={16} />
                 </button>
