@@ -2,6 +2,8 @@
   "dependencies": {
     "cloudinary": "^1.41.3",
     "dotenv": "^17.4.0",
+    "helmet": "^8.3.0",
+    "morgan": "^1.11.0",
     "multer": "^2.1.1",
     "multer-storage-cloudinary": "^4.0.0",
     "react-hot-toast": "^2.6.0"
