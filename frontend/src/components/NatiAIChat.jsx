@@ -616,7 +616,7 @@ text-base
 
 "
                   >
-                    Nati AI
+                    Nhatty AI
                   </h2>
 
                   <p
@@ -788,7 +788,7 @@ text-zinc-300
 
 "
                 >
-                  Nati AI is thinking...
+                  Nhatty AI is thinking...
                 </div>
               )}
 
