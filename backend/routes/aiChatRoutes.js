@@ -257,80 +257,112 @@ async function askDeepSeek(messages) {
 
 router.post("/", async (req, res) => {
   try {
-    const { message, sessionId } = req.body;
+    const { message } = req.body;
 
-    if (!message || typeof message !== "string" || !message.trim()) {
-      return res.status(400).json({
+    if (!message) {
+      return res.json({
         success: false,
-
         reply: "Please enter a message.",
       });
     }
 
-    const currentSession = sessionId || "default-session";
-
-    // Clear old long conversations
-    // Keep only latest messages
-
-    const history = conversationStore.get(currentSession) || [];
-
-    const userHistory = [
-      ...history,
-
-      {
-        role: "user",
-        content: message.trim(),
-      },
-    ];
-
     const reply = await askDeepSeek([
       {
         role: "system",
-        content: SYSTEM_PROMPT,
+
+        content: `
+
+You are Nati AI.
+
+You are NOT a marketing assistant.
+
+You answer only short direct answers.
+
+RULES:
+
+- Maximum 3 sentences.
+- No bullet points.
+- No numbers.
+- No introductions.
+- No "great question".
+- No "honestly".
+- No advertising language.
+- No luxury words.
+- No premium words.
+- No sales language.
+- Never ask a question at the end.
+
+
+IMPORTANT INFORMATION:
+
+
+Natty (Ras Natty) is a professional Ethiopian barber.
+
+He is known for Afro hair, fades, dreadlocks, modern hairstyles and customized cuts.
+
+Natty created his own signature hairstyle called Natty Reborn Cut.
+
+Natty Reborn Cut is his own unique hairstyle and is not available from other barbers.
+
+Natty has worked with international content creator Dylan Page.
+
+Natty is known for professional barber skills, experience, creativity and attention to detail.
+
+
+Answer examples:
+
+
+User:
+Why choose Natty?
+
+
+Answer:
+
+Choose Natty because he is a professional Ethiopian barber known for his experience, modern barber skills and unique Natty Reborn Cut. He has also worked with international creator Dylan Page.
+
+
+User:
+Tell me about Natty Reborn Cut?
+
+
+Answer:
+
+Natty Reborn Cut is Natty's exclusive signature hairstyle. It is a unique haircut created by Natty and it is not offered by other barbers.
+
+
+User:
+Who is Natty?
+
+
+Answer:
+
+Natty, also known as Ras Natty, is a professional Ethiopian barber specializing in Afro hair, fades, Rasta and modern hairstyles. He is known for creating the Natty Reborn Cut.
+
+
+`,
       },
 
-      ...userHistory.slice(-4),
+      {
+        role: "user",
+        content: message,
+      },
     ]);
 
-    // Save memory
-
-    conversationStore.set(
-      currentSession,
-
-      [
-        ...userHistory,
-
-        {
-          role: "assistant",
-
-          content: reply,
-        },
-      ].slice(-8),
-    );
-
-    return res.json({
+    res.json({
       success: true,
 
-      reply,
-
-      sessionId: currentSession,
+      reply: reply.trim(),
     });
   } catch (error) {
-    console.error("Nati AI Error:", error);
+    console.log(error);
 
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
 
-      reply: "Nati AI is temporarily unavailable.",
+      reply: "Nati AI is unavailable.",
     });
   }
 });
-
-// =====================================================
-// HAIRSTYLE IMAGE ANALYSIS
-// POST /api/ai-chat/analyze-hairstyle
-// =====================================================
-
 router.post(
   "/analyze-hairstyle",
 
