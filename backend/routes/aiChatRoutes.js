@@ -206,7 +206,7 @@ async function askDeepSeek(messages) {
 
         messages,
 
-        temperature: 0.4,
+        temperature: 0.7,
 
         max_tokens: 1000,
       }),
