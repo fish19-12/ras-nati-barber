@@ -21,7 +21,7 @@ import logo from "../assets/logo.jpg";
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 // =====================================================
-// STARTER PROMPTS
+// STARTER QUESTIONS
 // =====================================================
 
 const starterPrompts = [
@@ -32,12 +32,10 @@ const starterPrompts = [
   "What is Natty Reborn Cut?",
 
   "How can I book Natty?",
-
-  "What services can I book?",
 ];
 
 // =====================================================
-// TEXT DISPLAY
+// SIMPLE TEXT DISPLAY
 // =====================================================
 
 function renderContent(text) {
@@ -49,6 +47,10 @@ function renderContent(text) {
     </span>
   ));
 }
+
+// =====================================================
+// MAIN COMPONENT
+// =====================================================
 
 export default function NatiAIChat() {
   const [open, setOpen] = useState(false);
@@ -62,11 +64,11 @@ export default function NatiAIChat() {
 I'm Nati AI, the official assistant for Nhatty The Barber.
 
 I can help you with:
-• Natty
-• Natty Reborn Cut
+• Natty's story
 • Hairstyles
-• Services
-• Booking`,
+• Natty Reborn Cut
+• Booking
+• Barber services`,
     },
   ]);
 
@@ -97,7 +99,7 @@ I can help you with:
   }, [messages, open]);
 
   // =====================================================
-  // VOICE
+  // VOICE INPUT
   // =====================================================
 
   useEffect(() => {
@@ -146,7 +148,7 @@ I can help you with:
   }
 
   // =====================================================
-  // IMAGE
+  // IMAGE SELECT
   // =====================================================
 
   function handleImageChange(event) {
@@ -276,10 +278,11 @@ I can help you with:
       setLoading(false);
     }
   }
-
   return (
     <>
-      {/* FLOATING BUTTON */}
+      {/* =====================================================
+FLOATING AI BUTTON
+===================================================== */}
 
       <AnimatePresence>
         {!open && (
@@ -298,58 +301,34 @@ I can help you with:
             }}
             onClick={() => setOpen(true)}
             className="
-
 fixed
-
 z-[9999]
-
 right-5
-
 bottom-8
-
 flex
-
 items-center
-
 gap-3
-
 rounded-full
-
 bg-gradient-to-r
-
 from-yellow-400
-
 to-orange-500
-
 px-4
-
 py-3
-
 font-bold
-
 text-black
-
 shadow-xl
-
 hover:scale-105
-
 transition
-
 "
           >
             <img
               src={logo}
               alt="Nati AI"
               className="
-
 h-10
-
 w-10
-
 rounded-full
-
 object-cover
-
 "
             />
 
@@ -358,7 +337,9 @@ object-cover
         )}
       </AnimatePresence>
 
-      {/* CHAT WINDOW */}
+      {/* =====================================================
+AI CHAT WINDOW
+===================================================== */}
 
       <AnimatePresence>
         {open && (
@@ -367,16 +348,22 @@ object-cover
               opacity: 0,
 
               y: 40,
+
+              scale: 0.95,
             }}
             animate={{
               opacity: 1,
 
               y: 0,
+
+              scale: 1,
             }}
             exit={{
               opacity: 0,
 
               y: 40,
+
+              scale: 0.95,
             }}
             className="
 
@@ -406,11 +393,11 @@ overflow-hidden
 
 bg-[#070707]/95
 
+backdrop-blur-xl
+
 border
 
 border-white/10
-
-backdrop-blur-xl
 
 shadow-2xl
 
@@ -459,13 +446,17 @@ gap-3
                   alt="Nati"
                   className="
 
-h-11
-
 w-11
+
+h-11
 
 rounded-full
 
 object-cover
+
+border
+
+border-yellow-400
 
 "
                 />
@@ -474,7 +465,7 @@ object-cover
                   <h2 className="text-white font-bold">Nati AI</h2>
 
                   <p className="text-xs text-zinc-400">
-                    Nhatty The Barber Assistant
+                    Official Barber Assistant
                   </p>
                 </div>
               </div>
@@ -499,13 +490,15 @@ items-center
 
 justify-center
 
+hover:bg-red-500/30
+
 "
               >
                 <FaTimes />
               </button>
             </div>
 
-            {/* MESSAGES */}
+            {/* CHAT MESSAGES */}
 
             <div
               className="
@@ -514,7 +507,9 @@ flex-1
 
 overflow-y-auto
 
-p-4
+px-4
+
+py-4
 
 space-y-3
 
@@ -545,10 +540,32 @@ py-3
 
 text-sm
 
+leading-6
+
 ${
   msg.role === "assistant"
-    ? "mr-auto bg-white/10 text-white"
-    : "ml-auto bg-gradient-to-r from-yellow-400 to-orange-500 text-black"
+    ? `
+
+mr-auto
+
+bg-white/10
+
+text-white
+
+`
+    : `
+
+ml-auto
+
+bg-gradient-to-r
+
+from-yellow-400
+
+to-orange-500
+
+text-black
+
+`
 }
 
 `}
@@ -571,7 +588,7 @@ px-4
 
 py-3
 
-rounded-xl
+rounded-2xl
 
 w-fit
 
@@ -586,10 +603,20 @@ text-sm
               <div ref={bottomRef} />
             </div>
 
-            {/* STARTERS */}
+            {/* STARTER BUTTONS */}
 
             {messages.length === 1 && (
-              <div className="px-4 pb-3 space-y-2">
+              <div
+                className="
+
+px-4
+
+pb-3
+
+space-y-2
+
+"
+              >
                 {starterPrompts.map((prompt) => (
                   <button
                     key={prompt}
@@ -598,11 +625,11 @@ text-sm
 
 w-full
 
-flex
+text-left
 
-items-center
+px-4
 
-gap-2
+py-2
 
 rounded-full
 
@@ -612,17 +639,21 @@ border-white/10
 
 bg-white/5
 
-px-4
-
-py-2
+text-zinc-300
 
 text-xs
 
-text-zinc-300
-
 hover:text-white
 
+hover:border-yellow-400
+
 transition
+
+flex
+
+items-center
+
+gap-2
 
 "
                   >
@@ -634,14 +665,15 @@ transition
               </div>
             )}
 
-            {/* PREVIEW */}
+            {/* IMAGE PREVIEW */}
 
             {preview && (
               <div className="px-4 pb-2">
-                <img
-                  src={preview}
-                  alt="preview"
-                  className="
+                <div className="relative w-fit">
+                  <img
+                    src={preview}
+                    alt="preview"
+                    className="
 
 h-20
 
@@ -652,7 +684,37 @@ rounded-xl
 object-cover
 
 "
-                />
+                  />
+
+                  <button
+                    onClick={() => {
+                      setPreview(null);
+
+                      setSelectedImage(null);
+                    }}
+                    className="
+
+absolute
+
+-top-2
+
+-right-2
+
+h-6
+
+w-6
+
+rounded-full
+
+bg-red-500
+
+text-white
+
+"
+                  >
+                    <FaTimes size={12} />
+                  </button>
+                </div>
               </div>
             )}
 
@@ -694,13 +756,21 @@ py-2
 
 "
               >
-                <label className="text-yellow-400 cursor-pointer">
+                <label
+                  className="
+
+text-yellow-400
+
+cursor-pointer
+
+"
+                >
                   <FaImage />
 
                   <input
                     type="file"
-                    accept="image/*"
                     hidden
+                    accept="image/*"
                     onChange={handleImageChange}
                   />
                 </label>
@@ -726,19 +796,25 @@ text-white
 
 text-sm
 
+px-2
+
 "
                 />
 
                 <button
                   onClick={startVoice}
-                  className={listening ? "text-red-400" : "text-zinc-400"}
+                  className={`
+
+${listening ? "text-red-400" : "text-zinc-400"}
+
+`}
                 >
                   <FaMicrophone />
                 </button>
 
                 <button
-                  onClick={() => sendMessage()}
                   disabled={loading}
+                  onClick={() => sendMessage()}
                   className="
 
 h-10
@@ -763,7 +839,7 @@ justify-center
 
 "
                 >
-                  <FaPaperPlane />
+                  <FaPaperPlane size={15} />
                 </button>
               </div>
             </div>
