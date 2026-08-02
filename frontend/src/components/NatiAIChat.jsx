@@ -25,20 +25,22 @@ const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 // =====================================================
 
 const starterPrompts = [
-  "How do I book an appointment?",
+  "Who is Natty?",
 
-  "What services do you offer?",
+  "Why is Natty different?",
 
-  "Recommend a hairstyle for me",
+  "What is Natty Reborn Cut?",
 
-  "Tell me about Natty Reborn Cut",
+  "How can I book Natty?",
+
+  "What services can I book?",
 ];
 
 // =====================================================
-// MARKDOWN SIMPLE RENDER
+// TEXT DISPLAY
 // =====================================================
 
-function renderMarkdownContent(text) {
+function renderContent(text) {
   if (!text) return null;
 
   return text.split("\n").map((line, index) => (
@@ -48,15 +50,7 @@ function renderMarkdownContent(text) {
   ));
 }
 
-// =====================================================
-// MAIN COMPONENT
-// =====================================================
-
 export default function NatiAIChat() {
-  // ===============================
-  // STATES
-  // ===============================
-
   const [open, setOpen] = useState(false);
 
   const [messages, setMessages] = useState([
@@ -65,14 +59,14 @@ export default function NatiAIChat() {
 
       content: `Hello 👋
 
-I’m Nati AI, your premium grooming assistant for Nhatty The Barber.
+I'm Nati AI, the official assistant for Nhatty The Barber.
 
 I can help you with:
-• Booking
+• Natty
+• Natty Reborn Cut
 • Hairstyles
 • Services
-• Grooming advice
-• Natty's story`,
+• Booking`,
     },
   ]);
 
@@ -92,9 +86,9 @@ I can help you with:
 
   const recognition = useRef(null);
 
-  // ===============================
+  // =====================================================
   // AUTO SCROLL
-  // ===============================
+  // =====================================================
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({
@@ -102,25 +96,9 @@ I can help you with:
     });
   }, [messages, open]);
 
-  // ===============================
-  // BODY LOCK WHEN OPEN
-  // ===============================
-
-  useEffect(() => {
-    if (open) {
-      document.body.classList.add("ai-open");
-    } else {
-      document.body.classList.remove("ai-open");
-    }
-
-    return () => {
-      document.body.classList.remove("ai-open");
-    };
-  }, [open]);
-
-  // ===============================
-  // VOICE SETUP
-  // ===============================
+  // =====================================================
+  // VOICE
+  // =====================================================
 
   useEffect(() => {
     const SpeechRecognition =
@@ -155,7 +133,7 @@ I can help you with:
 
   function startVoice() {
     if (!recognition.current) {
-      alert("Voice input is not supported on this browser.");
+      alert("Voice input is not supported.");
 
       return;
     }
@@ -167,9 +145,9 @@ I can help you with:
     }
   }
 
-  // ===============================
-  // IMAGE SELECT
-  // ===============================
+  // =====================================================
+  // IMAGE
+  // =====================================================
 
   function handleImageChange(event) {
     const file = event.target.files?.[0];
@@ -179,7 +157,7 @@ I can help you with:
     }
 
     if (!file.type.startsWith("image")) {
-      alert("Please select an image file.");
+      alert("Please select an image.");
 
       return;
     }
@@ -193,7 +171,9 @@ I can help you with:
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
 
-      reader.onload = () => resolve(reader.result);
+      reader.onload = () => {
+        resolve(reader.result);
+      };
 
       reader.onerror = reject;
 
@@ -218,7 +198,7 @@ I can help you with:
       {
         role: "user",
 
-        content: text || "Please analyze this hairstyle image",
+        content: text || "Analyze my hairstyle",
       },
     ]);
 
@@ -238,7 +218,7 @@ I can help you with:
           {
             imageBase64,
 
-            userGoal: text || "Recommend a suitable hairstyle",
+            userGoal: text || "Recommend a hairstyle",
           },
         );
 
@@ -281,7 +261,7 @@ I can help you with:
         },
       ]);
     } catch (error) {
-      console.error("Nati AI error:", error);
+      console.log("Nati AI error", error);
 
       setMessages((prev) => [
         ...prev,
@@ -289,22 +269,17 @@ I can help you with:
         {
           role: "assistant",
 
-          content:
-            "Sorry, Nati AI is temporarily unavailable. Please try again.",
+          content: "Nati AI is temporarily unavailable.",
         },
       ]);
     } finally {
       setLoading(false);
     }
-  } // =====================================================
-  // RETURN UI PART 2
-  // =====================================================
+  }
 
   return (
     <>
-      {/* =====================================================
-    FLOATING BUTTON
-===================================================== */}
+      {/* FLOATING BUTTON */}
 
       <AnimatePresence>
         {!open && (
@@ -326,23 +301,11 @@ I can help you with:
 
 fixed
 
-
 z-[9999]
 
+right-5
 
-right-4
-
-
-
-bottom-[100px]
-
-
-
-sm:right-8
-
-sm:bottom-8
-
-
+bottom-8
 
 flex
 
@@ -350,48 +313,27 @@ items-center
 
 gap-3
 
-
-
 rounded-full
-
-
 
 bg-gradient-to-r
 
 from-yellow-400
 
-via-orange-400
-
 to-orange-500
-
-
 
 px-4
 
 py-3
 
-
+font-bold
 
 text-black
 
-
-
-font-bold
-
-
-
-shadow-[0_15px_50px_rgba(255,170,0,.45)]
-
-
-
-transition-all
-
-duration-300
-
-
+shadow-xl
 
 hover:scale-105
 
+transition
 
 "
           >
@@ -400,20 +342,13 @@ hover:scale-105
               alt="Nati AI"
               className="
 
-h-9
+h-10
 
-w-9
-
+w-10
 
 rounded-full
 
-
 object-cover
-
-
-border
-
-border-black/20
 
 "
             />
@@ -423,9 +358,7 @@ border-black/20
         )}
       </AnimatePresence>
 
-      {/* =====================================================
-    AI WINDOW
-===================================================== */}
+      {/* CHAT WINDOW */}
 
       <AnimatePresence>
         {open && (
@@ -434,138 +367,79 @@ border-black/20
               opacity: 0,
 
               y: 40,
-
-              scale: 0.95,
             }}
             animate={{
               opacity: 1,
 
               y: 0,
-
-              scale: 1,
             }}
             exit={{
               opacity: 0,
 
               y: 40,
-
-              scale: 0.95,
-            }}
-            transition={{
-              duration: 0.25,
             }}
             className="
 
 fixed
 
-
 z-[9999]
-
 
 left-3
 
 right-3
 
-
-
-bottom-[95px]
-
-
+bottom-5
 
 sm:left-auto
 
 sm:right-8
 
-sm:bottom-8
-
-
-
-w-auto
-
-
 sm:w-[420px]
 
-
-
-h-[70dvh]
-
-
-
-min-h-[430px]
-
-
+h-[75dvh]
 
 max-h-[700px]
 
-
-
-rounded-[28px]
-
+rounded-3xl
 
 overflow-hidden
 
-
+bg-[#070707]/95
 
 border
 
 border-white/10
 
-
-
-bg-[#070707]/95
-
-
-
 backdrop-blur-xl
 
-
-
-shadow-[0_30px_100px_rgba(0,0,0,.8)]
-
-
+shadow-2xl
 
 flex
 
 flex-col
 
-
 "
           >
-            {/* =====================================================
-    HEADER
-===================================================== */}
+            {/* HEADER */}
 
             <div
               className="
 
-shrink-0
-
-
 flex
-
 
 items-center
 
-
 justify-between
-
-
 
 px-4
 
 py-3
 
-
-
-bg-black/90
-
-
+bg-black
 
 border-b
 
 border-white/10
-
-
 
 "
             >
@@ -582,53 +456,25 @@ gap-3
               >
                 <img
                   src={logo}
-                  alt="Nati AI"
+                  alt="Nati"
                   className="
-
-w-11
 
 h-11
 
+w-11
 
 rounded-full
 
-
 object-cover
-
-
-border
-
-border-yellow-400/40
-
 
 "
                 />
 
                 <div>
-                  <h2
-                    className="
+                  <h2 className="text-white font-bold">Nati AI</h2>
 
-text-white
-
-font-bold
-
-text-base
-
-"
-                  >
-                    Nhatty AI
-                  </h2>
-
-                  <p
-                    className="
-
-text-xs
-
-text-zinc-400
-
-"
-                  >
-                    Premium Barber Assistant
+                  <p className="text-xs text-zinc-400">
+                    Nhatty The Barber Assistant
                   </p>
                 </div>
               </div>
@@ -641,7 +487,11 @@ h-10
 
 w-10
 
+rounded-full
 
+bg-white/10
+
+text-white
 
 flex
 
@@ -649,57 +499,24 @@ items-center
 
 justify-center
 
-
-
-rounded-full
-
-
-
-bg-white/10
-
-
-
-text-white
-
-
-
-hover:bg-red-500/30
-
-
-
-transition
-
-
 "
               >
-                <FaTimes size={18} />
+                <FaTimes />
               </button>
             </div>
 
-            {/* =====================================================
-    CHAT AREA
-===================================================== */}
+            {/* MESSAGES */}
 
             <div
               className="
 
 flex-1
 
-
 overflow-y-auto
 
-
-px-4
-
-py-4
-
-
+p-4
 
 space-y-3
-
-
-nati-ai-scroll
-
 
 "
             >
@@ -726,44 +543,18 @@ px-4
 
 py-3
 
-
 text-sm
-
-leading-6
-
-
 
 ${
   msg.role === "assistant"
-    ? `
-
-mr-auto
-
-bg-white/10
-
-text-zinc-100
-
-`
-    : `
-
-ml-auto
-
-bg-gradient-to-r
-
-from-yellow-400
-
-to-orange-500
-
-text-black
-
-`
+    ? "mr-auto bg-white/10 text-white"
+    : "ml-auto bg-gradient-to-r from-yellow-400 to-orange-500 text-black"
 }
-
 
 `}
                 >
                   {msg.role === "assistant"
-                    ? renderMarkdownContent(msg.content)
+                    ? renderContent(msg.content)
                     : msg.content}
                 </motion.div>
               ))}
@@ -772,31 +563,30 @@ text-black
                 <div
                   className="
 
-w-fit
-
-rounded-2xl
-
 bg-white/10
+
+text-zinc-300
 
 px-4
 
 py-3
 
-text-sm
+rounded-xl
 
-text-zinc-300
+w-fit
+
+text-sm
 
 "
                 >
-                  Nhatty AI is thinking...
+                  Nati AI is thinking...
                 </div>
               )}
 
               <div ref={bottomRef} />
             </div>
-            {/* =====================================================
-    STARTER PROMPTS + IMAGE PREVIEW + INPUT AREA
-===================================================== */}
+
+            {/* STARTERS */}
 
             {messages.length === 1 && (
               <div className="px-4 pb-3 space-y-2">
@@ -805,23 +595,36 @@ text-zinc-300
                     key={prompt}
                     onClick={() => sendMessage(prompt)}
                     className="
-        w-full
-        flex
-        items-center
-        gap-2
-        rounded-full
-        border
-        border-white/10
-        bg-white/5
-        px-4
-        py-2
-        text-left
-        text-xs
-        text-zinc-300
-        transition
-        hover:border-yellow-400/50
-        hover:text-white
-        "
+
+w-full
+
+flex
+
+items-center
+
+gap-2
+
+rounded-full
+
+border
+
+border-white/10
+
+bg-white/5
+
+px-4
+
+py-2
+
+text-xs
+
+text-zinc-300
+
+hover:text-white
+
+transition
+
+"
                   >
                     <FaMagic className="text-yellow-400" />
 
@@ -831,101 +634,68 @@ text-zinc-300
               </div>
             )}
 
+            {/* PREVIEW */}
+
             {preview && (
-              <div
-                className="
-px-4
-pb-2
-"
-              >
-                <div
+              <div className="px-4 pb-2">
+                <img
+                  src={preview}
+                  alt="preview"
                   className="
-relative
-w-fit
-"
-                >
-                  <img
-                    src={preview}
-                    alt="preview"
-                    className="
+
 h-20
+
 w-20
+
 rounded-xl
+
 object-cover
-border
-border-white/20
-"
-                  />
 
-                  <button
-                    onClick={() => {
-                      setPreview(null);
-
-                      setSelectedImage(null);
-                    }}
-                    className="
-absolute
--right-2
--top-2
-h-6
-w-6
-rounded-full
-bg-red-500
-text-white
-flex
-items-center
-justify-center
 "
-                  >
-                    <FaTimes size={12} />
-                  </button>
-                </div>
+                />
               </div>
             )}
 
-            {/* =====================================================
-    INPUT AREA FIXED MOBILE VERSION
-===================================================== */}
+            {/* INPUT */}
 
             <div
               className="
-    shrink-0
-    border-t
-    border-white/10
-    bg-black/95
-    backdrop-blur-xl
-    p-3
-    safe-area-bottom
-  "
+
+border-t
+
+border-white/10
+
+bg-black
+
+p-3
+
+"
             >
               <div
                 className="
-      flex
-      items-center
-      gap-2
-      w-full
-      rounded-full
-      border
-      border-white/10
-      bg-white/5
-      px-3
-      py-2
-    "
-              >
-                {/* IMAGE BUTTON */}
 
-                <label
-                  className="
-        flex
-        items-center
-        justify-center
-        shrink-0
-        cursor-pointer
-        text-yellow-400
-        hover:text-yellow-300
-      "
-                >
-                  <FaImage size={19} />
+flex
+
+items-center
+
+gap-2
+
+rounded-full
+
+bg-white/5
+
+border
+
+border-white/10
+
+px-3
+
+py-2
+
+"
+              >
+                <label className="text-yellow-400 cursor-pointer">
+                  <FaImage />
 
                   <input
                     type="file"
@@ -935,8 +705,6 @@ justify-center
                   />
                 </label>
 
-                {/* TEXT INPUT */}
-
                 <input
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
@@ -945,70 +713,57 @@ justify-center
                       sendMessage();
                     }
                   }}
-                  placeholder="Ask Nati AI anything..."
+                  placeholder="Ask Nati AI..."
                   className="
-        flex-1
-        min-w-0
-        bg-transparent
-        outline-none
-        text-sm
-        text-white
-        placeholder:text-zinc-500
-        px-2
-      "
-                />
 
-                {/* VOICE */}
+flex-1
+
+bg-transparent
+
+outline-none
+
+text-white
+
+text-sm
+
+"
+                />
 
                 <button
                   onClick={startVoice}
-                  className={`
-        shrink-0
-        flex
-        items-center
-        justify-center
-
-        ${listening ? "text-red-400" : "text-zinc-400"}
-
-        transition
-      `}
+                  className={listening ? "text-red-400" : "text-zinc-400"}
                 >
-                  <FaMicrophone size={18} />
+                  <FaMicrophone />
                 </button>
-
-                {/* SEND BUTTON */}
 
                 <button
                   onClick={() => sendMessage()}
                   disabled={loading}
                   className="
-        shrink-0
-        flex
-        items-center
-        justify-center
 
-        h-10
-        w-10
+h-10
 
-        rounded-full
+w-10
 
-        bg-gradient-to-r
-        from-yellow-400
-        to-orange-500
+rounded-full
 
-        text-black
+bg-gradient-to-r
 
-        shadow-lg
+from-yellow-400
 
-        transition
+to-orange-500
 
-        hover:scale-105
+text-black
 
-        disabled:opacity-50
+flex
 
-      "
+items-center
+
+justify-center
+
+"
                 >
-                  <FaPaperPlane size={16} />
+                  <FaPaperPlane />
                 </button>
               </div>
             </div>
