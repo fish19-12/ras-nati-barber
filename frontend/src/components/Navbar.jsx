@@ -136,23 +136,16 @@ const Navbar = () => {
       path: "/",
       icon: <FaHome />,
     },
-
     {
-      name: translations.navbar.contact,
-      path: "/contact",
-      icon: <FaPhoneAlt />,
+      name: translations.navbar.reviews,
+      path: "/reviews",
+      icon: <FaStar />,
     },
 
     {
       name: translations.navbar.gallery,
       path: "/gallery",
       icon: <FaImages />,
-    },
-
-    {
-      name: translations.navbar.reviews,
-      path: "/reviews",
-      icon: <FaStar />,
     },
 
     {
