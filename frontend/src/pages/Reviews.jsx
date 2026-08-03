@@ -1,8 +1,9 @@
 import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import axios from "axios";
+
 import {
   FaStar,
-  FaStarHalfAlt,
   FaRegStar,
   FaQuoteLeft,
   FaCheckCircle,
@@ -11,113 +12,95 @@ import {
   FaChevronLeft,
   FaChevronRight,
 } from "react-icons/fa";
-import axios from "axios";
 
-/* =========================================================
-   LOCAL CACHE CONFIG
-========================================================= */
+import { useLanguage } from "../context/LanguageContext.jsx";
+
+import en from "../translations/en.json";
+import am from "../translations/am.json";
 
 const CACHE_KEY = "nhatty_reviews_cache";
 const CACHE_TIME_KEY = "nhatty_reviews_cache_time";
 
-/* CACHE FOR 24 HOURS */
 const CACHE_DURATION = 1000 * 60 * 60 * 24;
 
 const Reviews = () => {
+  const { language } = useLanguage();
+
+  const translations = language === "AM" ? am : en;
+
   const [reviews, setReviews] = useState([]);
+
   const [loading, setLoading] = useState(true);
 
-  // MODAL
   const [selectedReview, setSelectedReview] = useState(null);
+
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const mountedRef = useRef(true);
 
-  /* =========================================================
-     MOBILE DETECTION
-  ========================================================= */
-
-  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
-
-  /* =========================================================
-     FETCH REVIEWS
-  ========================================================= */
-
   useEffect(() => {
-    mountedRef.current = true;
-
     const controller = new AbortController();
 
-    const loadReviews = async () => {
-      try {
-        /* =========================================
-           1. LOAD CACHE INSTANTLY
-        ========================================= */
+    mountedRef.current = true;
 
-        const cachedReviews = localStorage.getItem(CACHE_KEY);
+    const fetchReviews = async () => {
+      try {
+        const cached = localStorage.getItem(CACHE_KEY);
+
         const cacheTime = localStorage.getItem(CACHE_TIME_KEY);
 
-        if (cachedReviews && cacheTime) {
-          const isCacheValid = Date.now() - Number(cacheTime) < CACHE_DURATION;
+        if (cached && cacheTime) {
+          const valid = Date.now() - Number(cacheTime) < CACHE_DURATION;
 
-          if (isCacheValid) {
-            const parsed = JSON.parse(cachedReviews);
+          if (valid) {
+            const data = JSON.parse(cached);
 
             if (mountedRef.current) {
-              setReviews(parsed);
+              setReviews(data);
+
               setLoading(false);
             }
           }
         }
 
-        /* =========================================
-           2. FETCH FRESH DATA
-        ========================================= */
-
-        const res = await axios.get(
+        const response = await axios.get(
           `${import.meta.env.VITE_API_URL}/api/reviews`,
+
           {
             signal: controller.signal,
-            timeout: 4000,
-            headers: {
-              "Cache-Control": "public",
-            },
+            timeout: 10000,
           },
         );
 
-        let freshReviews = Array.isArray(res.data) ? res.data : [];
+        let data = [];
 
-        /* =========================================
-           PIN FIRST 5 REVIEWS
-        ========================================= */
+        if (Array.isArray(response.data)) {
+          data = response.data;
+        } else if (response.data && Array.isArray(response.data.reviews)) {
+          data = response.data.reviews;
+        } else {
+          console.error("Unexpected reviews response:", response.data);
 
-        freshReviews = [...freshReviews].sort((a, b) => {
+          data = [];
+        }
+        data.sort((a, b) => {
           if (a.pinned && !b.pinned) return -1;
+
           if (!a.pinned && b.pinned) return 1;
+
           return 0;
         });
 
-        /* =========================================
-           UPDATE ONLY IF CHANGED
-        ========================================= */
-
-        const oldData = JSON.stringify(reviews);
-        const newData = JSON.stringify(freshReviews);
-
-        if (oldData !== newData && mountedRef.current) {
-          setReviews(freshReviews);
+        if (mountedRef.current) {
+          setReviews(data);
         }
 
-        /* =========================================
-           SAVE CACHE
-        ========================================= */
-
-        localStorage.setItem(CACHE_KEY, JSON.stringify(freshReviews));
+        localStorage.setItem(CACHE_KEY, JSON.stringify(data));
 
         localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
-      } catch (err) {
-        if (!axios.isCancel(err)) {
-          console.error("Review fetch failed:", err);
+      } catch (error) {
+        if (!axios.isCancel(error)) {
+          console.error("Review fetch error:", error);
         }
       } finally {
         if (mountedRef.current) {
@@ -126,341 +109,409 @@ const Reviews = () => {
       }
     };
 
-    loadReviews();
+    fetchReviews();
 
     return () => {
       mountedRef.current = false;
+
       controller.abort();
     };
   }, []);
 
-  /* =========================================================
-     MODAL FUNCTIONS
-  ========================================================= */
-
-  const openModal = (review, index) => {
+  const openImagePreview = (review, index) => {
     setSelectedReview(review);
+
     setSelectedIndex(index);
-
-    document.body.style.overflow = "hidden";
   };
 
-  const closeModal = () => {
+  const closeImagePreview = () => {
     setSelectedReview(null);
-
-    document.body.style.overflow = "auto";
   };
 
-  const nextReview = () => {
-    const nextIndex = (selectedIndex + 1) % reviews.length;
+  const nextImage = () => {
+    if (!reviews.length) return;
 
-    setSelectedReview(reviews[nextIndex]);
-    setSelectedIndex(nextIndex);
+    const next = (selectedIndex + 1) % reviews.length;
+
+    setSelectedIndex(next);
+
+    setSelectedReview(reviews[next]);
   };
 
-  const prevReview = () => {
-    const prevIndex = (selectedIndex - 1 + reviews.length) % reviews.length;
+  const previousImage = () => {
+    if (!reviews.length) return;
 
-    setSelectedReview(reviews[prevIndex]);
-    setSelectedIndex(prevIndex);
+    const previous = (selectedIndex - 1 + reviews.length) % reviews.length;
+
+    setSelectedIndex(previous);
+
+    setSelectedReview(reviews[previous]);
   };
-
-  /* =========================================================
-     STAR RENDER
-  ========================================================= */
-
-  const renderStars = (rating) => {
-    return Array.from({ length: 5 }, (_, i) => {
-      if (i + 1 <= rating) {
-        return <FaStar key={i} className="text-yellow-400 mr-1" />;
-      }
-
-      if (i + 0.5 === rating) {
-        return <FaStarHalfAlt key={i} className="text-yellow-400 mr-1" />;
-      }
-
-      return <FaRegStar key={i} className="text-yellow-400 mr-1" />;
-    });
-  };
-
   return (
-    <>
-      <section className="relative w-full bg-gradient-to-b from-black via-[#0b0b0b] to-black text-white py-24 px-4 sm:px-6 md:px-12 font-exo overflow-hidden">
-        {/* BACKGROUND GLOW */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-yellow-500/10 blur-[80px] rounded-full pointer-events-none" />
+    <div className="bg-black text-white min-h-screen overflow-x-hidden">
+      {/* ============================
+            HERO SECTION
+      ============================= */}
 
-        {/* HEADER */}
-        <div className="max-w-4xl mx-auto text-center mb-16 relative z-10">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-4xl md:text-6xl font-black mb-6 bg-gradient-to-r from-yellow-300 via-yellow-500 to-yellow-700 bg-clip-text text-transparent"
-          >
-            Client Reviews
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="text-gray-400 text-lg leading-relaxed max-w-3xl mx-auto"
-          >
-            At{" "}
-            <span className="text-yellow-400 font-semibold">
-              Nhatty The Barber
+      <section className="pt-24 pb-12 px-6 text-center">
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: -30,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+          transition={{
+            duration: 0.7,
+          }}
+        >
+          <h1 className="text-4xl md:text-6xl font-black">
+            <span className="text-yellow-400">
+              {translations.reviews.title}
             </span>
-            , we provide premium grooming experiences trusted by influencers,
-            celebrities, and thousands of loyal clients across Ethiopia.
-          </motion.p>
+          </h1>
 
-          <p className="text-gray-500 mt-4">
-            Every haircut is crafted with precision, passion, and creativity.
+          <p className="text-gray-400 max-w-2xl mx-auto mt-5 text-lg">
+            {translations.reviews.description}
           </p>
-        </div>
+        </motion.div>
+      </section>
 
-        {/* STATS */}
-        <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-8 text-center mb-20 relative z-10">
-          {[
-            { value: "10K+", label: "Happy Clients" },
-            { value: "5★", label: "Average Rating" },
-            { value: "100+", label: "Celebrity Clients" },
-            { value: "5+", label: "Years Experience" },
-          ].map((item, i) => (
-            <motion.div
-              key={i}
-              whileHover={!isMobile ? { y: -6 } : {}}
-              className="bg-white/5 border border-white/10 backdrop-blur-md rounded-3xl p-6"
-            >
-              <h2 className="text-3xl font-bold text-yellow-400">
-                {item.value}
-              </h2>
+      {/* ============================
+            REVIEWS GRID
+      ============================= */}
 
-              <p className="text-gray-400 mt-2">{item.label}</p>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* REVIEWS */}
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* LOADING */}
-            {loading &&
-              reviews.length === 0 &&
-              Array.from({ length: 6 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="bg-white/10 rounded-3xl overflow-hidden animate-pulse"
-                >
-                  <div className="w-full h-72 bg-gray-700"></div>
-
-                  <div className="p-6 space-y-3">
-                    <div className="h-4 bg-gray-600 rounded"></div>
-                    <div className="h-4 bg-gray-600 rounded w-2/3"></div>
-                    <div className="h-4 bg-gray-600 rounded w-1/2"></div>
-                  </div>
-                </div>
-              ))}
-
-            {/* REVIEWS */}
+      <section className="max-w-7xl mx-auto px-6 pb-24">
+        {loading ? (
+          <div className="text-center py-20">
+            <p className="text-yellow-400 text-lg">
+              {translations.reviews.loading}
+            </p>
+          </div>
+        ) : reviews.length === 0 ? (
+          <div className="text-center py-20">
+            <p className="text-gray-400 text-lg">
+              {translations.reviews.noReviews}
+            </p>
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {reviews.map((review, index) => (
               <motion.div
-                key={review._id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-                whileHover={!isMobile ? { y: -10 } : {}}
-                className={`group relative rounded-[30px] overflow-hidden border backdrop-blur-md ${
-                  index < 5
-                    ? "border-yellow-400/40 bg-gradient-to-b from-yellow-500/10 to-white/5"
-                    : "border-white/10 bg-white/5"
-                } shadow-2xl`}
+                key={review._id || index}
+                initial={{
+                  opacity: 0,
+                  y: 30,
+                }}
+                whileInView={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                viewport={{
+                  once: true,
+                }}
+                transition={{
+                  duration: 0.5,
+                  delay: index * 0.1,
+                }}
+                className="
+                  relative
+                  bg-white/5
+                  backdrop-blur-xl
+                  border
+                  border-white/10
+                  rounded-3xl
+                  p-6
+                  hover:border-yellow-400/40
+                  transition
+                  "
               >
-                {/* TOP BADGE */}
-                {index < 5 && (
-                  <div className="absolute top-4 left-4 z-20 bg-yellow-400 text-black text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                    TOP REVIEW
+                <FaQuoteLeft
+                  className="
+                    text-yellow-400
+                    text-3xl
+                    mb-5
+                    opacity-70
+                    "
+                />
+
+                {/* REVIEW IMAGE */}
+
+                {review.photoUrl && (
+                  <div className="relative mb-5 group">
+                    <img
+                      src={review.photoUrl}
+                      alt={review.name || "Review"}
+                      loading="lazy"
+                      decoding="async"
+                      onError={(e) => {
+                        e.currentTarget.style.display = "none";
+                      }}
+                      className="
+                        w-full
+                        h-52
+                        object-cover
+                        rounded-2xl
+                        "
+                    />
+
+                    <button
+                      onClick={() => openImagePreview(review, index)}
+                      className="
+                        absolute
+                        inset-0
+                        bg-black/50
+                        opacity-0
+                        group-hover:opacity-100
+                        transition
+                        flex
+                        items-center
+                        justify-center
+                        rounded-2xl
+                        "
+                    >
+                      <FaExpand
+                        className="
+                          text-white
+                          text-2xl
+                          "
+                      />
+                    </button>
                   </div>
                 )}
 
-                {/* IMAGE */}
-                <div className="relative w-full h-80 overflow-hidden">
-                  <img
-                    src={review.photoUrl}
-                    alt={review.name}
-                    loading="lazy"
-                    decoding="async"
-                    className="w-full h-full object-cover"
-                  />
+                {/* STARS */}
 
-                  {/* OVERLAY */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
-
-                  {/* FULL IMAGE BUTTON */}
-                  <button
-                    onClick={() => openModal(review, index)}
-                    className="absolute top-4 right-4 w-12 h-12 rounded-full bg-black/60 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-yellow-400 hover:text-black transition"
-                  >
-                    <FaExpand />
-                  </button>
+                <div className="flex gap-1 mb-4">
+                  {[1, 2, 3, 4, 5].map((star) =>
+                    star <= Number(review.rating || 5) ? (
+                      <FaStar key={star} className="text-yellow-400" />
+                    ) : (
+                      <FaRegStar key={star} className="text-gray-500" />
+                    ),
+                  )}
                 </div>
 
-                {/* CONTENT */}
-                <div className="p-6 flex flex-col justify-between gap-4">
-                  <FaQuoteLeft className="text-yellow-400 text-2xl opacity-70" />
+                {/* COMMENT */}
 
+                <p className="text-gray-300 leading-relaxed mb-5">
+                  {review.comment}
+                </p>
+
+                {/* USER INFO */}
+
+                <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-2xl font-bold text-yellow-400 flex items-center gap-2">
-                      {review.name}
+                    <h3 className="font-bold text-white">{review.name}</h3>
 
-                      <FaCheckCircle className="text-green-400 text-sm" />
-                    </h3>
-
-                    <p className="text-gray-400 text-sm mt-1">{review.role}</p>
-
-                    <p className="text-gray-300 mt-4 leading-relaxed line-clamp-4">
-                      "{review.comment}"
-                    </p>
+                    <p className="text-sm text-yellow-400">{review.role}</p>
                   </div>
 
-                  {/* STARS */}
-                  <div className="flex items-center mt-2">
-                    {renderStars(review.rating)}
-                  </div>
+                  {review.pinned && (
+                    <FaCheckCircle
+                      className="
+                          text-yellow-400
+                          text-xl
+                          "
+                      title="Verified Review"
+                    />
+                  )}
                 </div>
               </motion.div>
             ))}
           </div>
-        </div>
+        )}
       </section>
 
-      {/* MODAL */}
+      {/* ============================
+            IMAGE PREVIEW MODAL
+      ============================= */}
+
       <AnimatePresence>
         {selectedReview && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-md flex items-center justify-center"
+            initial={{
+              opacity: 0,
+            }}
+            animate={{
+              opacity: 1,
+            }}
+            exit={{
+              opacity: 0,
+            }}
+            className="
+            fixed
+            inset-0
+            z-50
+            bg-black/90
+            flex
+            items-center
+            justify-center
+            p-6
+            "
+            onClick={closeImagePreview}
           >
-            {/* CLOSE */}
-            <button
-              onClick={closeModal}
-              className="fixed top-3 right-3 sm:top-6 sm:right-6 z-50 w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-black/50 border border-white/10 hover:bg-red-500 transition flex items-center justify-center text-white text-lg sm:text-xl backdrop-blur-md"
-            >
-              <FaTimes />
-            </button>
-
-            {/* PREV */}
-            <button
-              onClick={prevReview}
-              className="fixed left-2 sm:left-6 top-1/2 -translate-y-1/2 z-50 w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-black/50 border border-white/10 hover:bg-yellow-400 hover:text-black transition hidden sm:flex items-center justify-center text-white backdrop-blur-md"
-            >
-              <FaChevronLeft />
-            </button>
-
-            {/* NEXT */}
-            <button
-              onClick={nextReview}
-              className="fixed right-2 sm:right-6 top-1/2 -translate-y-1/2 z-50 w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-black/50 border border-white/10 hover:bg-yellow-400 hover:text-black transition hidden sm:flex items-center justify-center text-white backdrop-blur-md"
-            >
-              <FaChevronRight />
-            </button>
-
-            {/* MOBILE NAV */}
-            <div className="sm:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex gap-4">
-              <button
-                onClick={prevReview}
-                className="w-12 h-12 rounded-full bg-black/60 border border-white/10 text-white flex items-center justify-center backdrop-blur-md"
-              >
-                <FaChevronLeft />
-              </button>
-
-              <button
-                onClick={nextReview}
-                className="w-12 h-12 rounded-full bg-black/60 border border-white/10 text-white flex items-center justify-center backdrop-blur-md"
-              >
-                <FaChevronRight />
-              </button>
-            </div>
-
-            {/* FULL IMAGE VIEW */}
             <motion.div
               initial={{
-                scale: 0.95,
-                opacity: 0,
+                scale: 0.8,
               }}
               animate={{
                 scale: 1,
-                opacity: 1,
               }}
               exit={{
-                scale: 0.95,
-                opacity: 0,
+                scale: 0.8,
               }}
-              transition={{ duration: 0.25 }}
-              className="relative w-full h-full flex items-center justify-center p-3 sm:p-6"
+              className="
+              relative
+              max-w-5xl
+              w-full
+              "
+              onClick={(e) => e.stopPropagation()}
             >
-              {/* IMAGE */}
+              {" "}
+              {/* CLOSE BUTTON */}
+              <button
+                onClick={closeImagePreview}
+                className="
+                absolute
+                -top-12
+                right-0
+                text-white
+                text-3xl
+                hover:text-yellow-400
+                transition
+                "
+                aria-label="Close image"
+              >
+                <FaTimes />
+              </button>
+              {/* PREVIOUS IMAGE */}
+              {reviews.length > 1 && (
+                <button
+                  onClick={previousImage}
+                  className="
+                    absolute
+                    left-2
+                    top-1/2
+                    -translate-y-1/2
+                    bg-black/60
+                    text-white
+                    w-12
+                    h-12
+                    rounded-full
+                    flex
+                    items-center
+                    justify-center
+                    hover:bg-yellow-400
+                    hover:text-black
+                    transition
+                    z-10
+                    "
+                  aria-label="Previous image"
+                >
+                  <FaChevronLeft />
+                </button>
+              )}
+              {/* FULL IMAGE */}
               <img
                 src={selectedReview.photoUrl}
-                alt={selectedReview.name}
+                alt="Review Preview"
                 className="
-                  max-w-full
-                  max-h-[70vh]
-                  sm:max-h-[85vh]
-                  object-contain
-                  rounded-2xl
-                  shadow-[0_0_60px_rgba(255,215,0,0.12)]
+                w-full
+                max-h-[85vh]
+                object-contain
+                rounded-3xl
                 "
               />
-
-              {/* INFO CARD */}
-              <div
-                className="
-                  absolute
-                  bottom-4
-                  left-1/2
-                  -translate-x-1/2
-                  w-[95%]
-                  sm:w-auto
-                  max-w-2xl
-                  bg-black/55
-                  backdrop-blur-md
-                  border
-                  border-white/10
-                  rounded-3xl
-                  p-4
-                  sm:p-6
-                "
-              >
-                <div className="flex items-start gap-3">
-                  <FaQuoteLeft className="text-yellow-400 text-xl sm:text-2xl mt-1 flex-shrink-0" />
-
-                  <div className="min-w-0">
-                    <h2 className="text-xl sm:text-3xl font-black text-yellow-400 leading-tight">
-                      {selectedReview.name}
-                    </h2>
-
-                    <p className="text-gray-400 text-sm sm:text-base mt-1">
-                      {selectedReview.role}
-                    </p>
-
-                    <div className="flex items-center mt-3 flex-wrap">
-                      {renderStars(selectedReview.rating)}
-                    </div>
-
-                    <p className="text-gray-300 text-sm sm:text-base leading-relaxed mt-4 max-h-[120px] sm:max-h-[180px] overflow-y-auto pr-1">
-                      "{selectedReview.comment}"
-                    </p>
-                  </div>
-                </div>
-              </div>
+              {/* NEXT IMAGE */}
+              {reviews.length > 1 && (
+                <button
+                  onClick={nextImage}
+                  className="
+                    absolute
+                    right-2
+                    top-1/2
+                    -translate-y-1/2
+                    bg-black/60
+                    text-white
+                    w-12
+                    h-12
+                    rounded-full
+                    flex
+                    items-center
+                    justify-center
+                    hover:bg-yellow-400
+                    hover:text-black
+                    transition
+                    z-10
+                    "
+                  aria-label="Next image"
+                >
+                  <FaChevronRight />
+                </button>
+              )}
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+
+      {/* ============================
+            CTA SECTION
+      ============================= */}
+
+      <section className="text-center pb-20 px-6">
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: 30,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{
+            once: true,
+          }}
+        >
+          <h2
+            className="
+            text-3xl
+            md:text-5xl
+            font-bold
+            text-yellow-400
+            mb-5
+            "
+          >
+            {translations.reviews.ctaTitle}
+          </h2>
+
+          <p className="text-gray-400 max-w-xl mx-auto mb-8">
+            {translations.reviews.ctaDescription}
+          </p>
+
+          <a
+            href="/booking"
+            className="
+            inline-block
+            bg-gradient-to-r
+            from-yellow-400
+            to-orange-500
+            text-black
+            font-bold
+            px-10
+            py-4
+            rounded-full
+            hover:scale-105
+            transition
+            "
+          >
+            {translations.reviews.bookAppointment}
+          </a>
+        </motion.div>
+      </section>
+    </div>
   );
 };
 

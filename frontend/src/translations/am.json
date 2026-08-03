@@ -1,0 +1,373 @@
+{
+  "navbar": {
+    "home": "መነሻ",
+    "tutorial": "መመሪያ",
+    "gallery": "ማዕከለ ስዕል",
+    "reviews": "ግምገማዎች",
+    "about": "ስለ እኛ",
+    "services": "አገልግሎቶች",
+    "contact": "ያግኙን",
+    "bookNow": "አሁን ይዘዙ",
+    "bookAppointment": "ቀጠሮ ያስይዙ",
+    "languageEnglish": "እንግሊዝኛ",
+    "languageAmharic": "አማርኛ"
+  },
+
+  "footer": {
+    "description": "በአዲስ አበባ የሚገኝ ዘመናዊ የባርበር አገልግሎት። Nhatty The Barber በሙያዊ የፀጉር አቆራረጥ፣ የፂም እንክብካቤ እና የቅንጦት የባርበር ተሞክሮዎች በደንበኞች የታመነ ነው።",
+
+    "tags": {
+      "skinFade": "ስኪን ፌድ",
+      "vip": "ልዩ አገልግሎት",
+      "beard": "የፂም እንክብካቤ"
+    },
+
+    "contactTitle": "የመገናኛ መረጃ",
+    "callUs": "ይደውሉልን",
+    "location": "አድራሻ",
+    "openingHours": "የመክፈቻ ሰዓት",
+
+    "addressLine1": "አዲስ አበባ፣ ወሎ ሰፈር",
+    "addressLine2": "ጋራድ ሞል፣ 2ኛ ፎቅ",
+
+    "hours": "በየቀኑ፡ ከ12፡00 ቀን እስከ 4፡00 ሌሊት",
+
+    "viewMap": "በ Google Maps ይመልከቱ",
+
+    "followExplore": "ይከተሉን እና ያስሱ",
+
+    "copyright": "© 2026 Nhatty The Barber። ሁሉም መብቶች የተጠበቁ ናቸው።",
+
+    "bottomDescription": "በኢትዮጵያ የላቀ የባርበር ሱቅ። የቅንጦት የፀጉር አቆራረጥ፣ የፂም አሰራር፣ ዘመናዊ ስታይል እና ልዩ አገልግሎት በአዲስ አበባ ይሰጣል።"
+  },
+
+  "contact": {
+    "title": "Ras Natiን ያግኙ",
+
+    "description": "ለልዩ የፀጉር እና የፂም እንክብካቤ አገልግሎት ወደ Ras Nati Barber Shop ይምጡ። ባለሙያ ባርበሮቻችን ዘመናዊ የፀጉር አቆራረጥ፣ የተለያዩ ስታይሎች እና የቅንጦት የባርበር ተሞክሮ ይሰጣሉ።",
+
+    "getInTouch": "ያግኙን",
+
+    "addressLine1": "አዲስ አበባ – ወሎ ሰፈር",
+
+    "addressLine2": "ጋራድ ሞል፣ 2ኛ ፎቅ",
+
+    "hours": "በየቀኑ ከ9፡00 ጠዋት – 9፡00 ማታ",
+
+    "callNow": "አሁን ይደውሉ",
+
+    "whatsapp": "ዋትስአፕ",
+
+    "ctaTitle": "ለልዩ የፀጉር አቆራረጥ ዝግጁ ነዎት?",
+
+    "ctaDescription": "ቀጠሮዎን ዛሬ ያስይዙ እና የ Ras Nati ልዩ ተሞክሮን ይለማመዱ።",
+
+    "bookAppointment": "ቀጠሮ ያስይዙ"
+  },
+  "services": {
+    "heroTitle": "የእኛ",
+    "heroHighlight": "አገልግሎቶች",
+    "heroDescription": "በ Nhatty The Barber ዘመናዊ እና የቅንጦት የባርበር ተሞክሮ ያግኙ።",
+
+    "vip": {
+      "title": "VIP አገልግሎት",
+      "subtitle": "ልዩ የፀጉር እና የፂም እንክብካቤ",
+      "badge": "VIP"
+    },
+
+    "vvip": {
+      "title": "VVIP አገልግሎት",
+      "subtitle": "የቅንጦት ልዩ አገልግሎት",
+      "badge": "VVIP"
+    },
+
+    "reborn": {
+      "title": "Nhatty Reborn Cut",
+      "subtitle": "የቀድሞ መልክን ወደ አዲስ ስታይል መቀየር",
+      "badge": "ልዩ"
+    },
+
+    "outdoor": {
+      "title": "የውጭ አገልግሎት",
+      "subtitle": "በፈለጉት ቦታ አገልግሎት",
+      "badge": "ሞባይል"
+    },
+
+    "city": {
+      "title": "ከተማ ለከተማ አገልግሎት",
+      "subtitle": "በጉዞ ላይ የሚሰጥ የባርበር አገልግሎት",
+      "badge": "ጉዞ"
+    },
+
+    "items": {
+      "tea": "ሻይ",
+      "coffee": "ቡና",
+      "water": "ውሃ",
+      "juice": "ጁስ",
+      "macchiato": "ማኪያቶ",
+      "shampoo": "ሻምፖ",
+      "faceSteam": "የፊት ስቲም",
+      "hairTreatment": "የፀጉር ህክምና",
+      "curling": "ከርሊንግ",
+      "hairColor": "የፀጉር ቀለም",
+      "specialHairColor": "ልዩ የፀጉር ቀለም",
+      "faceMask": "የፊት ማስክ",
+      "hairFiber": "የፀጉር ፋይበር",
+      "realHairFiber": "እውነተኛ የፀጉር ፋይበር",
+      "pedicure": "ፔዲኪዩር",
+      "normalHairFiber": "መደበኛ የፀጉር ፋይበር",
+      "rebornCut": "Reborn አቆራረጥ"
+    },
+
+    "whyTitle": "ለምን Nhatty The Barber ይምረጡ?",
+
+    "modernStyles": "ዘመናዊ ስታይሎች",
+
+    "luxuryExperience": "የቅንጦት ተሞክሮ",
+
+    "premiumService": "ከፍተኛ ጥራት ያለው አገልግሎት",
+
+    "ctaTitle": "አዲስ ስታይል ለማግኘት ዝግጁ ነዎት?",
+
+    "bookAppointment": "ቀጠሮ ያስይዙ"
+  },
+  "about": {
+    "heroTitle": "ስለ",
+
+    "heroDescription": "ትክክለኛ አቆራረጥን ከቅንጦት ተሞክሮ ጋር የሚያጣምር ዘመናዊ የባርበር አገልግሎት። በብዙ የቅጥ አዋቂዎች እና ደንበኞች የታመነ።",
+
+    "founderRole": "መስራች እና ዋና ባርበር",
+
+    "meet": "ይወቁ",
+
+    "storyOne": "የ Nhatty The Barber መስራች ናቲ በትክክለኛነት፣ በስታይል እና በጥራት ላይ የተመሰረተ ብራንድ ገንብቷል። የጀመረው ፍላጎት ዛሬ በብዙ ደንበኞች የሚታመን የቅንጦት የእንክብካቤ ማዕከል ሆኗል።",
+
+    "storyTwo": "በዘመናዊ ፌድ፣ የፂም አቀራረጥ እና የፀጉር አገልግሎት ላይ ባለው ልምድ እያንዳንዱ አቆራረጥ በፈጠራ፣ በችሎታ እና በጥንቃቄ ይሰራል።",
+
+    "storyThree": "የ Nhatty The Barber ራዕይ ቀላል ነው፤ እያንዳንዱ ደንበኛ ከጉብኝቱ በኋላ በራስ መተማመን፣ በአዲስ ስሜት እና በልዩ መልክ እንዲወጣ ማድረግ።",
+
+    "shopTitle": "የእኛ ሱቅ ውስጥ",
+
+    "shopDescription": "ለከፍተኛ የባርበር ተሞክሮ የተዘጋጀ ዘመናዊ፣ ምቹ እና ልዩ አካባቢ።",
+
+    "premiumAtmosphere": "የቅንጦት አካባቢ",
+
+    "whyChoose": "ለምን እኛን ይመርጣሉ?",
+
+    "highlights": {
+      "reputation": {
+        "title": "የታወቀ ስም",
+        "desc": "በታዋቂ ሰዎች እና በዓለም አቀፍ ደንበኞች የታመነ የላቀ የባርበር አገልግሎት።"
+      },
+
+      "barbers": {
+        "title": "ልዩ ችሎታ ያላቸው ባርበሮች",
+        "desc": "ዘመናዊ ስታይልን ከባህላዊ የፀጉር አቆራረጥ ጋር የሚያጣምሩ ባለሙያዎች።"
+      },
+
+      "clients": {
+        "title": "ዓለም አቀፍ ደንበኞች",
+        "desc": "ከፍተኛ የጥራት የባርበር ተሞክሮ በሚፈልጉ ደንበኞች የታመነ።"
+      },
+
+      "luxury": {
+        "title": "የቅንጦት ተሞክሮ",
+        "desc": "እያንዳንዱ አገልግሎት በጥንቃቄ፣ በፍጹምነት እና በልዩ ትኩረት ይዘጋጃል።"
+      }
+    },
+
+    "ctaTitle": "ምርጥ መልክዎን ለማግኘት ዝግጁ ነዎት?",
+
+    "ctaDescription": "ዛሬ ቀጠሮዎን ያስይዙ እና የላቀ የባርበር ተሞክሮ ያግኙ።",
+
+    "bookNow": "አሁን ይዘዙ"
+  },
+  "reviews": {
+    "title": "የደንበኞቻችን ምስክርነት",
+    "description": "ደንበኞቻችን ስለ Nhatty The Barber የላቀ የፀጉር እና የእንክብካቤ አገልግሎት ያላቸውን ልምድ ይመልከቱ።",
+    "loading": "ግምገማዎች በመጫን ላይ...",
+    "noReviews": "እስካሁን ምንም ግምገማ የለም።",
+    "ctaTitle": "ለልዩ የፀጉር አቆራረጥ ዝግጁ ነዎት?",
+    "ctaDescription": "ቀጠሮዎን ዛሬ ያስይዙ እና የላቀ የባርበር አገልግሎት ይለማመዱ።",
+    "bookAppointment": "ቀጠሮ ያስይዙ"
+  },
+  "gallery": {
+    "title": "ናቲ ባርበር",
+    "subtitle": "የቅንጦት የፀጉር ቅጥ ስብስብ",
+    "description": "በፍቅር፣ በትክክለኛነት እና በሙያ የተሰሩ ዘመናዊ የፀጉር ቅጦች፣ ፌድ ስታይሎች እና ልዩ የግል ማስዋቢያ ስራዎችን ይመልከቱ።",
+
+    "loading": "ጋለሪው በመጫን ላይ ነው...",
+
+    "topStyle": "ምርጥ ቅጥ",
+
+    "previewStyle": "ቅጡን ይመልከቱ",
+
+    "showMore": "ተጨማሪ ይመልከቱ",
+
+    "premiumText": "ከNHATTY THE BARBER የተዘጋጁ የሙያ የፀጉር ቅጥ ሀሳቦች።",
+
+    "bookStyle": "ይህን ቅጥ ይያዙ"
+  },
+  "hero": {
+    "badge": "በኢትዮጵያ ዘመናዊ የፀጉር አሰራር ልምድ",
+
+    "typewriter": [
+      "ናቲ የፀጉር ባለሙያ",
+      "የላቀ የውበት እና የእንክብካቤ ልምድ",
+      "ዘመናዊ የፀጉር ቅጦች እና ንጹህ አሰራሮች",
+      "በኢትዮጵያ ምርጥ የፀጉር ባለሙያ",
+      "የቅንጦት የወንዶች የውበት ልምድ"
+    ],
+
+    "bookAppointment": "ቀጠሮ ያስይዙ",
+
+    "viewServices": "አገልግሎቶችን ይመልከቱ",
+
+    "tagline": ["መተማመን", "ቅጥ", "ትክክለኛነት", "ውበት"],
+
+    "scroll": "ይመልከቱ"
+  },
+  "booking": {
+    "title": "ቀጠሮ ያስይዙ",
+
+    "badge": "የቅንጦት ቀጠሮ ስርዓት",
+
+    "description": "ለልዩ ደንበኞች የተዘጋጀ የቅንጦት የባርበር እና የውበት ተሞክሮ።",
+
+    "customerInformation": "የደንበኛ መረጃ",
+
+    "fullName": "ሙሉ ስም",
+
+    "phoneNumber": "ስልክ ቁጥር",
+
+    "chooseService": "አገልግሎት ይምረጡ",
+
+    "services": {
+      "vip": "VIP አገልግሎት",
+      "vvip": "VVIP አገልግሎት",
+      "reborn": "Nhatty Reborn",
+      "outdoor": "የቤት አገልግሎት",
+      "city": "ከተማ ለከተማ"
+    },
+
+    "serviceDescription": {
+      "vip": "ልዩ የፀጉር እና የውበት እንክብካቤ",
+      "vvip": "የቅንጦት ልዩ አገልግሎት",
+      "reborn": "ሙሉ የመልክ ለውጥ",
+      "outdoor": "በፈለጉት ቦታ አገልግሎት",
+      "city": "በጉዞ የሚሰጥ የባርበር አገልግሎት"
+    },
+
+    "outdoor": {
+      "title": "ከቤት ወደ ቤት አገልግሎት",
+
+      "description": "በመረጡት ቦታ የሚሰጥ ልዩ አገልግሎት",
+
+      "warning": "የቤት አገልግሎት ከ7 ቀን በፊት መያዝ አለበት።",
+
+      "address": "የደንበኛ የቤት አድራሻ"
+    },
+
+    "city": {
+      "title": "ከተማ ለከተማ አገልግሎት",
+
+      "description": "በጉዞ የሚሰጥ የባርበር ተሞክሮ",
+
+      "warning": "ቢያንስ 15 ቀን ቀድመው ይያዙ።",
+
+      "location": "የደንበኛ ከተማ",
+
+      "date": "የሚፈለግበት ቀን"
+    },
+
+    "schedule": "የቀጠሮ ጊዜ",
+
+    "date": "ቀን",
+
+    "period": "የጊዜ ክፍል",
+
+    "choosePeriod": "ጊዜ ይምረጡ",
+
+    "morning": "ጠዋት",
+
+    "afternoon": "ከሰዓት",
+
+    "evening": "ማታ",
+
+    "reserved": "ተይዟል",
+
+    "payment": "ክፍያ",
+
+    "requiredDeposit": "የሚያስፈልግ ቅድመ ክፍያ",
+
+    "paymentScreenshot": "የክፍያ ማረጋገጫ",
+
+    "uploadScreenshot": "የክፍያ ስክሪንሾት ይጫኑ",
+
+    "uploadInfo": "JPG PNG WEBP ከ10MB በታች",
+
+    "confirmBooking": "ቀጠሮውን ያረጋግጡ",
+
+    "submitting": "በመላክ ላይ...",
+
+    "success": {
+      "title": "ቀጠሮዎ ተረጋግጧል",
+
+      "thankYou": "እናመሰግናለን",
+
+      "service": "አገልግሎት",
+
+      "date": "ቀን",
+
+      "time": "ሰዓት",
+
+      "policy": "የቀጠሮ ህግ",
+
+      "policyText": "እባክዎ 20 ደቂቃ ቀድመው ይድረሱ።",
+
+      "policyAmharic": "ደንበኞች 20 ደቂቃ ቀድመው መገኘት አለባቸው።",
+
+      "done": "ጨርስ"
+    },
+
+    "validation": {
+      "name": "እባክዎ ሙሉ ስምዎን ያስገቡ",
+
+      "phone": "እባክዎ ስልክ ቁጥር ያስገቡ",
+
+      "service": "እባክዎ አገልግሎት ይምረጡ",
+
+      "date": "እባክዎ ቀን ይምረጡ",
+
+      "period": "እባክዎ የጊዜ ክፍል ይምረጡ",
+
+      "time": "እባክዎ ሰዓት ይምረጡ",
+
+      "payment": "የክፍያ ማረጋገጫ ያስፈልጋል",
+
+      "address": "እባክዎ የቤት አድራሻ ያስገቡ",
+
+      "city": "የከተማ መረጃን ሙሉ ያድርጉ"
+    },
+
+    "messages": {
+      "copied": "ተቀድቷል!",
+
+      "processing": "ምስሉ በመዘጋጀት ላይ...",
+
+      "uploaded": "የክፍያ ማረጋገጫ ተጫኗል",
+
+      "invalidImage": "ትክክለኛ ምስል ይጫኑ",
+
+      "largeImage": "ምስሉ ከ10MB በታች መሆን አለበት",
+
+      "uploadFailed": "መጫን አልተሳካም",
+
+      "slotBooked": "ይህ ሰዓት ተይዟል። ሌላ ሰዓት ይምረጡ።",
+
+      "confirmed": "ቀጠሮዎ ተረጋግጧል!",
+
+      "failed": "ቀጠሮ ማስያዝ አልተሳካም። እንደገና ይሞክሩ።"
+    }
+  }
+}

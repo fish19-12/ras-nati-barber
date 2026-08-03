@@ -1,0 +1,348 @@
+{
+  "navbar": {
+    "home": "Home",
+    "tutorial": "Tutorial",
+    "gallery": "Gallery",
+    "reviews": "Reviews",
+    "about": "About",
+    "services": "Services",
+    "contact": "Contact",
+    "bookNow": "Book Now",
+    "bookAppointment": "Book Appointment",
+    "languageEnglish": "English",
+    "languageAmharic": "Amharic"
+  },
+
+  "footer": {
+    "description": "Premium barber services in Addis Ababa Ethiopia. Nhatty The Barber is trusted by influencers, celebrities, and loyal clients for modern fades, luxury haircuts, beard grooming, and VIP barber experiences.",
+
+    "tags": {
+      "skinFade": "Skin Fades",
+      "vip": "VIP Service",
+      "beard": "Beard Grooming"
+    },
+
+    "contactTitle": "Contact Information",
+    "callUs": "Call Us",
+    "location": "Location",
+    "openingHours": "Opening Hours",
+
+    "addressLine1": "Addis Ababa, Welo Sefer",
+    "addressLine2": "Garad Mall – 2nd Floor",
+
+    "hours": "Daily: 12:00 PM – 4:00 AM",
+
+    "viewMap": "View On Google Maps",
+
+    "followExplore": "Follow & Explore",
+
+    "copyright": "© 2026 Nhatty The Barber. All rights reserved.",
+
+    "bottomDescription": "Best barber shop in Ethiopia offering luxury haircuts, premium grooming, skin fades, beard styling, and VIP barber experiences in Addis Ababa."
+  },
+
+  "contact": {
+    "title": "Contact Ras Nati",
+
+    "description": "Visit Ras Nati Barber Shop for premium grooming services. Our professional barbers provide modern fades, stylish haircuts, beard grooming, and luxury barber experiences trusted by clients in Addis Ababa.",
+
+    "getInTouch": "Get in Touch",
+
+    "addressLine1": "Addis Ababa – Welo Sefer",
+
+    "addressLine2": "Garad Mall, 2nd Floor",
+
+    "hours": "Open Daily: 9:00 AM – 9:00 PM",
+
+    "callNow": "Call Now",
+
+    "whatsapp": "WhatsApp",
+
+    "ctaTitle": "Ready for Your Premium Cut?",
+
+    "ctaDescription": "Book your appointment today and experience the Ras Nati difference.",
+
+    "bookAppointment": "Book Appointment"
+  },
+  "services": {
+    "heroTitle": "Our",
+    "heroHighlight": "Services",
+    "heroDescription": "Premium grooming experience at Nhatty The Barber.",
+
+    "vip": {
+      "title": "VIP Service",
+      "subtitle": "Premium Grooming Experience",
+      "badge": "VIP"
+    },
+
+    "vvip": {
+      "title": "VVIP Service",
+      "subtitle": "Luxury Elite Treatment",
+      "badge": "VVIP"
+    },
+
+    "reborn": {
+      "title": "Nhatty Reborn Cut",
+      "subtitle": "Old To Young Transformation",
+      "badge": "Exclusive"
+    },
+
+    "outdoor": {
+      "title": "Outdoor Service",
+      "subtitle": "At Your Location",
+      "badge": "Mobile"
+    },
+
+    "city": {
+      "title": "City To City Service",
+      "subtitle": "Travel Grooming",
+      "badge": "Travel"
+    },
+
+    "items": {
+      "tea": "Tea",
+      "coffee": "Coffee",
+      "water": "Water",
+      "juice": "Juice",
+      "macchiato": "Macchiato",
+      "shampoo": "Shampoo",
+      "faceSteam": "Face Steam",
+      "hairTreatment": "Hair Treatment",
+      "curling": "Curling",
+      "hairColor": "Hair Color",
+      "specialHairColor": "Special Hair Color",
+      "faceMask": "Face Mask",
+      "hairFiber": "Hair Fiber",
+      "realHairFiber": "Real Hair Fiber",
+      "pedicure": "Pedicure",
+      "normalHairFiber": "Normal Hair Fiber",
+      "rebornCut": "Reborn Cut"
+    },
+
+    "whyTitle": "Why Choose Nhatty The Barber?",
+    "modernStyles": "Modern Styles",
+    "luxuryExperience": "Luxury Experience",
+    "premiumService": "Premium Service",
+
+    "ctaTitle": "Ready For Your Transformation?",
+    "bookAppointment": "Book Appointment"
+  },
+  "about": {
+    "heroTitle": "About",
+
+    "heroDescription": "Where precision meets luxury. A world-class barber experience trusted by style leaders and global clients.",
+
+    "founderRole": "Founder & Master Barber",
+
+    "meet": "Meet",
+
+    "storyOne": "Founder of Nhatty The Barber, Nati built a brand that represents precision, style, and excellence. What started as passion has grown into a premium grooming destination trusted by modern professionals and style leaders.",
+
+    "storyTwo": "With years of experience in advanced fades, beard sculpting, and modern grooming techniques, every haircut is created with creativity, skill, and attention to detail.",
+
+    "storyThree": "The vision behind Nhatty The Barber is simple: create a luxury experience where every client feels confident, refreshed, and elevated after every visit.",
+
+    "shopTitle": "Inside Our Shop",
+
+    "shopDescription": "A modern, stylish, and comfortable environment designed for premium grooming.",
+
+    "premiumAtmosphere": "Premium Atmosphere",
+
+    "whyChoose": "Why Choose Us",
+
+    "highlights": {
+      "reputation": {
+        "title": "Legendary Reputation",
+        "desc": "Recognized by celebrities and international clients for unmatched grooming excellence."
+      },
+
+      "barbers": {
+        "title": "Elite Barbers",
+        "desc": "Highly skilled professionals mastering modern trends and timeless styles."
+      },
+
+      "clients": {
+        "title": "Global Clients",
+        "desc": "Trusted by clients worldwide who demand premium grooming experiences."
+      },
+
+      "luxury": {
+        "title": "Luxury Experience",
+        "desc": "Every service is crafted with precision, care, and premium attention."
+      }
+    },
+
+    "ctaTitle": "Ready For Your Best Look?",
+
+    "ctaDescription": "Book your appointment today and experience premium grooming.",
+
+    "bookNow": "Book Now"
+  },
+  "reviews": {
+    "title": "Customer Reviews",
+    "description": "See what our clients say about Nhatty The Barber premium grooming experience.",
+    "loading": "Loading reviews...",
+    "noReviews": "No reviews available yet.",
+    "ctaTitle": "Ready For Your Premium Look?",
+    "ctaDescription": "Book your appointment today and experience professional barber service.",
+    "bookAppointment": "Book Appointment"
+  },
+  "gallery": {
+    "title": "NHATTY THE BARBER",
+    "subtitle": "Luxury Haircut Collection",
+    "description": "Discover elite fades, modern styles, sharp lineups, and premium grooming artistry crafted with passion and precision.",
+    "loading": "LOADING GALLERY",
+    "topStyle": "TOP STYLE",
+    "previewStyle": "Preview Style",
+    "showMore": "Show More",
+    "premiumText": "Premium haircut inspiration from NHATTY THE BARBER.",
+    "bookStyle": "Book This Style"
+  },
+  "hero": {
+    "badge": "Premium Barber Experience In Ethiopia",
+
+    "typewriter": [
+      "Nhatty The Barber",
+      "Premium Grooming Experience",
+      "Modern Cuts & Clean Styles",
+      "Best Barber In Ethiopia",
+      "Luxury Barber Experience"
+    ],
+
+    "bookAppointment": "Book Appointment",
+
+    "viewServices": "View Services",
+
+    "tagline": ["Confidence", "Style", "Precision", "Luxury"],
+
+    "scroll": "Scroll"
+  },
+  "booking": {
+    "title": "Book Appointment",
+
+    "badge": "Luxury Booking System",
+
+    "description": "Premium barber experience with luxury grooming services designed for elite clients.",
+
+    "customerInformation": "Customer Information",
+
+    "fullName": "Full Name",
+
+    "phoneNumber": "Phone Number",
+
+    "chooseService": "Choose Service",
+
+    "services": {
+      "vip": "VIP Service",
+      "vvip": "VVIP Service",
+      "reborn": "Nhatty Reborn",
+      "outdoor": "Outdoor",
+      "city": "City To City"
+    },
+
+    "serviceDescription": {
+      "vip": "Premium Grooming Experience",
+      "vvip": "Luxury Elite Service",
+      "reborn": "Complete Transformation",
+      "outdoor": "Service At Your Home",
+      "city": "Travel Grooming Service"
+    },
+
+    "outdoor": {
+      "title": "Home To Home Service",
+      "description": "Premium service at your location",
+      "warning": "Outdoor service must be booked 7 days before.",
+      "address": "Customer home address"
+    },
+
+    "city": {
+      "title": "City To City Service",
+      "description": "Travel grooming experience",
+      "warning": "Book at least 15 days before.",
+      "location": "Customer city",
+      "date": "Required date"
+    },
+
+    "schedule": "Appointment Schedule",
+
+    "date": "Date",
+
+    "period": "Period",
+
+    "choosePeriod": "Choose Period",
+
+    "morning": "Morning",
+
+    "afternoon": "Afternoon",
+
+    "evening": "Evening",
+
+    "reserved": "Reserved",
+
+    "payment": "Payment",
+
+    "requiredDeposit": "Required Deposit",
+
+    "paymentScreenshot": "Payment Screenshot",
+
+    "uploadScreenshot": "Upload Payment Screenshot",
+
+    "uploadInfo": "JPG PNG WEBP max 10MB",
+
+    "confirmBooking": "Confirm Booking",
+
+    "submitting": "Submitting...",
+
+    "success": {
+      "title": "Booking Confirmed",
+
+      "thankYou": "Thank you",
+
+      "service": "Service",
+
+      "date": "Date",
+
+      "time": "Time",
+
+      "policy": "Appointment Policy",
+
+      "policyText": "Please arrive 20 minutes early.",
+
+      "policyAmharic": "ደንበኞች 20 ደቂቃ ቀድመው መገኘት አለባቸው።",
+
+      "done": "Done"
+    },
+
+    "validation": {
+      "name": "Please enter your full name",
+
+      "phone": "Please enter your phone number",
+
+      "service": "Please select a service",
+
+      "date": "Please select appointment date",
+
+      "period": "Please select time period",
+
+      "time": "Please select appointment time",
+
+      "payment": "Payment screenshot is required",
+
+      "address": "Please enter your home address",
+
+      "city": "Complete city-to-city information"
+    },
+
+    "messages": {
+      "copied": "Copied!",
+      "processing": "Processing image...",
+      "uploaded": "Screenshot uploaded",
+      "invalidImage": "Please upload a valid image",
+      "largeImage": "Image must be below 10MB",
+      "uploadFailed": "Upload failed",
+      "slotBooked": "This time slot is already booked. Please choose another time.",
+      "confirmed": "Booking Confirmed!",
+      "failed": "Booking failed. Please try again."
+    }
+  }
+}

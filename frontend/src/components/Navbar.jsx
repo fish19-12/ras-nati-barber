@@ -16,17 +16,29 @@ import {
   FaCut,
   FaPhoneAlt,
 } from "react-icons/fa";
+
 import { Globe, ChevronDown } from "lucide-react";
 
+import { useLanguage } from "../context/LanguageContext.jsx";
+
+import en from "../translations/en.json";
+import am from "../translations/am.json";
+
 const Navbar = () => {
+  const { language, setLanguage } = useLanguage();
+
+  const translations = language === "AM" ? am : en;
+
   const [scrolled, setScrolled] = useState(false);
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [language, setLanguage] = useState("EN");
+
   const [languageOpen, setLanguageOpen] = useState(false);
 
   const location = useLocation();
 
-  /* ---------------- SCROLL EFFECT ---------------- */
+  /* ================= SCROLL EFFECT ================= */
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 40);
@@ -39,85 +51,124 @@ const Navbar = () => {
     };
   }, []);
 
-  /* ---------------- CLOSE MENU ON ROUTE CHANGE ---------------- */
+  /* ================= CLOSE MOBILE MENU ================= */
+
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [location.pathname]);
 
-  /* ---------------- DESKTOP LINKS ---------------- */
+  /* ================= DESKTOP LINKS ================= */
+
   const desktopLinks = [
-    { name: "Home", path: "/" },
-    { name: "Tutorial", path: "/tutorial" },
-    { name: "Gallery", path: "/gallery" },
-    { name: "Reviews", path: "/reviews" },
-    { name: "About", path: "/about" },
-    { name: "Services", path: "/services" },
-    { name: "Contact", path: "/contact" },
+    {
+      name: translations.navbar.home,
+      path: "/",
+    },
+
+    {
+      name: translations.navbar.tutorial,
+      path: "/tutorial",
+    },
+
+    {
+      name: translations.navbar.gallery,
+      path: "/gallery",
+    },
+
+    {
+      name: translations.navbar.reviews,
+      path: "/reviews",
+    },
+
+    {
+      name: translations.navbar.about,
+      path: "/about",
+    },
+
+    {
+      name: translations.navbar.services,
+      path: "/services",
+    },
+
+    {
+      name: translations.navbar.contact,
+      path: "/contact",
+    },
   ];
 
-  /* ---------------- MOBILE BOTTOM LINKS ---------------- */
+  /* ================= MOBILE BOTTOM LINKS ================= */
+
   const mobileLinks = [
     {
-      name: "Home",
+      name: translations.navbar.home,
       path: "/",
       icon: <FaHome />,
     },
     {
-      name: "Tutorial",
-      path: "/tutorial",
-      icon: <FaYoutube />,
-    },
-    {
-      name: "Gallery",
-      path: "/gallery",
-      icon: <FaImages />,
-    },
-    {
-      name: "Reviews",
+      name: translations.navbar.reviews,
       path: "/reviews",
       icon: <FaStar />,
     },
+
     {
-      name: "About",
+      name: translations.navbar.gallery,
+      path: "/gallery",
+      icon: <FaImages />,
+    },
+
+    {
+      name: translations.navbar.about,
       path: "/about",
       icon: <FaInfoCircle />,
+    },
+    {
+      name: translations.navbar.contact,
+      path: "/contact",
+      icon: <FaPhoneAlt />,
     },
   ];
 
-  /* ---------------- MOBILE MENU LINKS ---------------- */
+  /* ================= MOBILE MENU LINKS ================= */
+
   const mobileMenuLinks = [
     {
-      name: "Home",
+      name: translations.navbar.home,
       path: "/",
       icon: <FaHome />,
     },
+
     {
-      name: "Tutorial",
-      path: "/tutorial",
-      icon: <FaYoutube />,
+      name: translations.navbar.contact,
+      path: "/contact",
+      icon: <FaPhoneAlt />,
     },
+
     {
-      name: "Gallery",
+      name: translations.navbar.gallery,
       path: "/gallery",
       icon: <FaImages />,
     },
+
     {
-      name: "Reviews",
+      name: translations.navbar.reviews,
       path: "/reviews",
       icon: <FaStar />,
     },
+
     {
-      name: "About",
+      name: translations.navbar.about,
       path: "/about",
       icon: <FaInfoCircle />,
     },
+
     {
-      name: "Services",
+      name: translations.navbar.services,
       path: "/services",
       icon: <FaCut />,
     },
+
     {
-      name: "Contact",
+      name: translations.navbar.contact,
       path: "/contact",
       icon: <FaPhoneAlt />,
     },
@@ -126,8 +177,10 @@ const Navbar = () => {
   return (
     <>
       {/* ================= DESKTOP NAVBAR ================= */}
+
       <nav
         className={`
+
           fixed
           top-0
           left-0
@@ -137,21 +190,48 @@ const Navbar = () => {
           md:block
           transition-all
           duration-500
+
+
           ${
             scrolled
               ? "bg-black/85 backdrop-blur-2xl border-b border-yellow-400/10 shadow-2xl"
               : "bg-transparent"
           }
+
+
         `}
       >
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex items-center justify-between h-[88px]">
-            {/* LOGO */}
-            <Link to="/" className="flex items-center gap-3 group">
+        <div
+          className="
+          max-w-7xl
+          mx-auto
+          px-6
+          lg:px-8
+        "
+        >
+          <div
+            className="
+            flex
+            items-center
+            justify-between
+            h-[88px]
+          "
+          >
+            {/* ================= LOGO ================= */}
+
+            <Link
+              to="/"
+              className="
+                flex
+                items-center
+                gap-3
+                group
+              "
+            >
               <div className="relative">
                 <img
                   src={logo}
-                  alt="Nhatty The Barber"
+                  alt="Fiyorina Chiffon"
                   className="
                     h-12
                     w-12
@@ -166,7 +246,19 @@ const Navbar = () => {
                   "
                 />
 
-                <div className="absolute inset-0 rounded-full bg-yellow-400/20 blur-lg opacity-0 group-hover:opacity-100 transition-all duration-300" />
+                <div
+                  className="
+                    absolute
+                    inset-0
+                    rounded-full
+                    bg-yellow-400/20
+                    blur-lg
+                    opacity-0
+                    group-hover:opacity-100
+                    transition-all
+                    duration-300
+                  "
+                />
               </div>
 
               <div>
@@ -184,35 +276,52 @@ const Navbar = () => {
                     text-transparent
                   "
                 >
-                  NHATTY
+                  Fiyorina
                 </h1>
 
-                <p className="text-yellow-400 text-xs font-medium tracking-[4px] uppercase mt-1">
-                  The Barber
+                <p
+                  className="
+                    text-yellow-400
+                    text-xs
+                    font-medium
+                    tracking-[4px]
+                    uppercase
+                    mt-1
+                  "
+                >
+                  Chiffon
                 </p>
               </div>
             </Link>
 
-            {/* NAV LINKS */}
+            {/* ================= DESKTOP LINKS ================= */}
+
             <div className="flex items-center gap-6">
               {desktopLinks.map((link) => {
                 const isActive = location.pathname === link.path;
 
                 return (
                   <Link
-                    key={link.name}
+                    key={link.path}
                     to={link.path}
                     className={`
-                      relative
-                      text-sm
-                      uppercase
-                      tracking-[2px]
-                      font-semibold
-                      transition-all
-                      duration-300
-                      hover:text-yellow-400
-                      ${isActive ? "text-yellow-400" : "text-white"}
-                    `}
+
+
+                        relative
+                        text-sm
+                        uppercase
+                        tracking-[2px]
+                        font-semibold
+                        transition-all
+                        duration-300
+                        hover:text-yellow-400
+
+
+
+                        ${isActive ? "text-yellow-400" : "text-white"}
+
+
+                      `}
                   >
                     {link.name}
 
@@ -220,15 +329,15 @@ const Navbar = () => {
                       <motion.div
                         layoutId="activeDesktopLink"
                         className="
-                          absolute
-                          left-0
-                          -bottom-2
-                          w-full
-                          h-[2px]
-                          bg-yellow-400
-                          rounded-full
-                          shadow-[0_0_12px_rgba(250,204,21,0.9)]
-                        "
+                              absolute
+                              left-0
+                              -bottom-2
+                              w-full
+                              h-[2px]
+                              bg-yellow-400
+                              rounded-full
+                              shadow-[0_0_12px_rgba(250,204,21,0.9)]
+                            "
                       />
                     )}
                   </Link>
@@ -236,7 +345,8 @@ const Navbar = () => {
               })}
             </div>
 
-            {/* BOOK BUTTON */}
+            {/* ================= BOOK BUTTON ================= */}
+
             <Link
               to="/booking"
               className="
@@ -261,17 +371,29 @@ const Navbar = () => {
                 gap-3
               "
             >
-              <span className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-all duration-300" />
+              <span
+                className="
+                  absolute
+                  inset-0
+                  bg-white/20
+                  opacity-0
+                  group-hover:opacity-100
+                  transition-all
+                  duration-300
+                "
+              />
 
               <FaCalendarAlt className="relative z-10" />
 
-              <span className="relative z-10">Book Now</span>
+              <span className="relative z-10">
+                {translations.navbar.bookNow}
+              </span>
             </Link>
           </div>
         </div>
       </nav>
-
       {/* ================= MOBILE TOP NAV ================= */}
+
       <div
         className="
           fixed
@@ -286,26 +408,38 @@ const Navbar = () => {
           border-yellow-400/10
         "
       >
-        <div className="flex items-center justify-between px-5 py-4">
-          {/* MOBILE LOGO */}
-          <Link to="/" className="flex items-center gap-3">
-            <div className="relative">
-              <img
-                src={logo}
-                alt="Nhatty The Barber"
-                className="
-                  h-11
-                  w-11
-                  rounded-full
-                  object-cover
-                  border-2
-                  border-yellow-400
-                  shadow-[0_0_20px_rgba(250,204,21,0.35)]
-                "
-              />
+        <div
+          className="
+          flex
+          items-center
+          justify-between
+          px-5
+          py-4
+        "
+        >
+          {/* ================= MOBILE LOGO ================= */}
 
-              <div className="absolute inset-0 rounded-full bg-yellow-400/20 blur-lg" />
-            </div>
+          <Link
+            to="/"
+            className="
+              flex
+              items-center
+              gap-3
+            "
+          >
+            <img
+              src={logo}
+              alt="Fiyorina Chiffon"
+              className="
+                h-11
+                w-11
+                rounded-full
+                object-cover
+                border-2
+                border-yellow-400
+                shadow-[0_0_20px_rgba(250,204,21,0.35)]
+              "
+            />
 
             <div>
               <h2
@@ -321,129 +455,165 @@ const Navbar = () => {
                   text-transparent
                 "
               >
-                NHATTY
+                Fiyorina
               </h2>
 
-              <p className="text-yellow-400 text-[10px] tracking-[4px] uppercase mt-1">
-                The Barber
+              <p
+                className="
+                  text-yellow-400
+                  text-[10px]
+                  tracking-[4px]
+                  uppercase
+                  mt-1
+                "
+              >
+                Chiffon
               </p>
             </div>
           </Link>
 
-          {/* MENU BUTTON */}
-          <div className="flex items-center gap-3">
-            {/* Language Switcher */}
+          {/* ================= RIGHT ACTIONS ================= */}
+
+          <div
+            className="
+            flex
+            items-center
+            gap-3
+          "
+          >
+            {/* ================= LANGUAGE BUTTON ================= */}
+
             <div className="relative">
               <button
                 onClick={() => setLanguageOpen(!languageOpen)}
                 className="
-        flex
-        items-center
-        gap-1.5
-        px-3
-        py-3
-        rounded-2xl
-        bg-zinc-900
-        border
-        border-zinc-700
-        text-white
-        hover:border-yellow-400
-        hover:text-yellow-400
-        transition-all
-        duration-300
-      "
+                  flex
+                  items-center
+                  gap-1.5
+                  px-3
+                  py-3
+                  rounded-2xl
+                  bg-zinc-900
+                  border
+                  border-zinc-700
+                  text-white
+                  hover:border-yellow-400
+                  hover:text-yellow-400
+                  transition-all
+                "
               >
                 <Globe size={18} />
-                <span className="text-xs font-semibold">{language}</span>
+
+                <span
+                  className="
+                  text-xs
+                  font-semibold
+                "
+                >
+                  {language}
+                </span>
+
                 <ChevronDown
                   size={14}
-                  className={`transition-transform duration-300 ${
-                    languageOpen ? "rotate-180" : ""
-                  }`}
+                  className={`
+                    transition-transform
+                    duration-300
+
+                    ${languageOpen ? "rotate-180" : ""}
+
+                  `}
                 />
               </button>
 
               <AnimatePresence>
                 {languageOpen && (
                   <motion.div
-                    initial={{ opacity: 0, y: -8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
-                    transition={{ duration: 0.2 }}
+                    initial={{
+                      opacity: 0,
+                      y: -8,
+                    }}
+                    animate={{
+                      opacity: 1,
+                      y: 0,
+                    }}
+                    exit={{
+                      opacity: 0,
+                      y: -8,
+                    }}
                     className="
-            absolute
-            right-0
-            mt-2
-            w-32
-            rounded-2xl
-            bg-zinc-900
-            border
-            border-zinc-700
-            overflow-hidden
-            shadow-2xl
-          "
+                        absolute
+                        right-0
+                        mt-2
+                        w-36
+                        rounded-2xl
+                        bg-zinc-900
+                        border
+                        border-zinc-700
+                        overflow-hidden
+                        shadow-2xl
+                      "
                   >
                     <button
                       onClick={() => {
                         setLanguage("EN");
+
                         setLanguageOpen(false);
                       }}
                       className="
-              w-full
-              px-4
-              py-3
-              text-left
-              text-white
-              hover:bg-yellow-400
-              hover:text-black
-              transition-all
-            "
+                          w-full
+                          px-4
+                          py-3
+                          text-left
+                          text-white
+                          hover:bg-yellow-400
+                          hover:text-black
+                          transition-all
+                        "
                     >
-                      🇺🇸 English
+                      🇺🇸 {translations.navbar.languageEnglish}
                     </button>
 
                     <button
                       onClick={() => {
                         setLanguage("AM");
+
                         setLanguageOpen(false);
                       }}
                       className="
-              w-full
-              px-4
-              py-3
-              text-left
-              text-white
-              hover:bg-yellow-400
-              hover:text-black
-              transition-all
-            "
+                          w-full
+                          px-4
+                          py-3
+                          text-left
+                          text-white
+                          hover:bg-yellow-400
+                          hover:text-black
+                          transition-all
+                        "
                     >
-                      🇪🇹 አማርኛ
+                      🇪🇹 {translations.navbar.languageAmharic}
                     </button>
                   </motion.div>
                 )}
               </AnimatePresence>
             </div>
 
-            {/* Existing Menu Button */}
+            {/* ================= MENU BUTTON ================= */}
+
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="
-      relative
-      overflow-hidden
-      text-white
-      text-xl
-      bg-zinc-900
-      hover:bg-yellow-400
-      hover:text-black
-      p-3
-      rounded-2xl
-      transition-all
-      duration-300
-      border
-      border-zinc-700
-      shadow-lg
-    "
+                text-white
+                text-xl
+                bg-zinc-900
+                hover:bg-yellow-400
+                hover:text-black
+                p-3
+                rounded-2xl
+                transition-all
+                duration-300
+                border
+                border-zinc-700
+              "
             >
               {mobileMenuOpen ? <FaTimes /> : <FaBars />}
             </button>
@@ -452,77 +622,99 @@ const Navbar = () => {
       </div>
 
       {/* ================= MOBILE MENU ================= */}
+
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -40 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -40 }}
-            transition={{ duration: 0.3 }}
+            initial={{
+              opacity: 0,
+              y: -30,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            exit={{
+              opacity: 0,
+              y: -30,
+            }}
             className="
-              fixed
-              top-[76px]
-              left-0
-              right-0
-              z-50
-              md:hidden
-              bg-black/95
-              backdrop-blur-2xl
-              border-b
-              border-zinc-800
-            "
+                fixed
+                top-[76px]
+                left-0
+                right-0
+                z-40
+                md:hidden
+                bg-black/95
+                backdrop-blur-2xl
+                border-b
+                border-zinc-800
+              "
           >
-            <div className="px-6 py-8 flex flex-col gap-4">
-              {mobileMenuLinks.map((link, idx) => {
+            <div
+              className="
+                px-6
+                py-8
+                flex
+                flex-col
+                gap-4
+              "
+            >
+              {mobileMenuLinks.map((link, index) => {
                 const isActive = location.pathname === link.path;
 
                 return (
                   <motion.div
-                    key={link.name}
-                    initial={{ opacity: 0, x: -30 }}
-                    animate={{ opacity: 1, x: 0 }}
+                    key={link.path}
+                    initial={{
+                      opacity: 0,
+                      x: -20,
+                    }}
+                    animate={{
+                      opacity: 1,
+                      x: 0,
+                    }}
                     transition={{
-                      delay: idx * 0.05,
+                      delay: index * 0.05,
                     }}
                   >
                     <Link
                       to={link.path}
                       className={`
-                        flex
-                        items-center
-                        justify-between
-                        px-5
-                        py-4
-                        rounded-2xl
-                        text-lg
-                        font-semibold
-                        transition-all
-                        duration-300
-                        ${
-                          isActive
-                            ? "bg-yellow-400 text-black shadow-[0_0_25px_rgba(250,204,21,0.35)]"
-                            : "bg-zinc-900 text-white hover:bg-zinc-800"
-                        }
-                      `}
+
+                            flex
+                            items-center
+                            gap-4
+                            px-5
+                            py-4
+                            rounded-2xl
+                            font-semibold
+                            transition-all
+
+
+                            ${
+                              isActive
+                                ? "bg-yellow-400 text-black"
+                                : "bg-zinc-900 text-white"
+                            }
+
+
+                          `}
                     >
-                      <div className="flex items-center gap-4">
-                        <span className="text-xl">{link.icon}</span>
+                      <span className="text-xl">{link.icon}</span>
 
-                        <span>{link.name}</span>
-                      </div>
-
-                      {isActive && (
-                        <div className="w-2 h-2 rounded-full bg-black" />
-                      )}
+                      <span>{link.name}</span>
                     </Link>
                   </motion.div>
                 );
               })}
+            </div>
 
-              {/* MOBILE BOOK BUTTON */}
-              <Link
-                to="/booking"
-                className="
+            {/* ================= MOBILE BOOK BUTTON ================= */}
+
+            <Link
+              to="/booking"
+              className="
                   mt-4
                   bg-gradient-to-r
                   from-yellow-300
@@ -541,16 +733,17 @@ const Navbar = () => {
                   gap-3
                   shadow-[0_0_30px_rgba(250,204,21,0.35)]
                 "
-              >
-                <FaCalendarAlt />
-                Book Appointment
-              </Link>
-            </div>
+            >
+              <FaCalendarAlt />
+
+              {translations.navbar.bookAppointment}
+            </Link>
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* ================= MOBILE BOTTOM NAV ================= */}
+
       <div
         className="
           fixed
@@ -577,65 +770,75 @@ const Navbar = () => {
             relative
           "
         >
-          {mobileLinks.map((link, idx) => {
+          {mobileLinks.map((link, index) => {
             const isActive = location.pathname === link.path;
-
-            /* CENTER GALLERY BUTTON */
-            if (link.name === "Gallery") {
-              return (
-                <Link
-                  key={idx}
-                  to={link.path}
-                  className={`
-                    absolute
-                    left-1/2
-                    -translate-x-1/2
-                    -top-7
-                    w-[68px]
-                    h-[68px]
-                    rounded-full
-                    flex
-                    items-center
-                    justify-center
-                    text-2xl
-                    transition-all
-                    duration-300
-                    border-4
-                    border-black
-                    shadow-2xl
-                    ${
-                      isActive
-                        ? "bg-gradient-to-r from-yellow-300 to-yellow-500 text-black scale-110 shadow-[0_0_35px_rgba(250,204,21,0.45)]"
-                        : "bg-white text-black"
-                    }
-                  `}
-                >
-                  {link.icon}
-                </Link>
-              );
-            }
 
             return (
               <Link
-                key={idx}
+                key={index}
                 to={link.path}
                 className={`
-                  flex
-                  flex-col
-                  items-center
-                  justify-center
-                  text-[11px]
-                  transition-all
-                  duration-300
-                  ${isActive ? "text-yellow-400 scale-110" : "text-gray-400"}
-                `}
-              >
-                <div className="text-xl mb-1">{link.icon}</div>
 
-                <span className="font-medium">{link.name}</span>
+
+                    flex
+                    flex-col
+                    items-center
+                    justify-center
+                    text-[11px]
+                    transition-all
+                    duration-300
+
+
+
+                    ${isActive ? "text-yellow-400 scale-110" : "text-gray-400"}
+
+
+                  `}
+              >
+                <div
+                  className="
+                    text-xl
+                    mb-1
+                  "
+                >
+                  {link.icon}
+                </div>
+
+                <span>{link.name}</span>
               </Link>
             );
           })}
+
+          {/* ================= CENTER GALLERY BUTTON ================= */}
+
+          <Link
+            to="/gallery"
+            className="
+              absolute
+              left-1/2
+              -translate-x-1/2
+              -top-7
+              w-[68px]
+              h-[68px]
+              rounded-full
+              bg-gradient-to-r
+              from-yellow-300
+              via-yellow-400
+              to-yellow-500
+              text-black
+              flex
+              items-center
+              justify-center
+              text-2xl
+              border-4
+              border-black
+              shadow-[0_0_35px_rgba(250,204,21,0.45)]
+              transition-all
+              duration-300
+            "
+          >
+            <FaImages />
+          </Link>
         </div>
       </div>
     </>

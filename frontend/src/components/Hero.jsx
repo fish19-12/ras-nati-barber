@@ -1,20 +1,30 @@
 import { Link } from "react-router-dom";
+
 import hero from "../assets/hero.jpg";
+
 import { motion } from "framer-motion";
+
 import { useTypewriter, Cursor } from "react-simple-typewriter";
 
+import { useLanguage } from "../context/LanguageContext.jsx";
+
+import en from "../translations/en.json";
+import am from "../translations/am.json";
+
 const Hero = () => {
+  const { language } = useLanguage();
+
+  const translations = language === "AM" ? am : en;
+
   const [text] = useTypewriter({
-    words: [
-      "Nhatty The Barber",
-      "Premium Grooming Experience",
-      "Modern Cuts & Clean Styles",
-      "Best Barber In Ethiopia",
-      "Luxury Barber Experience",
-    ],
+    words: translations.hero.typewriter,
+
     loop: true,
+
     typeSpeed: 70,
+
     deleteSpeed: 40,
+
     delaySpeed: 2000,
   });
 
@@ -24,6 +34,7 @@ const Hero = () => {
       aria-label="Nhatty The Barber Hero Section"
     >
       {/* SEO FRIENDLY HIDDEN TEXT */}
+
       <h1 className="sr-only">
         Nhatty The Barber - Premium Barber Shop in Addis Ababa Ethiopia
       </h1>
@@ -35,6 +46,7 @@ const Hero = () => {
       </p>
 
       {/* BACKGROUND IMAGE */}
+
       <div
         className="
           absolute
@@ -50,17 +62,22 @@ const Hero = () => {
       />
 
       {/* DARK OVERLAY */}
+
       <div className="absolute inset-0 bg-black/60" />
 
       {/* GRADIENT OVERLAY */}
+
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-black/85" />
 
       {/* GLOW EFFECT */}
+
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-amber-500/10 blur-[120px] rounded-full pointer-events-none"></div>
 
       {/* CONTENT */}
+
       <div className="relative z-10 max-w-5xl mx-auto px-6 text-center flex flex-col items-center">
         {/* BADGE */}
+
         <motion.div
           initial={{ opacity: 0, y: -15 }}
           animate={{ opacity: 1, y: 0 }}
@@ -81,10 +98,11 @@ const Hero = () => {
             bg-white/5
           "
         >
-          Premium Barber Experience In Ethiopia
+          {translations.hero.badge}
         </motion.div>
 
         {/* HERO TITLE */}
+
         <motion.h2
           initial={{ opacity: 0, y: 35 }}
           animate={{ opacity: 1, y: 0 }}
@@ -100,11 +118,13 @@ const Hero = () => {
         >
           <span className="bg-gradient-to-r from-amber-300 via-yellow-400 to-orange-500 bg-clip-text text-transparent">
             {text}
+
             <Cursor cursorStyle="|" />
           </span>
         </motion.h2>
 
         {/* BUTTONS */}
+
         <motion.div
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
@@ -139,7 +159,7 @@ const Hero = () => {
               duration-300
             "
           >
-            Book Appointment
+            {translations.hero.bookAppointment}
           </Link>
 
           <Link
@@ -169,11 +189,12 @@ const Hero = () => {
               duration-300
             "
           >
-            View Services
+            {translations.hero.viewServices}
           </Link>
         </motion.div>
 
         {/* TAGLINE */}
+
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -191,23 +212,18 @@ const Hero = () => {
             justify-center
           "
         >
-          <span>Confidence</span>
+          {translations.hero.tagline.map((item, index) => (
+            <span key={item}>
+              {index !== 0 && <span className="mx-2">•</span>}
 
-          <span>•</span>
-
-          <span>Style</span>
-
-          <span>•</span>
-
-          <span>Precision</span>
-
-          <span>•</span>
-
-          <span>Luxury</span>
+              {item}
+            </span>
+          ))}
         </motion.div>
       </div>
 
       {/* SCROLL INDICATOR */}
+
       <motion.div
         animate={{ y: [0, 12, 0] }}
         transition={{ repeat: Infinity, duration: 1.5 }}
@@ -223,7 +239,9 @@ const Hero = () => {
           items-center
         "
       >
-        <span className="text-xs uppercase tracking-widest mb-2">Scroll</span>
+        <span className="text-xs uppercase tracking-widest mb-2">
+          {translations.hero.scroll}
+        </span>
 
         <span className="text-lg">↓</span>
       </motion.div>
