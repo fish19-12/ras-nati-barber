@@ -192,21 +192,21 @@
     "bookAppointment": "ቀጠሮ ያስይዙ"
   },
   "gallery": {
-    "title": "ናቲ ባርበር",
-    "subtitle": "የቅንጦት የፀጉር ቅጥ ስብስብ",
+    "title": "Nhatty barber ",
+    "subtitle": " የ ጋለርይ ስብስብ",
     "description": "በፍቅር፣ በትክክለኛነት እና በሙያ የተሰሩ ዘመናዊ የፀጉር ቅጦች፣ ፌድ ስታይሎች እና ልዩ የግል ማስዋቢያ ስራዎችን ይመልከቱ።",
 
     "loading": "ጋለሪው በመጫን ላይ ነው...",
 
-    "topStyle": "ምርጥ ቅጥ",
+    "topStyle": "አሪፍ",
 
-    "previewStyle": "ቅጡን ይመልከቱ",
+    "previewStyle": "ጋለርይ ይመልከቱ",
 
     "showMore": "ተጨማሪ ይመልከቱ",
 
     "premiumText": "ከNHATTY THE BARBER የተዘጋጁ የሙያ የፀጉር ቅጥ ሀሳቦች።",
 
-    "bookStyle": "ይህን ቅጥ ይያዙ"
+    "bookStyle": "ይህን ስታይል ይዘዙ"
   },
   "hero": {
     "badge": "በኢትዮጵያ ዘመናዊ የፀጉር አሰራር ልምድ",
