@@ -1443,7 +1443,6 @@ const Booking = () => {
 
       <style>{`
 
-
 .input{
 
 width:100%;
@@ -1451,8 +1450,22 @@ padding:15px;
 border-radius:16px;
 background:rgba(0,0,0,.45);
 border:1px solid rgba(255,255,255,.1);
+
 color:white;
+
 outline:none;
+
+font-size:15px;
+
+}
+
+
+
+.input::placeholder{
+
+color:#d1d5db;
+
+opacity:1;
 
 }
 
@@ -1466,6 +1479,15 @@ border-color:#facc15;
 
 
 
+.input option{
+
+background:#111827;
+
+color:white;
+
+}
+
+
 
 .section-title{
 
@@ -1473,8 +1495,9 @@ font-size:18px;
 font-weight:700;
 margin-bottom:16px;
 
-}
+color:white;
 
+}
 
 
 
@@ -1483,7 +1506,43 @@ margin-bottom:16px;
 display:block;
 margin-bottom:8px;
 font-size:13px;
-color:#9ca3af;
+color:#d1d5db;
+
+}
+
+
+
+input[type="date"]{
+
+color:white;
+
+}
+
+
+
+input[type="date"]::-webkit-calendar-picker-indicator{
+
+filter:invert(1);
+
+cursor:pointer;
+
+}
+
+
+
+select.input{
+
+color:white;
+
+}
+
+
+
+select.input option{
+
+color:white;
+
+background:#000;
 
 }
 
