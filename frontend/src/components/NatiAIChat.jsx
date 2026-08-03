@@ -262,12 +262,16 @@ I can help you with:
       // NORMAL CHAT
 
       const response = await axios.post(
-        `${API_URL}/api/ai-chat`,
-
+        `${API_URL}/api/ai-chat?time=${Date.now()}`,
         {
           message: text,
 
-          sessionId: sessionId.current,
+          sessionId: crypto.randomUUID(),
+        },
+        {
+          headers: {
+            "Cache-Control": "no-cache",
+          },
         },
       );
 
