@@ -411,7 +411,7 @@ ANSWER:
 
 ከ6 ዓመት በላይ የፀጉር አስተካካይነት ልምድ ያለው ሲሆን ታዋቂ ሰዎችን እና ዓለም አቀፍ ደንበኞችን አገልግሏል።
 
-እንደ Dylan Page እና እንደ Adonay Haile Michael ያሉ ታዋቂ ሰዎች የናቲን ሙያዊ ጥራት መርጠዋል።
+እንደ Dylan Page እና እንደ Adonay birhane ያሉ ታዋቂ ሰዎች የናቲን ሙያዊ ጥራት መርጠዋል።
 
 በተጨማሪም ናቲ ከፍተኛ ጥራት ያላቸውን original products እና professional barber tools ይጠቀማል።
 
