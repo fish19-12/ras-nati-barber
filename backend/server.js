@@ -32,38 +32,30 @@ const app = express();
 const server = http.createServer(app);
 
 // =====================================================
-// GLOBAL CORS CONFIGURATION
+// ALLOWED FRONTEND DOMAINS
 // =====================================================
 
 const allowedOrigins = [
-  // Local development
-
+  // Local
   "http://localhost:5173",
-
   "http://localhost:3000",
 
-  // Production domains
-
+  // Production
   "https://nhattythebarber.com",
-
   "https://www.nhattythebarber.com",
 
-  // Render environment variable
-
+  // Render env
   process.env.FRONTEND_URL,
 ].filter(Boolean);
 
-// =========================
+// =====================================================
 // SOCKET.IO
-// =========================
+// =====================================================
 
 const io = new Server(server, {
   cors: {
-    origin: function (origin, callback) {
-      // Allow:
-      // - Postman
-      // - Mobile apps
-      // - Server requests
+    origin: (origin, callback) => {
+      // allow mobile apps / postman
 
       if (!origin) {
         return callback(null, true);
@@ -73,18 +65,18 @@ const io = new Server(server, {
         return callback(null, true);
       }
 
-      console.log("Socket CORS blocked:", origin);
+      console.log("Socket origin allowed:", origin);
+
+      // allow all temporarily
 
       return callback(null, true);
     },
 
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
 
     credentials: true,
   },
 });
-
-// Make socket available everywhere
 
 app.set("io", io);
 
@@ -92,25 +84,17 @@ app.set("io", io);
 // SOCKET CONNECTION
 // =========================
 
-io.on(
-  "connection",
+io.on("connection", (socket) => {
+  console.log("🟢 Socket connected:", socket.id);
 
-  (socket) => {
-    console.log("🟢 Socket connected:", socket.id);
+  socket.on("disconnect", () => {
+    console.log("🔴 Socket disconnected:", socket.id);
+  });
+});
 
-    socket.on(
-      "disconnect",
-
-      () => {
-        console.log("🔴 Socket disconnected:", socket.id);
-      },
-    );
-  },
-);
-
-// =========================
+// =====================================================
 // SECURITY
-// =========================
+// =====================================================
 
 app.use(
   helmet({
@@ -118,35 +102,30 @@ app.use(
   }),
 );
 
-// =========================
-// LOGGING
-// =========================
+// =====================================================
+// LOGGER
+// =====================================================
 
 app.use(morgan("dev"));
 
-// =========================
+// =====================================================
 // CORS
-// =========================
+// =====================================================
 
 app.use(
   cors({
-    origin: function (origin, callback) {
-      // Allow requests without origin
-
+    origin: (origin, callback) => {
       if (!origin) {
         return callback(null, true);
       }
-
-      // Allow registered origins
 
       if (allowedOrigins.includes(origin)) {
         return callback(null, true);
       }
 
-      console.log("CORS blocked:", origin);
+      console.log("CORS request from:", origin);
 
-      // Allow all temporarily
-      // prevents production blocking
+      // allow unknown origins
 
       return callback(null, true);
     },
@@ -159,13 +138,9 @@ app.use(
   }),
 );
 
-// Allow OPTIONS everywhere
-
-app.options("*", cors());
-
-// =========================
+// =====================================================
 // BODY PARSER
-// =========================
+// =====================================================
 
 app.use(
   express.json({
@@ -181,11 +156,9 @@ app.use(
   }),
 );
 
-// =========================
-// API ROUTES
-// =========================
-
-// AUTH
+// =====================================================
+// ROUTES
+// =====================================================
 
 app.use(
   "/api/auth",
@@ -193,15 +166,11 @@ app.use(
   require("./routes/auth"),
 );
 
-// BOOKINGS
-
 app.use(
   "/api/bookings",
 
   require("./routes/bookingRoutes"),
 );
-
-// UNAVAILABLE SLOTS
 
 app.use(
   "/api/unavailable-slots",
@@ -209,15 +178,11 @@ app.use(
   require("./routes/unavailableSlotRoutes"),
 );
 
-// GALLERY
-
 app.use(
   "/api/gallery",
 
   require("./routes/galleryRoutes"),
 );
-
-// REVIEWS
 
 app.use(
   "/api/reviews",
@@ -225,15 +190,11 @@ app.use(
   require("./routes/reviewRoutes"),
 );
 
-// REGISTER
-
 app.use(
   "/api/register",
 
   require("./routes/registerRoutes"),
 );
-
-// TUTORIALS
 
 app.use(
   "/api/tutorials",
@@ -241,17 +202,15 @@ app.use(
   require("./routes/tutorialRoutes"),
 );
 
-// NATI AI
-
 app.use(
   "/api/ai-chat",
 
   require("./routes/aiChatRoutes"),
 );
 
-// =========================
-// HEALTH CHECK
-// =========================
+// =====================================================
+// HOME TEST
+// =====================================================
 
 app.get(
   "/",
@@ -267,9 +226,9 @@ app.get(
   },
 );
 
-// =========================
-// 404 HANDLER
-// =========================
+// =====================================================
+// 404
+// =====================================================
 
 app.use((req, res) => {
   res.status(404).json({
@@ -279,9 +238,9 @@ app.use((req, res) => {
   });
 });
 
-// =========================
+// =====================================================
 // ERROR HANDLER
-// =========================
+// =====================================================
 
 app.use((err, req, res, next) => {
   console.error("SERVER ERROR:", err);
@@ -293,9 +252,9 @@ app.use((err, req, res, next) => {
   });
 });
 
-// =========================
+// =====================================================
 // SERVER START
-// =========================
+// =====================================================
 
 const PORT = process.env.PORT || 5000;
 
@@ -312,7 +271,7 @@ server.listen(
 =================================
 
 
-🚀 Server:
+🚀 Running:
 http://localhost:${PORT}
 
 
@@ -320,7 +279,7 @@ http://localhost:${PORT}
 /api/ai-chat
 
 
-📸 Hairstyle Analysis:
+📸 Hairstyle:
 /api/ai-chat/analyze-hairstyle
 
 
@@ -338,15 +297,15 @@ ACTIVE
   },
 );
 
-// =========================
-// GRACEFUL SHUTDOWN
-// =========================
+// =====================================================
+// SHUTDOWN
+// =====================================================
 
 process.on(
   "SIGTERM",
 
   () => {
-    console.log("SIGTERM received. Closing server...");
+    console.log("SIGTERM received");
 
     server.close(() => {
       console.log("Server closed");
