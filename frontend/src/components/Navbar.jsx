@@ -269,7 +269,7 @@ const Navbar = () => {
                     text-transparent
                   "
                 >
-                  Fiyorina
+                  Nhatty The
                 </h1>
 
                 <p
@@ -282,7 +282,7 @@ const Navbar = () => {
                     mt-1
                   "
                 >
-                  Chiffon
+                  Barber
                 </p>
               </div>
             </Link>
