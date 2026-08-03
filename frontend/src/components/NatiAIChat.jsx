@@ -418,7 +418,7 @@ border-black/20
 "
             />
 
-            <span className="hidden sm:block">Nati AI</span>
+            <span className="block text-sm">Nhatty AI</span>
           </motion.button>
         )}
       </AnimatePresence>
