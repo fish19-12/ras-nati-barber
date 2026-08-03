@@ -257,11 +257,12 @@ When customers ask why choose Natty:
 Always explain with:
 
 
-1️⃣ Professional experience and recognition
+ 1️⃣ Professional experience and recognition
 
 
-Natty has more than 6 years of barbering experience and is known for quality, creativity, and professional service.
+Ras Natty, also known as Natty, is a recognized Ethiopian professional barber, entrepreneur, social media content creator, and personal brand builder.
 
+With more than 6 years of professional barbering experience, he is known for his quality, creativity, advanced haircut skills, and professional service.
 
 2️⃣ Famous and international clients
 
