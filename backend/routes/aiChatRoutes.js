@@ -234,77 +234,24 @@ WHY NATTI IS DIFFERENT
 =====================================================
 
 
-Natty is different from other barbers because he combines:
+ When customers ask:
 
-- Professional experience
-- Celebrity client experience
-- Premium products
-- Professional equipment
-- Unique techniques
-- Personalized customer service
+- ናቲ ከሌሎች ባርበሮች በምን ይለያል?
+- Why is Natty expensive?
+- Why choose Natty?
 
+Always explain using these 4 points:
 
-Important differences:
+1️⃣ Professional experience, celebrity recognition and social media influence.
 
+2️⃣ Celebrity and international clients including Dylan Page and Ethiopian personalities like Adonay Birhane.
 
-1. Celebrity and recognized clients:
+3️⃣ His unique signature technique "Natty Reborn Cut".
 
-Natty has worked with recognized personalities including:
+4️⃣ Premium products, professional tools and customer transformation experience.
 
-- International journalist Dylan Page
-- Ethiopian personalities and creators such as Adonay Haile Michael
-
-
-This shows the trust that clients have in his professional quality.
-
-
-2. Premium products:
-
-Natty uses original and high-quality barber products.
-
-The goal is:
-
-- Protecting client's hair
-- Protecting skin
-- Creating better results
-- Providing premium experience
-
-
-3. Professional tools:
-
-Natty invests in professional barber equipment including:
-
-- Premium clippers
-- Professional scissors
-- Quality trimmers
-- Modern barber tools
-
-
-4. Personalized service:
-
-Every haircut is designed according to:
-
-- Client face shape
-- Hair texture
-- Personal style
-- Lifestyle
-
-
-5. Signature haircut:
-
-Natty created:
-
-"Natty Reborn Cut"
-
-
-This unique haircut technique focuses on:
-
-- Improving facial appearance
-- Enhancing hairline
-- Creating a cleaner look
-- Increasing confidence
-
-
+Answer in Amharic when the customer writes Amharic.
+Keep the 1️⃣ 2️⃣ 3️⃣ 4️⃣ structure.
 
 =====================================================
 NATTY REBORN CUT
@@ -818,31 +765,113 @@ Addis Ababa, Ethiopia.
 function findFAQAnswer(message) {
   const text = message.toLowerCase().trim();
 
+  // =====================================
   // WHO IS NATTY
+  // =====================================
 
   if (
-    text.includes("ናቲ ማን ነው") ||
+    text.includes("ናቲ ማን") ||
     text.includes("who is natty") ||
-    text.includes("who is nati")
+    text.includes("who is nati") ||
+    text.includes("ras natty")
   ) {
-    return `ራስ ናቲ (Ras Natty) በመባልም የሚታወቀው ናቲ በኢትዮጵያ ውስጥ ታዋቂ የፀጉር አስተካካይ፣ ሥራ ፈጣሪ፣ የሶሻል ሚዲያ ይዘት ፈጣሪ እና የግል ብራንድ የገነባ ባለሙያ ነው።`;
-  }
+    return `
+ራስ ናቲ (Ras Natty) በመባልም የሚታወቀው ናቲ በኢትዮጵያ ውስጥ ታዋቂ የፀጉር አስተካካይ፣ የሶሻል ሚዲያ ይዘት ፈጣሪ፣ ሥራ ፈጣሪ እና የግል ብራንድ የገነባ ባለሙያ ነው።
 
-  // DIFFERENCE QUESTION
+ከ6 ዓመት በላይ በባርበሪንግ ሙያ ልምድ ያለው ሲሆን፣ በጥራት፣ በፈጠራ እና በልዩ የፀጉር አቆራረጥ ቴክኒኮች ይታወቃል።
+
+ከፀጉር መቁረጥ በላይ ደንበኞቹን ወደ የተሻለ ስታይል እና በራስ መተማመን ለመምራት ይሰራል።
+`;
+  }
+  // =====================================================
+  // WHY NATTY IS DIFFERENT
+  // =====================================================
 
   if (
     text.includes("ከሌሎች") ||
-    text.includes("የሚለያ") ||
+    text.includes("የሚለየው") ||
+    text.includes("ለምን ናቲ") ||
+    text.includes("why choose") ||
     text.includes("different") ||
-    text.includes("why choose")
+    text.includes("ውድ") ||
+    text.includes("ለምን ዋጋ")
   ) {
-    return `ናቲ ከሌሎች ባርበሮች የሚለየው በልምዱ፣ በጥራት እና በልዩ አገልግሎቱ ነው።
+    return `1️⃣ የሙያ ልምድ፣ ታዋቂነት እና የሶሻል ሚዲያ ተፅዕኖ
 
-ከ6 ዓመት በላይ የሙያ ልምድ ያለው ሲሆን እንደ Dylan Page እና Adonay Haile Michael ያሉ ታዋቂ ሰዎችን አገልግሏል።
 
-በተጨማሪም ናቲ ኦሪጅናል እና ጥራት ያላቸውን የፀጉር ምርቶች፣ professional tools እና ዘመናዊ ቴክኒኮችን ይጠቀማል።
+ናቲ (Ras Natty)  በኢትዮጵያ የታወቀ ባርበር፣ የሶሻል ሚዲያ ተፅዕኖ ፈጣሪ (Social Media Influencer) እና የግል ብራንድ የገነባ ባለሙያ ነው።
 
-እያንዳንዱ ደንበኛ ከፊት ቅርፅ፣ ፀጉር አይነት እና lifestyle ጋር የሚስማማ ልዩ ስታይል ያገኛል።`;
+
+በጥራት፣ በፈጠራ፣ በሙያዊ እውቀት እና ለደንበኞቹ በሚሰጠው ልዩ ትኩረት ይታወቃል።
+
+
+
+2️⃣ ታዋቂ ሰዎች እና ዓለም አቀፍ ደንበኞች
+
+
+ናቲ በሙያዊ ጥራቱ ታዋቂ ሰዎችን እና ዓለም አቀፍ ደንበኞችን አገልግሏል።
+
+
+እንደ International Content Creator Dylan Page እና እንደ ኢትዮጵያዊ ታዋቂ ሰዎች እንደ Adonay Birhane ያሉ ሰዎች የናቲን ሙያዊ ጥራት መርጠዋል።
+
+
+
+3️⃣ ልዩ ቴክኒክ - Natty Reborn Cut
+
+
+ናቲ የራሱን ልዩ የፀጉር አቆራረጥ ቴክኒክ "Natty Reborn Cut" ፈጥሯል።
+
+
+ይህ ቴክኒክ:
+
+
+- የፊት ቅርፅን
+- የፀጉር አይነትን
+- lifestyle
+- የግል ስታይል
+
+
+በመመልከት ለእያንዳንዱ ደንበኛ የሚስማማ ልዩ መልክ ይፈጥራል።
+
+
+
+4️⃣ የፕሪሚየም አገልግሎት እና ጥራት
+
+
+ናቲ Original Products እና Professional Barber Tools በመጠቀም ከቀላል ፀጉር ቁረጣ በላይ የstyle፣ confidence እና transformation ልምድ ይሰጣል።
+
+
+ስለዚህ የናቲ አገልግሎት ዋጋ የሚያንፀባርቀው የሙያ ልምድ፣ ጥራት፣ ልዩ ቴክኒክ እና ለደንበኛው የሚሰጠውን ልዩ ልምድ ነው።`;
+  }
+
+  // =====================================
+  // WHY EXPENSIVE
+  // =====================================
+
+  if (
+    text.includes("ዋጋ") ||
+    text.includes("ውድ") ||
+    text.includes("expensive") ||
+    text.includes("price") ||
+    text.includes("cost")
+  ) {
+    return `
+የናቲ አገልግሎት ዋጋ የሚያንፀባርቀው የሚሰጠውን ጥራት፣ ልምድ እና ልዩ የደንበኛ ልምድ ነው።
+
+ናቲ ከ6 ዓመት በላይ የሙያ ልምድ አለው።
+
+ደንበኞች የሚያገኙት:
+
+• Professional consultation
+• Premium products
+• Professional barber tools
+• Personalized haircut design
+• Natty Reborn Cut experience
+
+እያንዳንዱ haircut ከደንበኛው ፊት ቅርፅ፣ ፀጉር አይነት እና lifestyle ጋር እንዲስማማ ይዘጋጃል።
+
+ስለዚህ የናቲ አገልግሎት ቀላል ቁረጣ ሳይሆን የpremium grooming experience ነው።
+`;
   }
 
   return null;
