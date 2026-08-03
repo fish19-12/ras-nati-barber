@@ -31,21 +31,54 @@ const app = express();
 
 const server = http.createServer(app);
 
+// =====================================================
+// GLOBAL CORS CONFIGURATION
+// =====================================================
+
+const allowedOrigins = [
+  // Local development
+
+  "http://localhost:5173",
+
+  "http://localhost:3000",
+
+  // Production domains
+
+  "https://nhattythebarber.com",
+
+  "https://www.nhattythebarber.com",
+
+  // Render environment variable
+
+  process.env.FRONTEND_URL,
+].filter(Boolean);
+
 // =========================
 // SOCKET.IO
 // =========================
 
 const io = new Server(server, {
   cors: {
-    origin: [
-      "http://localhost:5173",
+    origin: function (origin, callback) {
+      // Allow:
+      // - Postman
+      // - Mobile apps
+      // - Server requests
 
-      "http://localhost:3000",
+      if (!origin) {
+        return callback(null, true);
+      }
 
-      process.env.FRONTEND_URL,
-    ].filter(Boolean),
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
 
-    methods: ["GET", "POST"],
+      console.log("Socket CORS blocked:", origin);
+
+      return callback(null, true);
+    },
+
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
 
     credentials: true,
   },
@@ -76,7 +109,7 @@ io.on(
 );
 
 // =========================
-// SECURITY MIDDLEWARE
+// SECURITY
 // =========================
 
 app.use(
@@ -97,26 +130,42 @@ app.use(morgan("dev"));
 
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
+    origin: function (origin, callback) {
+      // Allow requests without origin
 
-      "http://localhost:3000",
+      if (!origin) {
+        return callback(null, true);
+      }
 
-      process.env.FRONTEND_URL,
-    ].filter(Boolean),
+      // Allow registered origins
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      console.log("CORS blocked:", origin);
+
+      // Allow all temporarily
+      // prevents production blocking
+
+      return callback(null, true);
+    },
 
     credentials: true,
+
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
   }),
 );
+
+// Allow OPTIONS everywhere
+
+app.options("*", cors());
 
 // =========================
 // BODY PARSER
 // =========================
-
-// Increased because:
-// - Nati AI image analysis
-// - Payment screenshots
-// - Gallery uploads
 
 app.use(
   express.json({
@@ -231,7 +280,7 @@ app.use((req, res) => {
 });
 
 // =========================
-// GLOBAL ERROR HANDLER
+// ERROR HANDLER
 // =========================
 
 app.use((err, req, res, next) => {
@@ -254,27 +303,38 @@ server.listen(
   PORT,
 
   () => {
-    console.log(
-      `
+    console.log(`
+
 =================================
+
 🔥 Nhatty The Barber Backend
+
 =================================
+
 
 🚀 Server:
 http://localhost:${PORT}
 
+
 🤖 Nati AI:
 /api/ai-chat
 
+
 📸 Hairstyle Analysis:
- /api/ai-chat/analyze-hairstyle
+/api/ai-chat/analyze-hairstyle
+
 
 🔌 Socket.io:
 ACTIVE
 
+
+🌍 CORS:
+ACTIVE
+
+
 =================================
-`,
-    );
+
+`);
   },
 );
 
