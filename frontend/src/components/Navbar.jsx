@@ -224,7 +224,7 @@ const Navbar = () => {
               <div className="relative">
                 <img
                   src={logo}
-                  alt="Fiyorina Chiffon"
+                  alt=" nhatty the barber "
                   className="
                     h-12
                     w-12
@@ -422,7 +422,7 @@ const Navbar = () => {
           >
             <img
               src={logo}
-              alt="Fiyorina Chiffon"
+              alt=" nhatty the barber"
               className="
                 h-11
                 w-11
@@ -448,7 +448,7 @@ const Navbar = () => {
                   text-transparent
                 "
               >
-                Fiyorina
+                Nhatty The
               </h2>
 
               <p
@@ -460,7 +460,7 @@ const Navbar = () => {
                   mt-1
                 "
               >
-                Chiffon
+                Barber
               </p>
             </div>
           </Link>
