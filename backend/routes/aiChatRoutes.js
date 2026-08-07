@@ -246,46 +246,24 @@ Content includes:
 
 
 
-=====================================================
-WHY NATTY IS DIFFERENT
-=====================================================
+ When customers ask:
 
+- Why nhatty differ from the other barbers?
+- Why is Natty expensive?
+- Why choose Natty?
 
-When customers ask why choose Natty:
+Always explain using these 4 points:
 
+1️⃣ Professional experience, celebrity recognition and social media influence.
 
-Always explain with:
+2️⃣ Celebrity and international clients including Dylan Page and Ethiopian personalities like Adonay Birhane.
 
+3️⃣ His unique signature technique "Natty Reborn Cut".
 
- 1️⃣ Professional experience and recognition
+4️⃣ Premium products, professional tools and customer transformation experience.
 
-
-Ras Natty, also known as Natty, is a recognized Ethiopian professional barber, entrepreneur, social media content creator, and personal brand builder.
-
-With more than 6 years of professional barbering experience, he is known for his quality, creativity, advanced haircut skills, and professional service.
-
-2️⃣ Famous and international clients
-
-
-Natty has served recognized personalities including Dylan Page and Ethiopian personalities like Adonay Birhane.
-
-
-3️⃣ Natty Reborn Cut
-
-
-Natty created his own signature haircut technique focused on:
-
-- Face structure
-- Hair type
-- Hairline
-- Personal style
-
-
-4️⃣ Premium experience
-
-
-Uses professional tools and quality products to provide a complete transformation experience.
-
+Answer in Amharic when the customer writes Amharic.
+Keep the 1️⃣ 2️⃣ 3️⃣ 4️⃣ structure.
 
 
 =====================================================
@@ -771,66 +749,62 @@ function findFAQAnswer(message) {
 `;
   }
 
-  // -------------------------------------
-  // WHY CHOOSE NATTY
-  // -------------------------------------
+  // =====================================================
+  // WHY NATTY IS DIFFERENT
+  // =====================================================
 
   if (
     text.includes("ከሌሎች") ||
-    text.includes("የሚለየው") ||
-    text.includes("why choose") ||
-    text.includes("different") ||
+    text.includes("የሚለያ") ||
     text.includes("ለምን ናቲ") ||
-    text.includes("expensive") ||
-    text.includes("ውድ")
+    text.includes("ውድ") ||
+    text.includes("ለምን ዋጋ")
   ) {
-    return `
+    return `1️⃣  ራስ ናቲ (Ras Natty) በመባልም የሚታወቀው ናቲ በኢትዮጵያ የታወቀ ባርበር፣ የሶሻል ሚዲያ ተፅዕኖ ፈጣሪ (Social Media Influencer)፣ ሥራ ፈጣሪ እና የግል ብራንድ የገነባ ባለሙያ ነው።
 
-
-1️⃣ Professional experience and recognition
-
-
-ናቲ (Ras Natty) ከ6 ዓመት በላይ የባርበሪንግ ልምድ ያለው ሲሆን በጥራት፣ በፈጠራ እና በሙያዊ አገልግሎት ይታወቃል።
+  በጥራት፣ በፈጠራ፣ በሙያዊ እውቀት እና ለደንበኞቹ በሚሰጠው ልዩ ትኩረት ይታወቃል።
 
 
 
-2️⃣ Famous and international clients
+
+
+
+2️⃣ ታዋቂ ሰዎች እና ዓለም አቀፍ ደንበኞች
 
 
 ናቲ በሙያዊ ጥራቱ ታዋቂ ሰዎችን እና ዓለም አቀፍ ደንበኞችን አገልግሏል።
 
 
-እንደ Dylan Page እና Adonay Birhane ያሉ ሰዎች የናቲን ሙያዊ ጥራት መርጠዋል።
+እንደ International Content Creator Dylan Page እና እንደ ኢትዮጵያዊ ታዋቂ ሰዎች እንደ Adonay Birhane ያሉ ሰዎች የናቲን ሙያዊ ጥራት መርጠዋል።
 
 
 
-3️⃣ Natty Reborn Cut
+3️⃣ ልዩ ቴክኒክ - Natty Reborn Cut
 
 
-ይህ የናቲ ልዩ ቴክኒክ:
-
-- Face shape
-- Hair type
-- Hairline
-- Personal style
+ናቲ የራሱን ልዩ የፀጉር አቆራረጥ ቴክኒክ "Natty Reborn Cut" ፈጥሯል።
 
 
-በመመልከት ለደንበኛው የሚስማማ ልዩ መልክ ይፈጥራል።
+ይህ ቴክኒክ:
 
 
+- የፊት ቅርፅን
+- የፀጉር አይነትን
+- lifestyle
+- የግል ስታይል
 
-4️⃣ Premium grooming experience
 
-
-ናቲ Professional Tools እና Quality Products በመጠቀም
-
-ከቀላል haircut በላይ
-
-የstyle እና confidence transformation ልምድ ይሰጣል።
+በመመልከት ለእያንዳንዱ ደንበኛ የሚስማማ ልዩ መልክ ይፈጥራል።
 
 
 
-`;
+4️⃣ የፕሪሚየም አገልግሎት እና ጥራት
+
+
+ናቲ Original Products እና Professional Barber Tools በመጠቀም ከቀላል ፀጉር ቁረጣ በላይ የstyle፣ confidence እና transformation ልምድ ይሰጣል።
+
+
+ስለዚህ የናቲ አገልግሎት ዋጋ የሚያንፀባርቀው የሙያ ልምድ፣ ጥራት፣ ልዩ ቴክኒክ እና ለደንበኛው የሚሰጠውን ልዩ ልምድ ነው።`;
   }
 
   // -------------------------------------
