@@ -759,7 +759,8 @@ function findFAQAnswer(message) {
     text.includes("የሚለየው") ||
     text.includes("ለምን ናቲ") ||
     text.includes("ውድ") ||
-    text.includes("ለምን ዋጋ")
+    text.includes("ለምን ዋጋ") ||
+    text.includes("በምን")
   ) {
     return `1️⃣  ራስ ናቲ (Ras Natty) በመባልም የሚታወቀው ናቲ በኢትዮጵያ የታወቀ ባርበር፣ የሶሻል ሚዲያ ተፅዕኖ ፈጣሪ (Social Media Influencer)፣ ሥራ ፈጣሪ እና የግል ብራንድ የገነባ ባለሙያ ነው።
 
