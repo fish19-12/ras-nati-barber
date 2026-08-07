@@ -755,7 +755,7 @@ function findFAQAnswer(message) {
 
   if (
     text.includes("ከሌሎች") ||
-    text.includes("የሚለያ") ||
+    text.includes("የሚለየው") ||
     text.includes("ለምን ናቲ") ||
     text.includes("ውድ") ||
     text.includes("ለምን ዋጋ")
@@ -805,6 +805,88 @@ function findFAQAnswer(message) {
 
 
 ስለዚህ የናቲ አገልግሎት ዋጋ የሚያንፀባርቀው የሙያ ልምድ፣ ጥራት፣ ልዩ ቴክኒክ እና ለደንበኛው የሚሰጠውን ልዩ ልምድ ነው።`;
+  }
+  // =====================================================
+  // WHY NATTY IS DIFFERENT
+  // =====================================================
+
+  if (
+    text.includes("different") ||
+    text.includes("different from other barber") ||
+    text.includes("different from other barbers") ||
+    text.includes("why choose natty") ||
+    text.includes("why natty") ||
+    text.includes("why nati") ||
+    text.includes("what makes natty different") ||
+    text.includes("what makes nati different") ||
+    text.includes("why is natty special") ||
+    text.includes("why is nati special") ||
+    text.includes("expensive") ||
+    text.includes("why expensive") ||
+    text.includes("why is natty expensive") ||
+    text.includes("why is nati expensive") ||
+    text.includes("price") ||
+    text.includes("cost") ||
+    text.includes("worth it")
+  ) {
+    return `
+
+1️⃣ Professional Experience, Recognition and Personal Brand
+
+
+Natty, also known as Ras Natty, is a recognized Ethiopian barber, social media influencer, entrepreneur, and professional who has built his own personal brand.
+
+
+He is known for his quality service, creativity, professional knowledge, and the special attention he gives to every customer.
+
+
+
+2️⃣ Famous and International Clients
+
+
+Natty has served recognized personalities and international clients because of his professional quality and barbering skills.
+
+
+International Content Creator Dylan Page and Ethiopian personalities such as Adonay Birhane have chosen Natty for his professional haircut quality and expertise.
+
+
+
+3️⃣ Unique Technique - Natty Reborn Cut
+
+
+Natty created his own signature haircut technique called "Natty Reborn Cut".
+
+
+This unique technique focuses on:
+
+
+- Face shape
+
+- Hair type
+
+- Hairline
+
+- Lifestyle
+
+- Personal style
+
+
+By considering these factors, Natty creates a customized hairstyle and unique look that matches each customer's personality and appearance.
+
+
+
+4️⃣ Premium Service and Quality Experience
+
+
+Natty uses Original Products and Professional Barber Tools to provide more than a normal haircut.
+
+
+He provides a complete style, confidence, and transformation experience for every customer.
+
+
+Therefore, Natty's service price represents his professional experience, quality, unique techniques, and the premium experience he provides to each client.
+
+`;
   }
 
   // -------------------------------------
