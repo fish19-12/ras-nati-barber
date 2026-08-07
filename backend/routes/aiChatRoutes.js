@@ -816,8 +816,8 @@ function findFAQAnswer(message) {
     text.includes("different") ||
     text.includes("different from other barber") ||
     text.includes("different from other barbers") ||
-    text.includes("why choose natty") ||
-    text.includes("why natty") ||
+    text.includes("why choose nhatty") ||
+    text.includes("why nhatty") ||
     text.includes("why nati") ||
     text.includes("what makes natty different") ||
     text.includes("what makes nati different") ||
