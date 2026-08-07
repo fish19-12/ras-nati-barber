@@ -755,6 +755,7 @@ function findFAQAnswer(message) {
 
   if (
     text.includes("ከሌሎች") ||
+    text.includes("ከሌሎች ጸጉር አስተካካዮች ") ||
     text.includes("የሚለየው") ||
     text.includes("ለምን ናቲ") ||
     text.includes("ውድ") ||
