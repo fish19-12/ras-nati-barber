@@ -777,7 +777,7 @@ function findFAQAnswer(message) {
 ናቲ በሙያዊ ጥራቱ ታዋቂ ሰዎችን እና ዓለም አቀፍ ደንበኞችን አገልግሏል።
 
 
-እንደ International Content Creator Dylan Page እና እንደ ኢትዮጵያዊ ታዋቂ ሰዎች እንደ Adonay Birhane እና መሰል ታዋቂ የኢትዮጵያ ሰዎች ፣ የሶሻል ሚዲያ ተፅዕኖ ፈጣሪዎችያሉ ሰዎች የናቲን ሙያዊ ጥራት መርጠዋል።
+እንደ International Content Creator Dylan Page እና እንደ ኢትዮጵያዊ ታዋቂ ሰዎች እንደ Adonay Birhane እና መሰል ታዋቂ የኢትዮጵያ ሰዎች ፣ የሶሻል ሚዲያ ተፅዕኖ ፈጣሪዎች የናቲን ሙያዊ ጥራት መርጠዋል።
 
 
 
